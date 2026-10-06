@@ -555,7 +555,7 @@ export function VehicleDetail({
                 />
                 <Row
                   label="Jaar laatste registratie"
-                  value={numeric(v.odometerLastYear)}
+                  value={v.odometerLastYear?.toString() ?? "Niet beschikbaar"}
                 />
                 <Row
                   label="Exacte kilometerstand"

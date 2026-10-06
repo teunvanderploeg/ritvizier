@@ -1676,6 +1676,72 @@ p {
   padding-top: 2rem;
   min-height: 20rem;
 }
+
+/* Keep motion brief and local to the content that just appeared. */
+@keyframes content-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(0.5rem);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes surface-reveal {
+  from {
+    opacity: 0;
+    transform: translateY(0.25rem) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+@keyframes page-reveal {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+.vehicle-tab-content,
+.comparison-vehicle,
+.library-vehicle,
+.empty-state,
+.road-tax-panel,
+.motion-reveal {
+  animation: content-reveal 240ms cubic-bezier(0.2, 0.7, 0.3, 1);
+}
+.theme-menu,
+.field-help[open] p,
+.notice,
+.form-error {
+  animation: surface-reveal 180ms ease-out;
+  transform-origin: top center;
+}
+#main > .inner-page,
+#main > .vehicle-page,
+.home-hero {
+  animation: page-reveal 240ms ease-out;
+}
+.section-tabs button,
+.library-tabs button,
+.vehicle-status-card,
+.icon-button,
+.text-button {
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    border-color 180ms ease,
+    transform 120ms ease;
+}
+.vehicle-status-card:active,
+.icon-button:active,
+.text-button:active {
+  transform: translateY(1px);
+}
 .data-grid {
   display: grid;
   gap: 2rem;
@@ -1756,6 +1822,10 @@ p {
   flex-direction: column;
   align-items: flex-start;
   gap: 1rem;
+}
+.vehicle-cost-promo .eyebrow,
+.vehicle-cost-promo p {
+  color: var(--ink);
 }
 .vehicle-cost-promo h2 {
   font-size: 1.4rem;
