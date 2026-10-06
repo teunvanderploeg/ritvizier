@@ -2,12 +2,18 @@
 
 A Dutch vehicle lookup application. Next.js renders the interface; FastAPI fetches and normalizes official RDW Open Data. Recent searches, favourites and comparison selections stay in the browser. No account or analytics is required.
 
+## Project documentation and versions
+
+Read [Contributing](CONTRIBUTING.md) for branches, commits, checks and releases. [Architecture](docs/architecture.md) maps code and data flow; [Developer handoff](docs/handoff.md) records current behavior and maintenance priorities. [Verification](docs/verification.md) records completed checks and limits. Coding agents should read [AGENTS.md](AGENTS.md) before editing.
+
+`main` holds integrated work. New tasks use their own branch and merge commit. Annotated tags identify checked snapshots; `v1.0.0` is the first tagged baseline. See the [Changelog](CHANGELOG.md). Git history is currently local; no remote repository is configured.
+
 ## Development
 
 Requirements: Node.js 22.12+, Python 3.12+, npm. PostgreSQL 16+ is optional for durable cache storage. Without a database, the backend uses a bounded in-memory cache.
 
 ```powershell
-npm install
+npm ci
 python -m venv .venv
 .venv\Scripts\python -m pip install -e "backend[dev]"
 Copy-Item .env.example backend/.env
@@ -51,7 +57,7 @@ Missing RDW values remain null. Source metadata records datasets, retrieval time
 
 Running costs prefill RDW WLTP consumption (NEDC fallback). Insurance, maintenance, distance and energy price remain editable assumptions. Road tax uses official provincial passenger-car tables from the Belastingdienst calculator. The checked snapshot in `backend/app/data/road_tax_2026.json` is valid July–December 2026 and uses **massa rijklaar**, not empty mass. Petrol hybrids pay the normal rate; fully electric/hydrogen cars use 70% of the petrol quarterly amount, rounded down exactly as the live calculator does. Its legacy EV table column is deliberately unused. Diesel needs an explicit particulate-surcharge choice; LPG needs the registered installation class. Unsupported categories, missing weight, oldtimer cases and dates outside validity return an unavailable reason, never a guessed zero. The frontend labels the total as excluding road tax until it is known; manual override remains possible. Estimates exclude personal exemptions, suspension, depreciation, financing and purchase costs.
 
-To refresh the reviewed snapshot, run `.venv\\Scripts\\python backend/scripts/update_road_tax.py`. It parses only numeric assignments from the official public asset without executing remote code, validates all 12 tables, and records URL, retrieval timestamp and SHA-256. Review against the live calculator before extending the validity dates. The per-plate API retrieves weight/fuel from the backend cache; it does not trust caller-supplied technical values.
+To refresh the reviewed snapshot, run `.venv\Scripts\python backend/scripts/update_road_tax.py`. It parses only numeric assignments from the official public asset without executing remote code, validates all 12 tables, and records URL, retrieval timestamp and SHA-256. Review against the live calculator before extending the validity dates. The per-plate API retrieves weight/fuel from the backend cache; it does not trust caller-supplied technical values.
 
 Additional RDW datasets: `3huj-srit` (axes), `vezc-m2t6` (body), `jqs4-4kvw` (odometer explanation), `t49b-isb7` (recall status), `j9yg-7rg9` (campaign), `9ihi-jgpf` (risks), `byxc-wwua` (type approval base) and `7rjk-eycs` (transmission). Recall status O means open; P means the producer reported repair. Actions join by the actual plate/reference, not by general make/model similarity. Optional-source failures preserve core registration and carry warnings. Persisted schema-v1 cache records are refreshed automatically.
 

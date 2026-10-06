@@ -6,7 +6,7 @@ Verified locally on 7 October 2026 with Node 22.13.1 and Python 3.12.14.
 
 - Frontend: 23 validation, formatting, APK date-boundary, legacy-storage and source-link tests.
 - Backend: 46 normalization, provider, cache, recall joins, exact approval joins, cost, provincial road-tax, validation and rate-limit tests.
-- Browser: 24 production-build tests across Chromium and WebKit iPhone profiles.
+- Browser: 26 production-build tests across Chromium and WebKit iPhone profiles.
 - ESLint, TypeScript, Ruff and strict mypy pass.
 - Optimized Next.js production build passes.
 - npm audit reports zero vulnerabilities across production and development dependencies.
@@ -16,6 +16,14 @@ Verified locally on 7 October 2026 with Node 22.13.1 and Python 3.12.14.
 Browser tests exercise input normalization, invalid input, clear, direct links, noindex on unsuccessful lookups, saving and reopening vehicles, recent history, a second lookup from a vehicle page, comparison, removal, duplicate protection, clipboard sharing, cost updates, missing consumption, error responses, persistent themes and all vehicle sections.
 
 The viewport matrix covers 320, 375, 390, 430, 768, 1024 and 1440 pixels. Browser screenshots are in ignored `artifacts/`. These are browser-engine checks, not a physical-device Safari test.
+
+## Version baseline and motion regression
+
+The `v1.0.0` baseline includes the registration-year and motion changes. Browser checks verify that the last registration year is exactly `2026`, that tab content has an appearance transition under the normal motion preference, and that reduced motion disables it while the data remains accessible. The full suite contains 23 frontend, 46 backend and 26 browser checks, totaling 95 tests.
+
+Desktop and mobile captures were reviewed after the changes. Vehicle-page visual lint reports the intentionally scrolling tab strip and small existing secondary/decorative labels. The cost prompt contrast findings were corrected. No page-level overflow or browser console errors appeared in these captures. Year screenshots are in `artifacts/registration-year-chromium.png` and `artifacts/registration-year-webkit-iphone.png`; additional captures are in `artifacts/motion-desktop/` and `artifacts/motion-mobile/`. These artifacts are ignored by Git and must be regenerated on another checkout.
+
+Branch and release procedures are in `CONTRIBUTING.md`. Feature and documentation changes use separate branches and merge commits. The annotated baseline tag identifies the integrated snapshot. No remote or online branch protection is configured.
 
 ## Local network regression
 
