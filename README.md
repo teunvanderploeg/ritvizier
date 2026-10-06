@@ -4,7 +4,7 @@ A Dutch vehicle lookup application. Next.js renders the interface; FastAPI fetch
 
 ## Development
 
-Requirements: Node.js 20.9+, Python 3.12+, npm. PostgreSQL 16+ is optional for durable cache storage. Without a database, the backend uses a bounded in-memory cache.
+Requirements: Node.js 22.12+, Python 3.12+, npm. PostgreSQL 16+ is optional for durable cache storage. Without a database, the backend uses a bounded in-memory cache.
 
 ```powershell
 npm install
@@ -37,7 +37,7 @@ npm run test:e2e
 .venv\Scripts\python -m mypy backend/app
 ```
 
-End-to-end tests require running frontend and backend servers. Fixtures cover deterministic error and interaction paths; live-provider smoke checks are separate. Screenshots are saved to ignored `artifacts/`.
+End-to-end tests require a production build first. Playwright starts an isolated frontend on port 3100 and fixture API on port 8001. These test servers never replace the live RDW provider in the normal application. Fixture records are snapshots from RDW fetched on 6 October 2026. Screenshots are saved to ignored `artifacts/`. Run `scripts/smoke-test.ps1` with the normal API running to verify the live RDW path separately.
 
 ## PostgreSQL and containers
 
