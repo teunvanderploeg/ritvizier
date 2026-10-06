@@ -1,0 +1,124 @@
+{
+  "GZS88X": {
+    "licensePlate": "GZS88X",
+    "make": "VOLKSWAGEN",
+    "model": "GOLF",
+    "vehicleType": "Personenauto",
+    "bodyType": "stationwagen",
+    "firstRegistrationDate": "2023-08-03",
+    "firstRegistrationNetherlandsDate": "2024-12-28",
+    "apkExpiryDate": "2027-08-03",
+    "fuelTypes": [
+      "Elektriciteit",
+      "Benzine"
+    ],
+    "powerKw": 110.0,
+    "powerHp": 150,
+    "electricPowerKw": 9.4,
+    "massKg": 1265,
+    "readyMassKg": 1365,
+    "maxMassKg": 1870,
+    "payloadKg": 505,
+    "catalogPrice": 49704,
+    "bpm": 4931,
+    "colorPrimary": "GRIJS",
+    "numberOfSeats": 5,
+    "numberOfDoors": 5,
+    "engineCapacityCc": 1498,
+    "cylinders": 4,
+    "emissionsCo2": 129.0,
+    "emissionClass": "EURO 6 AP",
+    "consumptionCombined": null,
+    "electricConsumption": null,
+    "lengthCm": 429,
+    "widthCm": 179,
+    "heightCm": 146,
+    "wheelbaseCm": 262,
+    "towingBrakedKg": 1500,
+    "towingUnbrakedKg": 680,
+    "maxSpeedKmh": 224,
+    "isImport": true,
+    "isExported": false,
+    "isTaxi": false,
+    "recallPending": false,
+    "registrationPossible": true,
+    "source": {
+      "name": "RDW Open Data",
+      "datasets": [
+        "m9d7-ebf2",
+        "8ys7-d773"
+      ],
+      "fetchedAt": "2026-10-06T21:53:48.261668Z",
+      "missingFields": [
+        "consumptionCombined"
+      ],
+      "derivedFields": [
+        "powerHp",
+        "payloadKg",
+        "isImport"
+      ],
+      "warnings": []
+    }
+  },
+  "P185BH": {
+    "licensePlate": "P185BH",
+    "make": "TOYOTA",
+    "model": "TOYOTA YARIS CROSS",
+    "vehicleType": "Personenauto",
+    "bodyType": "hatchback",
+    "firstRegistrationDate": "2022-01-03",
+    "firstRegistrationNetherlandsDate": "2022-04-28",
+    "apkExpiryDate": "2027-05-21",
+    "fuelTypes": [
+      "Benzine",
+      "Elektriciteit"
+    ],
+    "powerKw": 68.0,
+    "powerHp": 92,
+    "electricPowerKw": 59.0,
+    "massKg": 1190,
+    "readyMassKg": 1290,
+    "maxMassKg": 1690,
+    "payloadKg": 400,
+    "catalogPrice": 37601,
+    "bpm": 2421,
+    "colorPrimary": "GRIJS",
+    "numberOfSeats": 5,
+    "numberOfDoors": 4,
+    "engineCapacityCc": 1490,
+    "cylinders": 3,
+    "emissionsCo2": 112.0,
+    "emissionClass": "EURO 6 AP",
+    "consumptionCombined": null,
+    "electricConsumption": null,
+    "lengthCm": 420,
+    "widthCm": 177,
+    "heightCm": 160,
+    "wheelbaseCm": 256,
+    "towingBrakedKg": 750,
+    "towingUnbrakedKg": 550,
+    "maxSpeedKmh": 170,
+    "isImport": true,
+    "isExported": false,
+    "isTaxi": false,
+    "recallPending": false,
+    "registrationPossible": true,
+    "source": {
+      "name": "RDW Open Data",
+      "datasets": [
+        "m9d7-ebf2",
+        "8ys7-d773"
+      ],
+      "fetchedAt": "2026-10-06T21:53:43.179026Z",
+      "missingFields": [
+        "consumptionCombined"
+      ],
+      "derivedFields": [
+        "powerHp",
+        "payloadKg",
+        "isImport"
+      ],
+      "warnings": []
+    }
+  }
+}
