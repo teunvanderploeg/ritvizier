@@ -1,9 +1,9 @@
 from datetime import datetime
 from typing import Any
 
-from sqlalchemy import DateTime, JSON, String
-from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
+from sqlalchemy import JSON, DateTime, String
 from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker, create_async_engine
+from sqlalchemy.orm import DeclarativeBase, Mapped, mapped_column
 
 
 class Base(DeclarativeBase):
@@ -18,5 +18,7 @@ class VehicleCache(Base):
 
 
 def create_sessions(url: str) -> async_sessionmaker[AsyncSession]:
-    engine = create_async_engine(url, pool_pre_ping=True)
+    engine = create_async_engine(
+        url, pool_pre_ping=True, pool_timeout=3, connect_args={"timeout": 2}
+    )
     return async_sessionmaker(engine, expire_on_commit=False)

@@ -1,4 +1,5 @@
 from pydantic import Field
+
 from app.schemas.vehicle import ApiModel
 
 
@@ -23,9 +24,14 @@ class CostEstimate(ApiModel):
 
 def calculate_costs(values: CostAssumptions) -> CostEstimate:
     energy = round(values.annual_km / 100 * values.consumption * values.energy_price / 12, 2)
-    monthly = round(energy + values.insurance_monthly + values.maintenance_monthly + values.road_tax_monthly, 2)
+    monthly = round(
+        energy + values.insurance_monthly + values.maintenance_monthly + values.road_tax_monthly, 2
+    )
     return CostEstimate(
-        energy_monthly=energy, insurance_monthly=values.insurance_monthly,
-        maintenance_monthly=values.maintenance_monthly, road_tax_monthly=values.road_tax_monthly,
-        monthly=monthly, annual=round(monthly * 12, 2),
+        energy_monthly=energy,
+        insurance_monthly=values.insurance_monthly,
+        maintenance_monthly=values.maintenance_monthly,
+        road_tax_monthly=values.road_tax_monthly,
+        monthly=monthly,
+        annual=round(monthly * 12, 2),
     )
