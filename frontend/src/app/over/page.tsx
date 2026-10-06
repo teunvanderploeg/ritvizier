@@ -19,10 +19,13 @@ export default function AboutPage() {
       </p>
       <h2 id="bronnen">Waar komen de gegevens vandaan?</h2>
       <p>
-        We gebruiken twee officiële datasets van RDW Open Data. De
+        We combineren officiële datasets van RDW Open Data. De
         voertuigregistratie levert onder meer merk, toelating, APK, gewicht en
         afmetingen. De brandstofdataset levert beschikbare motor-, brandstof- en
-        emissiegegevens.
+        emissiegegevens. Aanvullende datasets leveren asgegevens, carrosserie,
+        tellerstandtoelichting en gekoppelde terugroepacties. Waar de exacte
+        typegoedkeuring, variant en uitvoering overeenkomen, halen we ook
+        transmissie en preciezere afmetingen op.
       </p>
       <ul>
         <li>
@@ -58,15 +61,20 @@ export default function AboutPage() {
         waarden worden als berekend aangeduid.
       </p>
       <p>
-        De kostenberekening is een scenario op basis van jouw invoer. Prijzen en
-        verbruik in het formulier zijn voorbeeldwaarden. RitVizier berekent in
-        deze versie geen officiële wegenbelasting.
+        De kostenberekening is een scenario op basis van jouw invoer. Verbruik
+        wordt waar mogelijk vooraf ingevuld met RDW-gegevens. Voor gewone
+        personenauto’s berekenen we een wegenbelastingindicatie met massa
+        rijklaar, brandstof en jouw woonprovincie, op basis van de
+        gecontroleerde tarieftabellen van de Belastingdienst voor juli–december
+        2026. Bijzondere tarieven en persoonlijke vrijstellingen vragen een
+        aparte controle.
       </p>
       <h2>Wat een kentekencheck je niet vertelt</h2>
       <p>
-        We doen geen uitspraken over schadevrij rijden, de juistheid van een
-        kilometerstand, het aantal eigenaren of onderhoudshistorie. Die
-        informatie wordt niet geleverd door onze gekoppelde bronnen.
+        Het officiële tellerstandoordeel is beschikbaar, de exacte
+        kilometerstand en volledige meetreeks zijn niet openbaar. Commerciële
+        optiepakketten, schadehistorie, het aantal eigenaren en
+        onderhoudsbewijzen worden niet geleverd door onze gekoppelde bronnen.
       </p>
       <h2>Onafhankelijk</h2>
       <p>RitVizier is een zelfstandig product en geen onderdeel van de RDW.</p>

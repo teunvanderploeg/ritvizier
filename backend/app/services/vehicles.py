@@ -43,7 +43,11 @@ class VehicleService:
             try:
                 async with self.sessions() as session:
                     stored = await session.get(VehicleCache, plate)
-                    if stored and stored.expires_at > now:
+                    if (
+                        stored
+                        and stored.expires_at > now
+                        and stored.payload.get("source", {}).get("schemaVersion") == 2
+                    ):
                         vehicle = Vehicle.model_validate(stored.payload)
                         self._remember(plate, stored.expires_at, vehicle)
                         return vehicle

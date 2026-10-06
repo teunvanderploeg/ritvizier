@@ -6,7 +6,7 @@ export async function backendRequest(path: string, options?: RequestInit) {
       {
         ...options,
         cache: "no-store",
-        signal: AbortSignal.timeout(18000),
+        signal: AbortSignal.timeout(35000),
       },
     );
     const body: unknown = await response.json();

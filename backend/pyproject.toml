@@ -9,7 +9,7 @@ requires-python = ">=3.12"
 dependencies = [
   "fastapi>=0.115,<1", "uvicorn[standard]>=0.32,<1", "httpx>=0.28,<1",
   "pydantic-settings>=2.7,<3", "sqlalchemy[asyncio]>=2.0,<3",
-  "asyncpg>=0.30,<1", "alembic>=1.14,<2"
+  "asyncpg>=0.30,<1", "alembic>=1.14,<2", "tzdata>=2025.1,<2027"
 ]
 
 [project.optional-dependencies]
@@ -18,6 +18,9 @@ dev = ["pytest>=8,<10", "pytest-asyncio>=0.25,<2", "ruff>=0.9,<1", "mypy>=1.14,<
 [tool.setuptools.packages.find]
 where = ["."]
 include = ["app*"]
+
+[tool.setuptools.package-data]
+app = ["data/*.json"]
 
 [tool.pytest.ini_options]
 asyncio_mode = "auto"

@@ -1,8 +1,9 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Coins, Info, ArrowUpRight } from "lucide-react";
 import { currency } from "@/lib/formatting";
 import type { Vehicle } from "@/types/vehicle";
+import { RoadTax } from "./RoadTax";
 interface Assumptions {
   annualKm: number;
   consumption: number;
@@ -27,7 +28,7 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
     annualKm: 15000,
     consumption: electric
       ? (vehicle?.electricConsumption ?? 18)
-      : (vehicle?.consumptionCombined ?? 6.5),
+      : (vehicle?.consumptionWltp ?? vehicle?.consumptionCombined ?? 6.5),
     energyPrice: electric ? 0.35 : 2.1,
     insuranceMonthly: 65,
     maintenanceMonthly: 50,
@@ -37,6 +38,13 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
   const [error, setError] = useState("");
   const [busy, setBusy] = useState(true);
   const [retry, setRetry] = useState(0);
+  const [manualTax, setManualTax] = useState(!vehicle);
+  const [taxMonthly, setTaxMonthly] = useState<number | null>(null);
+  const acceptTax = useCallback((amount: number | null) => {
+    setTaxMonthly(amount);
+    setBusy(true);
+  }, []);
+  const taxIncomplete = !manualTax && taxMonthly === null;
   useEffect(() => {
     const controller = new AbortController();
     const timer = setTimeout(async () => {
@@ -46,7 +54,12 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
         const response = await fetch("/api/costs", {
           method: "POST",
           headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(values),
+          body: JSON.stringify({
+            ...values,
+            roadTaxMonthly: manualTax
+              ? values.roadTaxMonthly
+              : (taxMonthly ?? 0),
+          }),
           signal: controller.signal,
         });
         if (!response.ok)
@@ -70,7 +83,7 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
       clearTimeout(timer);
       controller.abort();
     };
-  }, [values, retry]);
+  }, [values, retry, taxMonthly, manualTax]);
   function update(key: keyof Assumptions, value: string, max: number) {
     const number = Number(value);
     if (Number.isFinite(number)) {
@@ -124,6 +137,32 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
           Pas de voorbeeldwaarden aan jouw situatie aan. De uitkomst is een
           inschatting op basis van je invoer.
         </p>
+        {vehicle && (
+          <>
+            {!manualTax && <RoadTax vehicle={vehicle} onEstimate={acceptTax} />}
+            <button
+              className="text-button tax-mode-button"
+              onClick={() => {
+                setBusy(true);
+                setTaxMonthly(null);
+                setManualTax(!manualTax);
+              }}
+            >
+              {manualTax
+                ? "Wegenbelasting automatisch berekenen"
+                : "Zelf een bedrag voor wegenbelasting invullen"}
+            </button>
+            <p className="cost-footnote">
+              Verbruik vooraf ingevuld met{" "}
+              {vehicle.consumptionWltp != null
+                ? "RDW WLTP"
+                : vehicle.consumptionCombined != null
+                  ? "RDW NEDC"
+                  : "een voorbeeldwaarde"}
+              . Pas dit aan je praktijkverbruik aan.
+            </p>
+          </>
+        )}
         <label className="range-label" htmlFor="annual-km">
           Kilometers per jaar{" "}
           <strong>
@@ -165,39 +204,45 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
               ["maintenanceMonthly", "Onderhoud per maand", "€", 2000, 1],
               ["roadTaxMonthly", "Wegenbelasting per maand", "€", 2000, 1],
             ] as const
-          ).map(([key, label, unit, max, step]) => (
-            <label key={key} className="cost-field" htmlFor={`cost-${key}`}>
-              <span>{label}</span>
-              <div>
-                <input
-                  id={`cost-${key}`}
-                  type="number"
-                  min="0"
-                  max={max}
-                  step={step}
-                  inputMode="decimal"
-                  value={values[key]}
-                  onChange={(e) => update(key, e.target.value, max)}
-                />
-                <span>{unit}</span>
-              </div>
-            </label>
-          ))}
+          )
+            .filter(([key]) => key !== "roadTaxMonthly" || manualTax)
+            .map(([key, label, unit, max, step]) => (
+              <label key={key} className="cost-field" htmlFor={`cost-${key}`}>
+                <span>{label}</span>
+                <div>
+                  <input
+                    id={`cost-${key}`}
+                    type="number"
+                    min="0"
+                    max={max}
+                    step={step}
+                    inputMode="decimal"
+                    value={values[key]}
+                    onChange={(e) => update(key, e.target.value, max)}
+                  />
+                  <span>{unit}</span>
+                </div>
+              </label>
+            ))}
         </div>
-        <p className="cost-footnote">
-          <Info size={16} />
-          Wegenbelasting staat standaard op € 0. Vul je eigen bedrag in voor een
-          bruikbare totaalschatting.
-        </p>
-        <a
-          className="source-link"
-          href="https://www.belastingdienst.nl/wps/wcm/connect/nl/auto-en-vervoer/content/hulpmiddel-motorrijtuigenbelasting-berekenen"
-          target="_blank"
-          rel="noreferrer"
-        >
-          Bereken je wegenbelasting bij de Belastingdienst{" "}
-          <ArrowUpRight size={14} />
-        </a>
+        {manualTax && (
+          <p className="cost-footnote">
+            <Info size={16} />
+            Wegenbelasting staat standaard op € 0. Vul je eigen bedrag in voor
+            een bruikbare totaalschatting.
+          </p>
+        )}
+        {manualTax && (
+          <a
+            className="source-link"
+            href="https://www.belastingdienst.nl/wps/wcm/connect/nl/auto-en-vervoer/content/hulpmiddel-motorrijtuigenbelasting-berekenen"
+            target="_blank"
+            rel="noreferrer"
+          >
+            Bereken je wegenbelasting bij de Belastingdienst{" "}
+            <ArrowUpRight size={14} />
+          </a>
+        )}
       </div>
       <div className="cost-result" aria-busy={busy}>
         <span className="eyebrow">RITVIZIER-INSCHATTING</span>
@@ -205,14 +250,26 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
           {error
             ? "Niet beschikbaar"
             : result
-              ? currency(result.monthly)
+              ? currency(
+                  taxIncomplete
+                    ? result.monthly - result.roadTaxMonthly
+                    : result.monthly,
+                )
               : "Berekenen…"}
           <span>{result && !error ? "per maand" : ""}</span>
         </div>
         <p>
-          {result && !error ? `${currency(result.annual)} per jaar` : ""}
+          {result && !error
+            ? `${currency(taxIncomplete ? result.annual - result.roadTaxMonthly * 12 : result.annual)} per jaar`
+            : ""}
           {busy && result ? " · Wordt bijgewerkt…" : ""}
         </p>
+        {taxIncomplete && (
+          <p className="tax-incomplete">
+            Tussentotaal zonder wegenbelasting. Kies je provincie of vul zelf
+            een bedrag in.
+          </p>
+        )}
         {error ? (
           <div role="alert">
             <p className="form-error">{error}</p>
@@ -246,7 +303,11 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
                       <span style={{ background: item.color }} />
                       {item.label}
                     </dt>
-                    <dd>{currency(item.value, 2)}</dd>
+                    <dd>
+                      {item.label === "Wegenbelasting" && taxIncomplete
+                        ? "Nog niet berekend"
+                        : currency(item.value, 2)}
+                    </dd>
                   </div>
                 ))}
               </dl>

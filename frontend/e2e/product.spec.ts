@@ -1,7 +1,154 @@
 import { test, expect } from "@playwright/test";
 import { join } from "node:path";
-import { mkdir } from "node:fs/promises";
+import { mkdir, readFile } from "node:fs/promises";
 const artifacts = join(process.cwd(), "..", "artifacts");
+
+test("recall details distinguish open actions from repairs reported by the producer", async ({
+  page,
+}) => {
+  const snapshots = JSON.parse(
+    await readFile(
+      join(
+        process.cwd(),
+        "..",
+        "backend",
+        "tests",
+        "fixtures",
+        "vehicles.json",
+      ),
+      "utf8",
+    ),
+  );
+  const action = {
+    reference: "TEST-OPEN",
+    statusCode: "O",
+    status: "Openstaande terugroepactie",
+    publicationDate: "2026-01-15",
+    producer: "Testproducent",
+    producerReference: "TEST",
+    defect: "Defect uit testscenario",
+    consequences: "Gevolg uit testscenario",
+    remedy: "Herstel door merkdealer",
+    risks: ["Risico uit testscenario"],
+    phone: null,
+    url: "javascript:alert(1)",
+  };
+  await page.route("**/api/vehicles/AB-123-C", (route) =>
+    route.fulfill({
+      json: {
+        ...snapshots.G921GS,
+        licensePlate: "AB123C",
+        recallPending: true,
+        recalls: [
+          action,
+          {
+            ...action,
+            reference: "TEST-REPAIRED",
+            statusCode: "P",
+            status: "Producent heeft herstel gemeld",
+          },
+        ],
+      },
+    }),
+  );
+  await page.goto("/auto/AB-123-C");
+  await page.getByRole("button", { name: "Opnieuw proberen" }).click();
+  await page
+    .locator(".section-tabs")
+    .getByRole("button", { name: "Terugroepacties", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", { name: "Er staat een terugroepactie open" }),
+  ).toBeVisible();
+  await expect(page.locator(".recall-card")).toHaveCount(2);
+  await expect(page.locator(".recall-card").first()).toContainText(
+    "Defect uit testscenario",
+  );
+  await expect(page.locator(".recall-card").last()).toContainText(
+    "Producent heeft herstel gemeld",
+  );
+  await expect(page.locator('a[href^="javascript:"]')).toHaveCount(0);
+});
+
+test("MINI exposes RDW history, exact execution, emissions and automatic provincial road tax", async ({
+  page,
+}) => {
+  await page.setViewportSize({ width: 320, height: 900 });
+  await page.goto("/auto/G-921-GS");
+  await expect(page.getByText("Groen / Zwart", { exact: true })).toBeVisible();
+  await expect(page.getByText("DAW500L0", { exact: true })).toBeVisible();
+  await page
+    .locator(".section-tabs")
+    .getByRole("button", { name: "Uitvoering", exact: true })
+    .click();
+  await expect(page.getByText("Automaat", { exact: true })).toBeVisible();
+  await expect(
+    page.locator(".data-row").filter({ hasText: "Aantal versnellingen" }),
+  ).toContainText("7");
+  await page
+    .locator(".section-tabs")
+    .getByRole("button", { name: "Tellerstand & historie", exact: true })
+    .click();
+  await expect(
+    page.getByText(/De geregistreerde tellerstand is steeds hoger/),
+  ).toBeVisible();
+  await expect(
+    page.locator(".data-row").filter({ hasText: "Exacte kilometerstand" }),
+  ).toContainText("Niet openbaar beschikbaar");
+  await page
+    .locator(".section-tabs")
+    .getByRole("button", { name: "Terugroepacties", exact: true })
+    .click();
+  await expect(
+    page.getByRole("heading", {
+      name: "Geen openstaande terugroepactie gemeld",
+    }),
+  ).toBeVisible();
+  await page
+    .locator(".section-tabs")
+    .getByRole("button", { name: "Verbruik & milieu", exact: true })
+    .click();
+  await expect(
+    page.locator(".data-row").filter({ hasText: "CO₂ WLTP" }),
+  ).toContainText("157 g/km");
+  await expect(
+    page.locator(".data-row").filter({ hasText: "CO₂ NEDC" }),
+  ).toContainText("122 g/km");
+  await page
+    .locator(".section-tabs")
+    .getByRole("button", { name: "Kosten", exact: true })
+    .click();
+  await expect(page.locator(".tax-incomplete")).toContainText(
+    "zonder wegenbelasting",
+  );
+  await expect(page.getByLabel("Verbruik per 100 km")).toHaveValue("6.9");
+  await page.getByLabel("Woonprovincie").selectOption("NH");
+  await expect(page.locator(".road-tax-amount")).toContainText("226");
+  await expect(page.locator(".cost-breakdown")).toContainText("75,33");
+  await expect(page.locator(".tax-incomplete")).toHaveCount(0);
+  await page.getByLabel("Woonprovincie").selectOption("ZH");
+  await expect(page.locator(".road-tax-amount")).toContainText("247");
+  await expect(page.locator(".cost-breakdown")).toContainText("82,33");
+  await expect(page.getByLabel("Wegenbelasting per maand")).toHaveCount(0);
+  expect(
+    await page.evaluate(
+      () => document.documentElement.scrollWidth <= window.innerWidth,
+    ),
+  ).toBe(true);
+  await page.screenshot({
+    path: join(artifacts, `mini-tax-${test.info().project.name}.png`),
+    fullPage: true,
+  });
+  await page.getByLabel("Woonprovincie").selectOption("");
+  await expect(page.locator(".tax-incomplete")).toBeVisible();
+  await page
+    .getByRole("button", {
+      name: "Zelf een bedrag voor wegenbelasting invullen",
+    })
+    .click();
+  await page.getByLabel("Wegenbelasting per maand").fill("99");
+  await expect(page.locator(".cost-breakdown")).toContainText("99,00");
+});
 
 test("shares a stable vehicle URL through the clipboard fallback", async ({
   page,
@@ -234,6 +381,9 @@ test("vehicle detail tabs fit mobile and preserve missing values", async ({
   ).toBeVisible();
   for (const tab of [
     "APK & registratie",
+    "Tellerstand & historie",
+    "Terugroepacties",
+    "Uitvoering",
     "Motor & prestaties",
     "Verbruik & milieu",
     "Afmetingen & gewicht",
@@ -248,7 +398,9 @@ test("vehicle detail tabs fit mobile and preserve missing values", async ({
       await expect(
         page
           .locator(".data-row")
-          .filter({ has: page.getByText("Brandstofverbruik", { exact: true }) })
+          .filter({
+            has: page.getByText("Brandstofverbruik NEDC", { exact: true }),
+          })
           .getByRole("definition"),
       ).toHaveText("Niet beschikbaar");
     }

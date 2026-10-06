@@ -11,7 +11,7 @@ const getData = cache(async (plate: string) => {
   try {
     const response = await fetch(
       `${process.env.BACKEND_URL || "http://127.0.0.1:8000"}/api/vehicles/${normalized.data}`,
-      { cache: "no-store", signal: AbortSignal.timeout(18000) },
+      { cache: "no-store", signal: AbortSignal.timeout(35000) },
     );
     const data = await response.json();
     if (!response.ok)

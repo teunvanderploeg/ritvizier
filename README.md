@@ -19,7 +19,7 @@ In another terminal, run `npm run dev` and open http://localhost:3000.
 
 For a phone or another device on the same network, use the computer's IPv4 address on port 3000, for example `http://192.168.50.205:3000`. The development server listens on all interfaces and allows its local interface addresses for Next.js development assets and live updates. Restart it after a network-address change. With the development server running, `node scripts/check-lan.mjs http://192.168.50.205:3000` checks network access, input and lookups in Chromium and WebKit.
 
-The frontend proxies `/api/vehicles/:plate` and `/api/costs` to FastAPI. Domain logic belongs to the Python backend. RDW datasets `m9d7-ebf2` and `8ys7-d773` supply registration and fuel data. No owner, damage or maintenance history is inferred.
+The frontend proxies `/api/vehicles/:plate`, `/api/costs` and `/api/road-tax` to FastAPI. Domain logic belongs to the Python backend. RDW registration, fuel, body, axle, odometer explanation and recall datasets are combined. Type approval is joined on the complete approval number, variant and execution code; conflicting revisions or ranges never become arbitrary specifications. No owner, damage or maintenance history is inferred.
 
 ## Configuration
 
@@ -47,7 +47,13 @@ End-to-end tests require a production build first. Playwright starts an isolated
 
 ## Data and calculations
 
-Missing RDW values remain null. Source metadata records datasets, retrieval time and missing fields. kW-to-hp, import indication and payload are labelled as derived. Running costs are a scenario based on user-entered annual distance, consumption, energy price, insurance, maintenance and road tax. They exclude depreciation, financing and purchase costs. Road tax is entered by the user; this release does not implement an official tax calculator.
+Missing RDW values remain null. Source metadata records datasets, retrieval time and missing fields. kW-to-hp, import indication, payload, age and APK countdown are labelled as derived. Both colors, registration date, WAM, odometer judgment, exact execution identifiers, transmission, recall status/detail/risk and separate WLTP/NEDC figures are shown. Exact odometer readings, complete inspection history and commercial option packages are unavailable through these public sources.
+
+Running costs prefill RDW WLTP consumption (NEDC fallback). Insurance, maintenance, distance and energy price remain editable assumptions. Road tax uses official provincial passenger-car tables from the Belastingdienst calculator. The checked snapshot in `backend/app/data/road_tax_2026.json` is valid July–December 2026 and uses **massa rijklaar**, not empty mass. Petrol hybrids pay the normal rate; fully electric/hydrogen cars use 70% of the petrol quarterly amount, rounded down exactly as the live calculator does. Its legacy EV table column is deliberately unused. Diesel needs an explicit particulate-surcharge choice; LPG needs the registered installation class. Unsupported categories, missing weight, oldtimer cases and dates outside validity return an unavailable reason, never a guessed zero. The frontend labels the total as excluding road tax until it is known; manual override remains possible. Estimates exclude personal exemptions, suspension, depreciation, financing and purchase costs.
+
+To refresh the reviewed snapshot, run `.venv\\Scripts\\python backend/scripts/update_road_tax.py`. It parses only numeric assignments from the official public asset without executing remote code, validates all 12 tables, and records URL, retrieval timestamp and SHA-256. Review against the live calculator before extending the validity dates. The per-plate API retrieves weight/fuel from the backend cache; it does not trust caller-supplied technical values.
+
+Additional RDW datasets: `3huj-srit` (axes), `vezc-m2t6` (body), `jqs4-4kvw` (odometer explanation), `t49b-isb7` (recall status), `j9yg-7rg9` (campaign), `9ihi-jgpf` (risks), `byxc-wwua` (type approval base) and `7rjk-eycs` (transmission). Recall status O means open; P means the producer reported repair. Actions join by the actual plate/reference, not by general make/model similarity. Optional-source failures preserve core registration and carry warnings. Persisted schema-v1 cache records are refreshed automatically.
 
 ## Operational limits
 

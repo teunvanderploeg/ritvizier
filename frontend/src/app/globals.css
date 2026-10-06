@@ -2665,3 +2665,224 @@ input[type="range"] {
 .neutral-banner .text-button {
   color: var(--muted);
 }
+
+.vehicle-status-grid {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1rem 0;
+}
+.vehicle-status-card {
+  display: flex;
+  align-items: center;
+  gap: 0.85rem;
+  width: 100%;
+  min-width: 0;
+  text-align: left;
+  padding: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  color: var(--ink);
+  font-size: 0.75rem;
+}
+.vehicle-status-card > span {
+  flex: 1;
+  min-width: 0;
+}
+.vehicle-status-card svg {
+  flex-shrink: 0;
+  color: var(--teal);
+}
+.vehicle-status-card strong {
+  display: block;
+  margin: 0.35rem 0;
+  font-size: 1rem;
+}
+.vehicle-status-card small {
+  color: var(--muted);
+}
+.vehicle-status-card:hover {
+  border-color: var(--brand);
+}
+.status-warning {
+  color: var(--warning);
+  background: color-mix(in srgb, var(--warning) 8%, var(--surface));
+}
+.status-warning svg {
+  color: var(--warning);
+}
+.recall-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 1rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 1.25rem;
+}
+.recall-summary > svg {
+  flex-shrink: 0;
+}
+.recall-summary h2 {
+  font-size: 1.2rem;
+  margin: 0 0 0.5rem;
+}
+.recall-summary p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.recall-list {
+  display: grid;
+  gap: 1.25rem;
+  margin: 1.5rem 0;
+}
+.recall-card {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  min-width: 0;
+}
+.recall-card-heading {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  align-items: center;
+  justify-content: space-between;
+}
+.recall-card-heading h3 {
+  margin: 0;
+}
+.recall-badge {
+  border-radius: 0.4rem;
+  background: var(--surface-subtle);
+  padding: 0.4rem 0.65rem;
+  font-size: 0.75rem;
+}
+.recall-card .data-row {
+  grid-template-columns: minmax(0, 1fr);
+  gap: 0.35rem;
+}
+.recall-card .data-row dd {
+  text-align: left;
+  font-weight: 400;
+  line-height: 1.6;
+}
+.road-tax-panel {
+  background: var(--surface-subtle);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1rem;
+  margin: 1.25rem 0 0.5rem;
+}
+.road-tax-panel h3 {
+  font-size: 1rem;
+  margin: 0 0 0.5rem;
+}
+.road-tax-panel p {
+  font-size: 0.8125rem;
+}
+.road-tax-panel small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.6875rem;
+  line-height: 1.7;
+}
+.road-tax-panel .source-link {
+  margin-top: 0.8rem;
+}
+.select-field {
+  display: block;
+  min-width: 0;
+  font-size: 0.8125rem;
+  margin-top: 1rem;
+}
+.select-field select {
+  display: block;
+  width: 100%;
+  min-width: 0;
+  min-height: 2.8rem;
+  margin: 0.5rem 0;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.6rem;
+  background: var(--surface);
+  color: var(--ink);
+  font: inherit;
+}
+.road-tax-amount {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+.road-tax-amount strong {
+  font-size: 1.75rem;
+}
+.road-tax-amount span {
+  font-size: 0.8125rem;
+  color: var(--muted);
+}
+.tax-mode-button {
+  min-height: 2.75rem;
+  text-align: left;
+}
+.tax-incomplete {
+  padding: 0.75rem;
+  border-radius: 0.5rem;
+  background: var(--surface);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+}
+.dataset-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem 1rem;
+  margin: 1rem 0;
+}
+.dataset-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.25rem;
+  font-size: 0.6875rem;
+  color: var(--brand);
+}
+.attention-panel {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  margin-bottom: 2rem;
+  background: var(--surface-subtle);
+}
+.attention-panel h2 {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 1rem;
+  margin: 0;
+}
+.attention-panel ul {
+  padding-left: 1.25rem;
+  font-size: 0.8125rem;
+  line-height: 1.7;
+  color: var(--muted);
+  margin-bottom: 0;
+}
+@media (min-width: 640px) {
+  .vehicle-status-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+  .road-tax-panel {
+    padding: 1.25rem;
+  }
+}
+@media (min-width: 768px) {
+  .data-wide {
+    grid-column: 1 / -1;
+  }
+  .recall-card .data-row {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
+    gap: 1rem;
+  }
+}

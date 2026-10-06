@@ -1,0 +1,163 @@
+{
+  "8ys7-d773": [
+    {
+      "kenteken": "G921GS",
+      "brandstof_volgnummer": "1",
+      "brandstof_omschrijving": "Benzine",
+      "brandstofverbruik_gecombineerd": "5.40",
+      "co2_uitstoot_gecombineerd": "122",
+      "geluidsniveau_rijdend": "69",
+      "geluidsniveau_stationair": "76",
+      "emissiecode_omschrijving": "6",
+      "milieuklasse_eg_goedkeuring_licht": "715/2007*2018/1832DG",
+      "nettomaximumvermogen": "100.00",
+      "toerental_geluidsniveau": "3375",
+      "emis_deeltjes_type1_wltp": "0.34",
+      "emissie_co2_gecombineerd_wltp": "157",
+      "brandstof_verbruik_gecombineerd_wltp": "6.900",
+      "uitlaatemissieniveau": "EURO 6 DG"
+    }
+  ],
+  "3huj-srit": [
+    {
+      "kenteken": "G921GS",
+      "as_nummer": "1",
+      "aantal_assen": "2",
+      "plaatscode_as": "V",
+      "spoorbreedte": "159",
+      "wettelijk_toegestane_maximum_aslast": "1045",
+      "technisch_toegestane_maximum_aslast": "1045"
+    },
+    {
+      "kenteken": "G921GS",
+      "as_nummer": "2",
+      "aantal_assen": "2",
+      "plaatscode_as": "A",
+      "spoorbreedte": "159",
+      "wettelijk_toegestane_maximum_aslast": "980",
+      "technisch_toegestane_maximum_aslast": "980"
+    }
+  ],
+  "byxc-wwua": [
+    {
+      "typegoedkeuringsnummer": "e1*2007/46*1682*07",
+      "codevarianttgk": "YW31",
+      "codeuitvoeringtgk": "DAW500L0",
+      "volgnummerrevisieuitvoering": "0",
+      "begindatumrevisieuitvoering": "2019-06-27",
+      "voertuigcategorie": "M1",
+      "codelinksrechtsrijdend": "R",
+      "aantalwielen": "4",
+      "wielbasisondergrens": "2670",
+      "wielbasisbovengrens": "2670",
+      "aantaldeurenondergrens": "4",
+      "aantaldeurenbovengrens": "4",
+      "lengteondergrens": "4299",
+      "lengtebovengrens": "4299",
+      "breedteondergrens": "1822",
+      "breedtebovengrens": "1822",
+      "hoogteondergrens": "1557",
+      "hoogtebovengrens": "1557",
+      "aantalzitplaatsenondergrens": "5",
+      "aantalzitplaatsenbovengrens": "5",
+      "maximummassaondergrens": "1985",
+      "maximummassabovengrens": "1985",
+      "massarijklaarondergrens": "1490",
+      "massarijklaarbovengrens": "1490",
+      "maxconstructiesnelheidahwogr": "200.00",
+      "maxconstructiesnelheidahwbgr": "200.00",
+      "paramrijweerstandf0ondergrens": "130.500000",
+      "paramrijweerstandf0bovengrens": "187.400000",
+      "paramrijweerstandf1ondergrens": "-0.271000",
+      "paramrijweerstandf1bovengrens": "-0.271000",
+      "paramrijweerstandf2ondergrens": "0.037480",
+      "paramrijweerstandf2bovengrens": "0.040090"
+    }
+  ],
+  "7rjk-eycs": [
+    {
+      "typegoedkeuringsnummer": "e1*2007/46*1682*07",
+      "codevarianttgk": "YW31",
+      "codeuitvoeringtgk": "DAW500L0",
+      "volgnummerrevisieuitvoering": "0",
+      "volgnummerversnelling": "1",
+      "codetypeversnellingsbak": "A",
+      "aantalversnellingenondergrens": "7",
+      "aantalversnellingenbovengrens": "7"
+    }
+  ],
+  "vezc-m2t6": [
+    {
+      "kenteken": "G921GS",
+      "carrosserie_volgnummer": "1",
+      "carrosserietype": "AC",
+      "type_carrosserie_europese_omschrijving": "Stationwagen"
+    }
+  ],
+  "m9d7-ebf2": [
+    {
+      "kenteken": "G921GS",
+      "voertuigsoort": "Personenauto",
+      "merk": "MINI",
+      "handelsbenaming": "COUNTRYMAN COOPER",
+      "vervaldatum_apk": "20271018",
+      "datum_tenaamstelling": "20210211",
+      "bruto_bpm": "5479",
+      "inrichting": "stationwagen",
+      "aantal_zitplaatsen": "5",
+      "eerste_kleur": "GROEN",
+      "tweede_kleur": "ZWART",
+      "aantal_cilinders": "3",
+      "cilinderinhoud": "1499",
+      "massa_ledig_voertuig": "1390",
+      "toegestane_maximum_massa_voertuig": "1985",
+      "massa_rijklaar": "1490",
+      "maximum_massa_trekken_ongeremd": "715",
+      "maximum_trekken_massa_geremd": "1500",
+      "datum_eerste_toelating": "20191018",
+      "datum_eerste_tenaamstelling_in_nederland": "20191018",
+      "wacht_op_keuren": "Geen verstrekking in Open Data",
+      "catalogusprijs": "41772",
+      "wam_verzekerd": "Ja",
+      "maximale_constructiesnelheid": "200",
+      "aantal_deuren": "4",
+      "aantal_wielen": "4",
+      "lengte": "430",
+      "breedte": "182",
+      "europese_voertuigcategorie": "M1",
+      "technische_max_massa_voertuig": "1985",
+      "type": "FMX",
+      "typegoedkeuringsnummer": "e1*2007/46*1682*07",
+      "variant": "YW31",
+      "uitvoering": "DAW500L0",
+      "volgnummer_wijziging_eu_typegoedkeuring": "0",
+      "vermogen_massarijklaar": "0.07",
+      "wielbasis": "267",
+      "export_indicator": "Nee",
+      "openstaande_terugroepactie_indicator": "Nee",
+      "taxi_indicator": "Nee",
+      "maximum_massa_samenstelling": "3485",
+      "jaar_laatste_registratie_tellerstand": "2026",
+      "tellerstandoordeel": "Logisch",
+      "code_toelichting_tellerstandoordeel": "00",
+      "tenaamstellen_mogelijk": "Ja",
+      "vervaldatum_apk_dt": "2027-10-18T00:00:00",
+      "datum_tenaamstelling_dt": "2021-02-11T00:00:00",
+      "datum_eerste_toelating_dt": "2019-10-18T00:00:00",
+      "datum_eerste_tenaamstelling_in_nederland_dt": "2019-10-18T00:00:00",
+      "hoogte_voertuig": "156",
+      "api_gekentekende_voertuigen_assen": "https://opendata.rdw.nl/resource/3huj-srit.json",
+      "api_gekentekende_voertuigen_brandstof": "https://opendata.rdw.nl/resource/8ys7-d773.json",
+      "api_gekentekende_voertuigen_carrosserie": "https://opendata.rdw.nl/resource/vezc-m2t6.json",
+      "api_gekentekende_voertuigen_carrosserie_specifiek": "https://opendata.rdw.nl/resource/jhie-znh9.json",
+      "api_gekentekende_voertuigen_voertuigklasse": "https://opendata.rdw.nl/resource/kmfi-hrps.json"
+    }
+  ],
+  "t49b-isb7": [],
+  "jqs4-4kvw": [
+    {
+      "code_toelichting_tellerstandoordeel": "00",
+      "toelichting_tellerstandoordeel": "De geregistreerde tellerstand is steeds hoger dan de daarvoor geregistreerde tellerstand. Wij oordelen dan dat de tellerstand logisch verklaarbaar is."
+    }
+  ]
+}

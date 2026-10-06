@@ -22,6 +22,24 @@ const metrics: { label: string; format: (vehicle: Vehicle) => string }[] = [
     format: (v) => v.firstRegistrationDate?.slice(0, 4) || "Niet beschikbaar",
   },
   { label: "Brandstof", format: (v) => fuelLabel(v.fuelTypes) },
+  { label: "Uitvoeringcode", format: (v) => v.version || "Niet beschikbaar" },
+  {
+    label: "Tellerstandoordeel",
+    format: (v) => v.odometerJudgment || "Niet beschikbaar",
+  },
+  {
+    label: "Openstaande terugroepactie",
+    format: (v) =>
+      v.recallPending == null
+        ? "Niet beschikbaar"
+        : v.recallPending
+          ? "Ja"
+          : "Nee",
+  },
+  {
+    label: "Verbruik WLTP",
+    format: (v) => numeric(v.consumptionWltp, "l/100 km"),
+  },
   { label: "Vermogen", format: (v) => numeric(v.powerKw, "kW") },
   {
     label: "Vermogen in pk (berekend)",

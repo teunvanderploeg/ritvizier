@@ -14,6 +14,7 @@ from app.db.cache import create_sessions
 from app.providers.rdw import ProviderUnavailable, RdwProvider, VehicleNotFound
 from app.schemas.vehicle import Vehicle
 from app.services.costs import CostAssumptions, CostEstimate, calculate_costs
+from app.services.road_tax import RoadTaxEstimate, RoadTaxRequest, calculate_road_tax
 from app.services.vehicles import VehicleService
 
 
@@ -100,3 +101,9 @@ async def get_vehicle(plate: str, request: Request) -> Vehicle:
 async def estimate_costs(values: CostAssumptions, request: Request) -> CostEstimate:
     check_rate(request)
     return calculate_costs(values)
+
+
+@app.post("/api/road-tax", response_model=RoadTaxEstimate)
+async def estimate_road_tax(values: RoadTaxRequest, request: Request) -> RoadTaxEstimate:
+    vehicle = await get_vehicle(values.license_plate, request)
+    return calculate_road_tax(vehicle, values)

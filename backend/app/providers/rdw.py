@@ -4,7 +4,7 @@ from typing import Any, Protocol
 
 import httpx
 
-from app.schemas.vehicle import SourceInfo, Vehicle
+from app.schemas.vehicle import Axle, Recall, SourceInfo, TypeApproval, Vehicle
 
 
 class VehicleNotFound(Exception):
@@ -57,6 +57,8 @@ def normalize_vehicle(
     electric = next(
         (item for item in fuels if item.get("brandstof_omschrijving") == "Elektriciteit"), {}
     )
+    if not fuel:
+        fuel = electric
     power = number(fuel.get("nettomaximumvermogen"))
     electric_power = number(
         electric.get("netto_max_vermogen_elektrisch") or electric.get("nettomaximumvermogen")
@@ -67,7 +69,10 @@ def normalize_vehicle(
     local = source_date(raw.get("datum_eerste_tenaamstelling_in_nederland"))
     ready = integer(raw.get("massa_rijklaar"))
     maximum = integer(raw.get("toegestane_maximum_massa_voertuig"))
-    electric_wh_per_km = number(electric.get("elektrisch_verbruik_enkel_elektrisch_wltp"))
+    electric_wh_per_km = number(
+        electric.get("elektrisch_verbruik_enkel_elektrisch_wltp")
+        or electric.get("elektrisch_verbruik_extern_opladen_wltp")
+    )
     vehicle = Vehicle(
         license_plate=raw["kenteken"],
         make=raw["merk"],
@@ -94,6 +99,47 @@ def normalize_vehicle(
         catalog_price=integer(raw.get("catalogusprijs")),
         bpm=integer(raw.get("bruto_bpm")),
         color_primary=raw.get("eerste_kleur"),
+        color_secondary=raw.get("tweede_kleur"),
+        registration_date=source_date(raw.get("datum_tenaamstelling")),
+        wam_insured=boolean(raw.get("wam_verzekerd")),
+        type_code=raw.get("type"),
+        variant=raw.get("variant"),
+        version=raw.get("uitvoering"),
+        type_approval_number=raw.get("typegoedkeuringsnummer"),
+        european_category=raw.get("europese_voertuigcategorie"),
+        number_of_wheels=integer(raw.get("aantal_wielen")),
+        standing_places=integer(raw.get("aantal_staanplaatsen")),
+        technical_max_mass_kg=integer(raw.get("technische_max_massa_voertuig")),
+        combination_max_mass_kg=integer(raw.get("maximum_massa_samenstelling")),
+        coupling_max_load_kg=integer(raw.get("maximum_last_onder_de_koppeling")),
+        odometer_judgment=raw.get("tellerstandoordeel"),
+        odometer_judgment_code=raw.get("code_toelichting_tellerstandoordeel"),
+        odometer_last_year=integer(raw.get("jaar_laatste_registratie_tellerstand")),
+        consumption_wltp=number(fuel.get("brandstof_verbruik_gecombineerd_wltp")),
+        consumption_city=number(fuel.get("brandstofverbruik_stad")),
+        consumption_highway=number(fuel.get("brandstofverbruik_buiten")),
+        emissions_co2_wltp=number(fuel.get("emissie_co2_gecombineerd_wltp")),
+        emissions_co2_nedc=number(fuel.get("co2_uitstoot_gecombineerd")),
+        particulate_emissions_wltp=number(fuel.get("emis_deeltjes_type1_wltp")),
+        particulate_emissions=number(fuel.get("uitstoot_deeltjes_licht")),
+        noise_stationary_db=number(fuel.get("geluidsniveau_stationair")),
+        noise_driving_db=number(fuel.get("geluidsniveau_rijdend")),
+        noise_rpm=integer(fuel.get("toerental_geluidsniveau")),
+        environmental_approval=fuel.get("milieuklasse_eg_goedkeuring_licht"),
+        electric_range_km=integer(
+            electric.get("actie_radius_enkel_elektrisch_wltp")
+            or electric.get("actie_radius_extern_opladen_wltp")
+        ),
+        hybrid_class=next(
+            (
+                f["klasse_hybride_elektrisch_voertuig"]
+                for f in fuels
+                if f.get("klasse_hybride_elektrisch_voertuig")
+            ),
+            None,
+        ),
+        consumption_weighted_wltp=number(fuel.get("brandstof_verbruik_gewogen_gecombineerd_wltp")),
+        emissions_co2_weighted_wltp=number(fuel.get("emissie_co2_gewogen_gecombineerd_wltp")),
         number_of_seats=integer(raw.get("aantal_zitplaatsen")),
         number_of_doors=integer(raw.get("aantal_deuren")),
         engine_capacity_cc=integer(raw.get("cilinderinhoud")),
@@ -153,11 +199,11 @@ class RdwProvider:
     def __init__(self, client: httpx.AsyncClient):
         self.client = client
 
-    async def _dataset(self, dataset: str, plate: str) -> list[dict[str, Any]]:
+    async def _query(self, dataset: str, params: dict[str, str]) -> list[dict[str, Any]]:
         try:
             response = await self.client.get(
                 f"https://opendata.rdw.nl/resource/{dataset}.json",
-                params={"kenteken": plate, "$limit": "10"},
+                params={**params, "$limit": "100"},
             )
             response.raise_for_status()
             result = response.json()
@@ -167,13 +213,13 @@ class RdwProvider:
         except (httpx.HTTPError, ValueError) as exc:
             raise ProviderUnavailable() from exc
 
+    async def _dataset(self, dataset: str, plate: str) -> list[dict[str, Any]]:
+        return await self._query(dataset, {"kenteken": plate})
+
     async def get_vehicle(self, plate: str) -> Vehicle:
-        results: tuple[
-            list[dict[str, Any]] | BaseException, list[dict[str, Any]] | BaseException
-        ] = await asyncio.gather(
-            self._dataset("m9d7-ebf2", plate),
-            self._dataset("8ys7-d773", plate),
-            return_exceptions=True,
+        dataset_ids = ["m9d7-ebf2", "8ys7-d773", "3huj-srit", "vezc-m2t6", "t49b-isb7"]
+        results = await asyncio.gather(
+            *(self._dataset(dataset, plate) for dataset in dataset_ids), return_exceptions=True
         )
         raw_result = results[0]
         fuel_result = results[1]
@@ -186,6 +232,151 @@ class RdwProvider:
         fuel_available = not isinstance(fuel_result, BaseException)
         fuels = fuel_result if isinstance(fuel_result, list) else []
         try:
-            return normalize_vehicle(raw_result[0], fuels, datetime.now(UTC), fuel_available)
+            vehicle = normalize_vehicle(raw_result[0], fuels, datetime.now(UTC), fuel_available)
+            for dataset, result in zip(dataset_ids[2:], results[2:], strict=True):
+                if isinstance(result, BaseException):
+                    label = {
+                        "3huj-srit": "Asgegevens",
+                        "vezc-m2t6": "Carrosseriegegevens",
+                        "t49b-isb7": "Details van terugroepacties",
+                    }[dataset]
+                    vehicle.source.warnings.append(f"{label} zijn tijdelijk niet beschikbaar.")
+                else:
+                    vehicle.source.datasets.append(dataset)
+            axes = results[2] if isinstance(results[2], list) else []
+            vehicle.axes = [
+                Axle(
+                    number=integer(item.get("as_nummer")),
+                    position=item.get("plaatscode_as"),
+                    track_cm=integer(item.get("spoorbreedte")),
+                    max_mass_kg=integer(item.get("wettelijk_toegestane_maximum_aslast")),
+                )
+                for item in axes
+                if item.get("kenteken") == plate
+            ]
+            bodies = results[3] if isinstance(results[3], list) else []
+            if bodies and bodies[0].get("kenteken") == plate:
+                vehicle.body_code = bodies[0].get("carrosserietype")
+            statuses = results[4] if isinstance(results[4], list) else []
+            vehicle.recall_details_available = isinstance(results[4], list) and len(statuses) < 100
+            statuses = [
+                s for s in statuses if s.get("kenteken") == plate and s.get("referentiecode_rdw")
+            ]
+            await asyncio.gather(
+                self._odometer(vehicle),
+                self._type_approval(vehicle),
+                self._recalls(vehicle, statuses),
+            )
+            return vehicle
         except (KeyError, TypeError, ValueError) as exc:
             raise ProviderUnavailable() from exc
+
+    async def _odometer(self, vehicle: Vehicle) -> None:
+        if not vehicle.odometer_judgment_code:
+            return
+        try:
+            rows = await self._query(
+                "jqs4-4kvw", {"code_toelichting_tellerstandoordeel": vehicle.odometer_judgment_code}
+            )
+            if rows:
+                vehicle.odometer_explanation = rows[0].get("toelichting_tellerstandoordeel")
+            vehicle.source.datasets.append("jqs4-4kvw")
+        except ProviderUnavailable:
+            vehicle.source.warnings.append(
+                "De toelichting bij het tellerstandoordeel is tijdelijk niet beschikbaar."
+            )
+
+    async def _type_approval(self, vehicle: Vehicle) -> None:
+        if not all([vehicle.type_approval_number, vehicle.variant, vehicle.version]):
+            return
+        params = {
+            "typegoedkeuringsnummer": vehicle.type_approval_number or "",
+            "codevarianttgk": vehicle.variant or "",
+            "codeuitvoeringtgk": vehicle.version or "",
+        }
+        datasets = ["byxc-wwua", "7rjk-eycs"]
+        results = await asyncio.gather(
+            *(self._query(d, params) for d in datasets), return_exceptions=True
+        )
+        valid: list[list[dict[str, Any]]] = []
+        for dataset, result in zip(datasets, results, strict=True):
+            if isinstance(result, BaseException):
+                vehicle.source.warnings.append(
+                    "Een deel van de typegoedkeuringsgegevens is tijdelijk niet beschikbaar."
+                )
+                valid.append([])
+            else:
+                vehicle.source.datasets.append(dataset)
+                # Never join only by model name or select an arbitrary approval revision.
+                valid.append(
+                    [r for r in result if all(r.get(k) == v for k, v in params.items())]
+                    if len(result) < 100
+                    else []
+                )
+        base, gears = valid
+
+        def unique(rows: list[dict[str, Any]], key: str) -> str | None:
+            values = {str(r[key]) for r in rows if r.get(key) is not None}
+            return values.pop() if len(values) == 1 and all(key in r for r in rows) else None
+
+        def exact(rows: list[dict[str, Any]], prefix: str) -> int | None:
+            low, high = unique(rows, prefix + "ondergrens"), unique(rows, prefix + "bovengrens")
+            return integer(low) if low is not None and low == high else None
+
+        code = unique(gears, "codetypeversnellingsbak")
+        vehicle.type_approval = TypeApproval(
+            matched=bool(base or gears),
+            transmission_code=code,
+            transmission={"A": "Automaat", "M": "Handgeschakeld"}.get(code or ""),
+            gears=exact(gears, "aantalversnellingen"),
+            length_mm=exact(base, "lengte"),
+            width_mm=exact(base, "breedte"),
+            height_mm=exact(base, "hoogte"),
+            wheelbase_mm=exact(base, "wielbasis"),
+        )
+
+    async def _recalls(self, vehicle: Vehicle, statuses: list[dict[str, Any]]) -> None:
+        async def detail(status: dict[str, Any]) -> Recall:
+            reference = str(status["referentiecode_rdw"])
+            results = await asyncio.gather(
+                self._query("j9yg-7rg9", {"referentiecode_rdw": reference}),
+                self._query("9ihi-jgpf", {"referentiecode_rdw": reference}),
+                return_exceptions=True,
+            )
+            for dataset, result in zip(["j9yg-7rg9", "9ihi-jgpf"], results, strict=True):
+                if isinstance(result, BaseException):
+                    vehicle.source.warnings.append(
+                        f"Niet alle details van terugroepactie {reference} konden worden opgehaald."
+                    )
+                    vehicle.recall_details_available = False
+                elif dataset not in vehicle.source.datasets:
+                    vehicle.source.datasets.append(dataset)
+            rows = results[0] if isinstance(results[0], list) else []
+            raw = next((r for r in rows if r.get("referentiecode_rdw") == reference), {})
+            risks = results[1] if isinstance(results[1], list) else []
+            return Recall(
+                reference=reference,
+                status_code=status.get("code_status"),
+                status=status.get("status"),
+                publication_date=source_date(raw.get("publicatiedatum_rdw")),
+                producer=raw.get("meldende_producent_distributeur"),
+                producer_reference=raw.get("referentiecode_producent"),
+                defect=raw.get("omschrijving_defect"),
+                consequences=raw.get("materi_le_gevolgen"),
+                remedy=raw.get("beschrijving_van_het_herstel"),
+                risks=[
+                    r["mogelijk_gevaar"]
+                    for r in risks
+                    if r.get("referentiecode_rdw") == reference and r.get("mogelijk_gevaar")
+                ],
+                url=raw.get("meer_informatie_op_internet"),
+                phone=raw.get("meer_informatie_via_telefoonnummer"),
+            )
+
+        # At most 20 campaigns: guard the provider against an unexpectedly large fan-out.
+        if len(statuses) > 20:
+            vehicle.recall_details_available = False
+            vehicle.source.warnings.append(
+                "Niet alle terugroepacties worden getoond. Controleer het RDW-register."
+            )
+        vehicle.recalls = await asyncio.gather(*(detail(s) for s in statuses[:20]))
