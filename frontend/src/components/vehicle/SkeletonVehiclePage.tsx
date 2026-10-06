@@ -1,1 +1,19 @@
-export function SkeletonVehiclePage() { return <div className="container vehicle-loading" role="status" aria-label="Voertuiggegevens ophalen"><p>Voertuiggegevens ophalen…</p><div className="skeleton skeleton-title"/><div className="skeleton skeleton-subtitle"/><div className="skeleton-facts">{[1,2,3,4].map(i => <div className="skeleton" key={i}/>)}</div><div className="skeleton skeleton-panel"/></div>; }
+export function SkeletonVehiclePage() {
+  return (
+    <div
+      className="container vehicle-loading"
+      role="status"
+      aria-label="Voertuiggegevens ophalen"
+    >
+      <p>Voertuiggegevens ophalen…</p>
+      <div className="skeleton skeleton-title" />
+      <div className="skeleton skeleton-subtitle" />
+      <div className="skeleton-facts">
+        {[1, 2, 3, 4].map((i) => (
+          <div className="skeleton" key={i} />
+        ))}
+      </div>
+      <div className="skeleton skeleton-panel" />
+    </div>
+  );
+}

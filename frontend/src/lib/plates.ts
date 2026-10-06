@@ -17,13 +17,18 @@ const sidecodes = [
   [/^(\d{3})([A-Z]{2})(\d)$/, "$1-$2-$3"],
 ] as const;
 
-export function normalizePlate(value: string) { return value.toUpperCase().replace(/[\s-]/g, ""); }
+export function normalizePlate(value: string) {
+  return value.toUpperCase().replace(/[\s-]/g, "");
+}
 export function formatPlate(value: string) {
   const normalized = normalizePlate(value);
   const pattern = sidecodes.find(([regex]) => regex.test(normalized));
   return pattern ? normalized.replace(pattern[0], pattern[1]) : normalized;
 }
-export const plateSchema = z.string().transform(normalizePlate).refine(
-  (value) => sidecodes.some(([regex]) => regex.test(value)),
-  "Dit kenteken lijkt niet geldig. Controleer het kenteken en probeer opnieuw.",
-);
+export const plateSchema = z
+  .string()
+  .transform(normalizePlate)
+  .refine(
+    (value) => sidecodes.some(([regex]) => regex.test(value)),
+    "Dit kenteken lijkt niet geldig. Controleer het kenteken en probeer opnieuw.",
+  );

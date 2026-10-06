@@ -1,4 +1,24 @@
+import js from "@eslint/js";
 import { defineConfig, globalIgnores } from "eslint/config";
-import nextVitals from "eslint-config-next/core-web-vitals";
-import nextTs from "eslint-config-next/typescript";
-export default defineConfig([...nextVitals, ...nextTs, globalIgnores([".next/**", "next-env.d.ts", "test-results/**", "playwright-report/**"])]);
+import tseslint from "typescript-eslint";
+import reactHooks from "eslint-plugin-react-hooks";
+import jsxA11y from "eslint-plugin-jsx-a11y";
+
+export default defineConfig([
+  globalIgnores([
+    ".next/**",
+    "next-env.d.ts",
+    "test-results/**",
+    "playwright-report/**",
+  ]),
+  js.configs.recommended,
+  ...tseslint.configs.recommended,
+  {
+    files: ["**/*.{ts,tsx}"],
+    plugins: { "react-hooks": reactHooks, "jsx-a11y": jsxA11y },
+    rules: {
+      ...reactHooks.configs.recommended.rules,
+      ...jsxA11y.configs.recommended.rules,
+    },
+  },
+]);

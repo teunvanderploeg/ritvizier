@@ -2,11 +2,31 @@
 import { useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
-import { ArrowLeft, ArrowRight, Bookmark, Check, Share2, Columns2, ShieldCheck, CalendarCheck2, Fuel, Zap, Weight, Info, ArrowUpRight, CircleAlert } from "lucide-react";
+import {
+  ArrowLeft,
+  ArrowRight,
+  Bookmark,
+  Share2,
+  Columns2,
+  ShieldCheck,
+  CalendarCheck2,
+  Fuel,
+  Zap,
+  Weight,
+  Info,
+  ArrowUpRight,
+  CircleAlert,
+} from "lucide-react";
 import type { Vehicle } from "@/types/vehicle";
 import { fetchVehicle } from "@/lib/api";
 import { addVehicle, readVehicles, writeVehicles } from "@/lib/storage";
-import { currency, date, fuelLabel, numeric, titleCase } from "@/lib/formatting";
+import {
+  currency,
+  date,
+  fuelLabel,
+  numeric,
+  titleCase,
+} from "@/lib/formatting";
 import { LicensePlateInput } from "@/components/search/LicensePlateInput";
 import { LicensePlateBadge } from "@/components/search/LicensePlateBadge";
 import { VehicleIllustration } from "@/components/brand/VehicleIllustration";
@@ -17,47 +37,507 @@ import { useCollection } from "@/components/search/RecentSearches";
 import { CostEstimator } from "@/features/ownership-costs/CostEstimator";
 import { useEffect } from "react";
 
-const tabs = ["Overzicht", "APK & registratie", "Motor & prestaties", "Verbruik & milieu", "Afmetingen & gewicht", "Kosten", "Praktisch"];
-function DataSection({ title, children }: { title: string; children: React.ReactNode }) { return <section className="data-section"><h2>{title}</h2><dl>{children}</dl></section>; }
-function flag(value: boolean | null) { return value === null ? "Niet beschikbaar" : value ? "Ja" : "Nee"; }
-export function VehicleDetail({ plate, initialVehicle, initialError }: { plate: string; initialVehicle: Vehicle | null; initialError?: string }) {
-  const [vehicle, setVehicle] = useState(initialVehicle); const [error, setError] = useState(initialError || ""); const [loading, setLoading] = useState(false);
-  const [tab, setTab] = useState("Overzicht"); const [notice, setNotice] = useState("");
-  const saved = useCollection("favourites"); const router = useRouter();
-  useEffect(() => { if (initialVehicle) addVehicle("recent", initialVehicle); }, [initialVehicle]);
-  async function retry() { setLoading(true); setError(""); try { const fresh = await fetchVehicle(plate); setVehicle(fresh); addVehicle("recent", fresh); } catch(e) { setError(e instanceof Error ? e.message : "De voertuiggegevens zijn tijdelijk niet beschikbaar."); } finally { setLoading(false); } }
-  if (loading) return <SkeletonVehiclePage/>;
-  if (error || !vehicle) return <ErrorState message={error || "We konden geen voertuig vinden voor dit kenteken."} onRetry={retry}/>;
-  const v = vehicle; const isSaved = saved.some(item => item.licensePlate === v.licensePlate);
-  const expired = v.apkExpiryDate ? v.apkExpiryDate < new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Amsterdam" }).format(new Date()) : false;
+const tabs = [
+  "Overzicht",
+  "APK & registratie",
+  "Motor & prestaties",
+  "Verbruik & milieu",
+  "Afmetingen & gewicht",
+  "Kosten",
+  "Praktisch",
+];
+function DataSection({
+  title,
+  children,
+}: {
+  title: string;
+  children: React.ReactNode;
+}) {
+  return (
+    <section className="data-section">
+      <h2>{title}</h2>
+      <dl>{children}</dl>
+    </section>
+  );
+}
+function flag(value: boolean | null) {
+  return value === null ? "Niet beschikbaar" : value ? "Ja" : "Nee";
+}
+export function VehicleDetail({
+  plate,
+  initialVehicle,
+  initialError,
+}: {
+  plate: string;
+  initialVehicle: Vehicle | null;
+  initialError?: string;
+}) {
+  const [vehicle, setVehicle] = useState(initialVehicle);
+  const [error, setError] = useState(initialError || "");
+  const [loading, setLoading] = useState(false);
+  const [tab, setTab] = useState("Overzicht");
+  const [notice, setNotice] = useState("");
+  const saved = useCollection("favourites");
+  const router = useRouter();
+  useEffect(() => {
+    if (initialVehicle) addVehicle("recent", initialVehicle);
+  }, [initialVehicle]);
+  async function retry() {
+    setLoading(true);
+    setError("");
+    try {
+      const fresh = await fetchVehicle(plate);
+      setVehicle(fresh);
+      addVehicle("recent", fresh);
+    } catch (e) {
+      setError(
+        e instanceof Error
+          ? e.message
+          : "De voertuiggegevens zijn tijdelijk niet beschikbaar.",
+      );
+    } finally {
+      setLoading(false);
+    }
+  }
+  if (loading) return <SkeletonVehiclePage />;
+  if (error || !vehicle)
+    return (
+      <ErrorState
+        message={error || "We konden geen voertuig vinden voor dit kenteken."}
+        onRetry={retry}
+      />
+    );
+  const v = vehicle;
+  const isSaved = saved.some((item) => item.licensePlate === v.licensePlate);
+  const expired = v.apkExpiryDate
+    ? v.apkExpiryDate <
+      new Intl.DateTimeFormat("sv-SE", { timeZone: "Europe/Amsterdam" }).format(
+        new Date(),
+      )
+    : false;
   function toggleFavourite() {
-    const ok = isSaved ? writeVehicles("favourites", readVehicles("favourites").filter(item => item.licensePlate !== v.licensePlate)) : addVehicle("favourites", v);
-    setNotice(ok ? isSaved ? "Auto verwijderd uit Opgeslagen." : "Auto opgeslagen op dit apparaat." : "Opslaan lukt niet. Controleer of je browser lokale opslag toestaat.");
+    const ok = isSaved
+      ? writeVehicles(
+          "favourites",
+          readVehicles("favourites").filter(
+            (item) => item.licensePlate !== v.licensePlate,
+          ),
+        )
+      : addVehicle("favourites", v);
+    setNotice(
+      ok
+        ? isSaved
+          ? "Auto verwijderd uit Opgeslagen."
+          : "Auto opgeslagen op dit apparaat."
+        : "Opslaan lukt niet. Controleer of je browser lokale opslag toestaat.",
+    );
   }
   function compare() {
     const existing = readVehicles("comparison");
-    if (existing.length >= 3 && !existing.some(item => item.licensePlate === v.licensePlate)) { setNotice("Je kunt maximaal drie auto’s vergelijken. Verwijder eerst een auto uit je vergelijking."); return; }
-    if (addVehicle("comparison", v)) router.push("/vergelijken"); else setNotice("Opslaan lukt niet. Controleer de lokale opslag van je browser.");
+    if (
+      existing.length >= 3 &&
+      !existing.some((item) => item.licensePlate === v.licensePlate)
+    ) {
+      setNotice(
+        "Je kunt maximaal drie auto’s vergelijken. Verwijder eerst een auto uit je vergelijking.",
+      );
+      return;
+    }
+    if (addVehicle("comparison", v)) router.push("/vergelijken");
+    else
+      setNotice(
+        "Opslaan lukt niet. Controleer de lokale opslag van je browser.",
+      );
   }
   async function share() {
-    try { if (navigator.share) await navigator.share({ title: `${titleCase(v.make)} ${v.model || ""} | RitVizier`, url: location.href }); else { await navigator.clipboard.writeText(location.href); setNotice("Link gekopieerd. Je kunt deze nu delen."); } }
-    catch (e) { if (!(e instanceof DOMException && e.name === "AbortError")) setNotice("Delen lukt niet. Kopieer de link uit je adresbalk."); }
+    try {
+      if (navigator.share)
+        await navigator.share({
+          title: `${titleCase(v.make)} ${v.model || ""} | RitVizier`,
+          url: location.href,
+        });
+      else {
+        await navigator.clipboard.writeText(location.href);
+        setNotice("Link gekopieerd. Je kunt deze nu delen.");
+      }
+    } catch (e) {
+      if (!(e instanceof DOMException && e.name === "AbortError"))
+        setNotice("Delen lukt niet. Kopieer de link uit je adresbalk.");
+    }
   }
-  return <div className="container vehicle-page"><div className="vehicle-topbar"><Link href="/" className="back-link"><ArrowLeft size={16}/>Kentekencheck</Link><LicensePlateInput compact/></div>
-    <section className="vehicle-hero"><div className="vehicle-heading"><span className="eyebrow">{v.make}</span><h1>{titleCase(v.model || v.vehicleType)}</h1><div className="vehicle-subtitle"><LicensePlateBadge plate={v.licensePlate}/><span>{v.firstRegistrationDate?.slice(0,4) || "Bouwjaar onbekend"} · {fuelLabel(v.fuelTypes)} · {titleCase(v.bodyType)}</span></div><div className="vehicle-actions"><button className={`button button-secondary ${isSaved ? "saved-button" : ""}`} onClick={toggleFavourite}><Bookmark size={16} fill={isSaved ? "currentColor" : "none"}/>{isSaved ? "Opgeslagen" : "Auto opslaan"}</button><button className="button button-secondary" onClick={compare}><Columns2 size={16}/>Vergelijken</button><button className="icon-button bordered-button" onClick={share} aria-label="Voertuig delen"><Share2 size={18}/></button></div></div><div className="vehicle-hero-art"><VehicleIllustration/><span>Illustratie, geen foto van dit voertuig</span></div></section>
-    {notice && <div className="notice" role="status"><Info size={16}/>{notice}<button className="text-button" onClick={() => setNotice("")}>Sluiten</button></div>}
-    <div className="quick-facts">{[{ icon: CalendarCheck2, label: "Bouwjaar", value: v.firstRegistrationDate?.slice(0,4) || "Niet beschikbaar" }, { icon: Fuel, label: "Brandstof", value: fuelLabel(v.fuelTypes) }, { icon: Zap, label: "Vermogen", value: numeric(v.powerKw, "kW"), sub: v.powerHp != null ? `${numeric(v.powerHp, "pk")} · berekend` : undefined }, { icon: Weight, label: "Gewicht leeg", value: numeric(v.massKg, "kg") }].map(({ icon: Icon, label, value, sub }) => <div className="quick-fact" key={label}><Icon size={19}/><span>{label}</span><strong>{value}</strong>{sub && <small>{sub}</small>}</div>)}</div>
-    <div className={`apk-banner ${expired ? "warning-banner" : ""}`}><div>{expired ? <CircleAlert size={20}/> : <CalendarCheck2 size={20}/>}<span><strong>{v.apkExpiryDate ? `${expired ? "APK verlopen op" : "APK geldig tot"} ${date(v.apkExpiryDate)}` : "APK-datum niet beschikbaar"}</strong><span>{v.apkExpiryDate ? "APK-datum volgens het RDW-register." : "Voor dit voertuig heeft de RDW geen APK-datum beschikbaar."}</span></span></div><button className="text-button" onClick={() => setTab("APK & registratie")}>Bekijk registratie <ArrowRight size={15}/></button></div>
-    <nav className="section-tabs" aria-label="Voertuigonderdelen">{tabs.map(item => <button aria-pressed={item === tab} key={item} onClick={() => setTab(item)}>{item}</button>)}</nav>
-    <div className="vehicle-tab-content" key={tab}>
-    {tab === "Overzicht" && <><div className="data-grid"><DataSection title="De belangrijkste gegevens"><Row label="Merk" value={titleCase(v.make)}/><Row label="Model" value={titleCase(v.model)}/><Row label="Voertuigsoort" value={v.vehicleType || "Niet beschikbaar"}/><Row label="Eerste toelating" value={date(v.firstRegistrationDate)} explanation="De datum waarop dit voertuig voor het eerst is geregistreerd, ook als dat buiten Nederland was."/><Row label="Catalogusprijs" value={currency(v.catalogPrice)} explanation="De nieuwprijs volgens de RDW. Dit is niet de huidige marktwaarde."/><Row label="Kleur" value={titleCase(v.colorPrimary)}/></DataSection><DataSection title="Handig om te weten"><Row label="Zitplaatsen" value={numeric(v.numberOfSeats)}/><Row label="Deuren" value={numeric(v.numberOfDoors)}/><Row label="Trekgewicht geremd" value={numeric(v.towingBrakedKg, "kg")} explanation="De maximale massa van een aanhanger met eigen remmen."/><Row label="Geïmporteerd" value={flag(v.isImport)} derived explanation="Afgeleid uit de eerste toelating en eerste Nederlandse registratie. Een latere Nederlandse registratie wijst op import."/><Row label="Openstaande terugroepactie" value={flag(v.recallPending)}/><Row label="Brandstof" value={fuelLabel(v.fuelTypes)}/></DataSection></div><div className="vehicle-cost-promo"><div><span className="eyebrow">MEER DAN DE AANSCHAFPRIJS</span><h2>Wat kost deze auto jou per maand?</h2><p>Reken het uit met jouw kilometers, verbruik en vaste lasten.</p></div><button className="button" onClick={() => setTab("Kosten")}>Bereken je kosten <ArrowRight size={17}/></button></div></>}
-    {tab === "APK & registratie" && <div className="data-grid"><DataSection title="APK & toelating"><Row label="APK geldig tot" value={date(v.apkExpiryDate)}/><Row label="Eerste toelating" value={date(v.firstRegistrationDate)}/><Row label="Eerste registratie Nederland" value={date(v.firstRegistrationNetherlandsDate)}/><Row label="Geïmporteerd" value={flag(v.isImport)} derived/><Row label="Tenaamstelling mogelijk" value={flag(v.registrationPossible)}/></DataSection><DataSection title="Registratiestatus"><Row label="Geëxporteerd" value={flag(v.isExported)}/><Row label="Taxi-indicatie" value={flag(v.isTaxi)}/><Row label="Openstaande terugroepactie" value={flag(v.recallPending)}/><Row label="Bruto BPM bij registratie" value={currency(v.bpm)}/></DataSection><p className="data-note"><Info size={16}/>Openbare registratiegegevens vertellen niets over schade, onderhoud of eerdere eigenaren.</p></div>}
-    {tab === "Motor & prestaties" && <div className="data-grid"><DataSection title="Motor"><Row label="Brandstof" value={fuelLabel(v.fuelTypes)}/><Row label="Cilinderinhoud" value={numeric(v.engineCapacityCc, "cc")}/><Row label="Cilinders" value={numeric(v.cylinders)}/><Row label="Vermogen" value={numeric(v.powerKw, "kW")}/><Row label="Vermogen in paardenkracht" value={numeric(v.powerHp, "pk")} derived explanation="Omgerekend uit kW. 1 kW is ongeveer 1,36 pk."/></DataSection><DataSection title="Prestaties"><Row label="Elektrisch vermogen" value={numeric(v.electricPowerKw, "kW")}/><Row label="Maximumsnelheid" value={numeric(v.maxSpeedKmh, "km/u")}/></DataSection></div>}
-    {tab === "Verbruik & milieu" && <div className="data-grid"><DataSection title="Uitstoot & verbruik"><Row label="CO₂-uitstoot" value={numeric(v.emissionsCo2, "g/km")} explanation="De geregistreerde gecombineerde uitstoot. Praktijkuitstoot kan verschillen."/><Row label="Emissieklasse" value={v.emissionClass || "Niet beschikbaar"}/><Row label="Brandstofverbruik" value={numeric(v.consumptionCombined, "l/100 km")}/><Row label="Elektrisch verbruik" value={numeric(v.electricConsumption, "kWh/100 km")}/></DataSection><div className="explanation-panel"><Fuel size={25}/><h3>Op papier en op de weg</h3><p>Geregistreerd verbruik is gemeten onder testomstandigheden. Je rijstijl, snelheid en het weer hebben invloed op het werkelijke verbruik.</p><p>Ontbreekt een waarde? Je kunt zelf een verbruik invullen bij de kostenberekening.</p><button className="text-button" onClick={() => setTab("Kosten")}>Naar de kostenberekening <ArrowRight size={15}/></button></div></div>}
-    {tab === "Afmetingen & gewicht" && <div className="data-grid"><DataSection title="Afmetingen"><Row label="Lengte" value={numeric(v.lengthCm, "cm")}/><Row label="Breedte" value={numeric(v.widthCm, "cm")}/><Row label="Hoogte" value={numeric(v.heightCm, "cm")}/><Row label="Wielbasis" value={numeric(v.wheelbaseCm, "cm")} explanation="De afstand tussen de vooras en achteras."/></DataSection><DataSection title="Gewicht"><Row label="Massa leeg" value={numeric(v.massKg, "kg")}/><Row label="Massa rijklaar" value={numeric(v.readyMassKg, "kg")} explanation="Het gewicht van de auto in rijklare toestand, inclusief vloeistoffen en de wettelijk meegerekende bestuurder."/><Row label="Toegestane maximummassa" value={numeric(v.maxMassKg, "kg")}/><Row label="Laadvermogen vanaf rijklaar" value={numeric(v.payloadKg, "kg")} derived explanation="Toegestane maximummassa min massa rijklaar."/></DataSection></div>}
-    {tab === "Kosten" && <CostEstimator vehicle={v}/>}
-    {tab === "Praktisch" && <div className="data-grid"><DataSection title="Dagelijks gebruik"><Row label="Carrosserie" value={titleCase(v.bodyType)}/><Row label="Zitplaatsen" value={numeric(v.numberOfSeats)}/><Row label="Deuren" value={numeric(v.numberOfDoors)}/><Row label="Kleur" value={titleCase(v.colorPrimary)}/></DataSection><DataSection title="Een aanhanger meenemen"><Row label="Trekgewicht geremd" value={numeric(v.towingBrakedKg, "kg")}/><Row label="Trekgewicht ongeremd" value={numeric(v.towingUnbrakedKg, "kg")}/><Row label="Laadvermogen vanaf rijklaar" value={numeric(v.payloadKg, "kg")} derived/></DataSection></div>}
+  return (
+    <div className="container vehicle-page">
+      <div className="vehicle-topbar">
+        <Link href="/" className="back-link">
+          <ArrowLeft size={16} />
+          Kentekencheck
+        </Link>
+        <LicensePlateInput compact />
+      </div>
+      <section className="vehicle-hero">
+        <div className="vehicle-heading">
+          <span className="eyebrow">{v.make}</span>
+          <h1>{titleCase(v.model || v.vehicleType)}</h1>
+          <div className="vehicle-subtitle">
+            <LicensePlateBadge plate={v.licensePlate} />
+            <span>
+              {v.firstRegistrationDate?.slice(0, 4) || "Bouwjaar onbekend"} ·{" "}
+              {fuelLabel(v.fuelTypes)} · {titleCase(v.bodyType)}
+            </span>
+          </div>
+          <div className="vehicle-actions">
+            <button
+              className={`button button-secondary ${isSaved ? "saved-button" : ""}`}
+              onClick={toggleFavourite}
+            >
+              <Bookmark size={16} fill={isSaved ? "currentColor" : "none"} />
+              {isSaved ? "Opgeslagen" : "Auto opslaan"}
+            </button>
+            <button className="button button-secondary" onClick={compare}>
+              <Columns2 size={16} />
+              Vergelijken
+            </button>
+            <button
+              className="icon-button bordered-button"
+              onClick={share}
+              aria-label="Voertuig delen"
+            >
+              <Share2 size={18} />
+            </button>
+          </div>
+        </div>
+        <div className="vehicle-hero-art">
+          <VehicleIllustration />
+          <span>Illustratie, geen foto van dit voertuig</span>
+        </div>
+      </section>
+      {notice && (
+        <div className="notice" role="status">
+          <Info size={16} />
+          {notice}
+          <button className="text-button" onClick={() => setNotice("")}>
+            Sluiten
+          </button>
+        </div>
+      )}
+      <div className="quick-facts">
+        {[
+          {
+            icon: CalendarCheck2,
+            label: "Bouwjaar",
+            value: v.firstRegistrationDate?.slice(0, 4) || "Niet beschikbaar",
+          },
+          { icon: Fuel, label: "Brandstof", value: fuelLabel(v.fuelTypes) },
+          {
+            icon: Zap,
+            label: "Vermogen",
+            value: numeric(v.powerKw, "kW"),
+            sub:
+              v.powerHp != null
+                ? `${numeric(v.powerHp, "pk")} · berekend`
+                : undefined,
+          },
+          {
+            icon: Weight,
+            label: "Gewicht leeg",
+            value: numeric(v.massKg, "kg"),
+          },
+        ].map(({ icon: Icon, label, value, sub }) => (
+          <div className="quick-fact" key={label}>
+            <Icon size={19} />
+            <span>{label}</span>
+            <strong>{value}</strong>
+            {sub && <small>{sub}</small>}
+          </div>
+        ))}
+      </div>
+      <div
+        className={`apk-banner ${!v.apkExpiryDate ? "neutral-banner" : expired ? "warning-banner" : ""}`}
+      >
+        <div>
+          {expired ? <CircleAlert size={20} /> : <CalendarCheck2 size={20} />}
+          <span>
+            <strong>
+              {v.apkExpiryDate
+                ? `${expired ? "APK verlopen op" : "APK geldig tot"} ${date(v.apkExpiryDate)}`
+                : "APK-datum niet beschikbaar"}
+            </strong>
+            <span>
+              {v.apkExpiryDate
+                ? "APK-datum volgens het RDW-register."
+                : "Voor dit voertuig heeft de RDW geen APK-datum beschikbaar."}
+            </span>
+          </span>
+        </div>
+        <button
+          className="text-button"
+          onClick={() => setTab("APK & registratie")}
+        >
+          Bekijk registratie <ArrowRight size={15} />
+        </button>
+      </div>
+      <nav className="section-tabs" aria-label="Voertuigonderdelen">
+        {tabs.map((item) => (
+          <button
+            aria-pressed={item === tab}
+            key={item}
+            onClick={() => setTab(item)}
+          >
+            {item}
+          </button>
+        ))}
+      </nav>
+      <div className="vehicle-tab-content" key={tab}>
+        {tab === "Overzicht" && (
+          <>
+            <div className="data-grid">
+              <DataSection title="De belangrijkste gegevens">
+                <Row label="Merk" value={titleCase(v.make)} />
+                <Row label="Model" value={titleCase(v.model)} />
+                <Row
+                  label="Voertuigsoort"
+                  value={v.vehicleType || "Niet beschikbaar"}
+                />
+                <Row
+                  label="Eerste toelating"
+                  value={date(v.firstRegistrationDate)}
+                  explanation="De datum waarop dit voertuig voor het eerst is geregistreerd, ook als dat buiten Nederland was."
+                />
+                <Row
+                  label="Catalogusprijs"
+                  value={currency(v.catalogPrice)}
+                  explanation="De nieuwprijs volgens de RDW. Dit is niet de huidige marktwaarde."
+                />
+                <Row label="Kleur" value={titleCase(v.colorPrimary)} />
+              </DataSection>
+              <DataSection title="Handig om te weten">
+                <Row label="Zitplaatsen" value={numeric(v.numberOfSeats)} />
+                <Row label="Deuren" value={numeric(v.numberOfDoors)} />
+                <Row
+                  label="Trekgewicht geremd"
+                  value={numeric(v.towingBrakedKg, "kg")}
+                  explanation="De maximale massa van een aanhanger met eigen remmen."
+                />
+                <Row
+                  label="Geïmporteerd"
+                  value={flag(v.isImport)}
+                  derived
+                  explanation="Afgeleid uit de eerste toelating en eerste Nederlandse registratie. Een latere Nederlandse registratie wijst op import."
+                />
+                <Row
+                  label="Openstaande terugroepactie"
+                  value={flag(v.recallPending)}
+                />
+                <Row label="Brandstof" value={fuelLabel(v.fuelTypes)} />
+              </DataSection>
+            </div>
+            <div className="vehicle-cost-promo">
+              <div>
+                <span className="eyebrow">MEER DAN DE AANSCHAFPRIJS</span>
+                <h2>Wat kost deze auto jou per maand?</h2>
+                <p>
+                  Reken het uit met jouw kilometers, verbruik en vaste lasten.
+                </p>
+              </div>
+              <button className="button" onClick={() => setTab("Kosten")}>
+                Bereken je kosten <ArrowRight size={17} />
+              </button>
+            </div>
+          </>
+        )}
+        {tab === "APK & registratie" && (
+          <div className="data-grid">
+            <DataSection title="APK & toelating">
+              <Row label="APK geldig tot" value={date(v.apkExpiryDate)} />
+              <Row
+                label="Eerste toelating"
+                value={date(v.firstRegistrationDate)}
+              />
+              <Row
+                label="Eerste registratie Nederland"
+                value={date(v.firstRegistrationNetherlandsDate)}
+              />
+              <Row label="Geïmporteerd" value={flag(v.isImport)} derived />
+              <Row
+                label="Tenaamstelling mogelijk"
+                value={flag(v.registrationPossible)}
+              />
+            </DataSection>
+            <DataSection title="Registratiestatus">
+              <Row label="Geëxporteerd" value={flag(v.isExported)} />
+              <Row label="Taxi-indicatie" value={flag(v.isTaxi)} />
+              <Row
+                label="Openstaande terugroepactie"
+                value={flag(v.recallPending)}
+              />
+              <Row label="Bruto BPM bij registratie" value={currency(v.bpm)} />
+            </DataSection>
+            <p className="data-note">
+              <Info size={16} />
+              Openbare registratiegegevens vertellen niets over schade,
+              onderhoud of eerdere eigenaren.
+            </p>
+          </div>
+        )}
+        {tab === "Motor & prestaties" && (
+          <div className="data-grid">
+            <DataSection title="Motor">
+              <Row label="Brandstof" value={fuelLabel(v.fuelTypes)} />
+              <Row
+                label="Cilinderinhoud"
+                value={numeric(v.engineCapacityCc, "cc")}
+              />
+              <Row label="Cilinders" value={numeric(v.cylinders)} />
+              <Row label="Vermogen" value={numeric(v.powerKw, "kW")} />
+              <Row
+                label="Vermogen in paardenkracht"
+                value={numeric(v.powerHp, "pk")}
+                derived
+                explanation="Omgerekend uit kW. 1 kW is ongeveer 1,36 pk."
+              />
+            </DataSection>
+            <DataSection title="Prestaties">
+              <Row
+                label="Elektrisch vermogen"
+                value={numeric(v.electricPowerKw, "kW")}
+              />
+              <Row
+                label="Maximumsnelheid"
+                value={numeric(v.maxSpeedKmh, "km/u")}
+              />
+            </DataSection>
+          </div>
+        )}
+        {tab === "Verbruik & milieu" && (
+          <div className="data-grid">
+            <DataSection title="Uitstoot & verbruik">
+              <Row
+                label="CO₂-uitstoot"
+                value={numeric(v.emissionsCo2, "g/km")}
+                explanation="De geregistreerde gecombineerde uitstoot. Praktijkuitstoot kan verschillen."
+              />
+              <Row
+                label="Emissieklasse"
+                value={v.emissionClass || "Niet beschikbaar"}
+              />
+              <Row
+                label="Brandstofverbruik"
+                value={numeric(v.consumptionCombined, "l/100 km")}
+              />
+              <Row
+                label="Elektrisch verbruik"
+                value={numeric(v.electricConsumption, "kWh/100 km")}
+              />
+            </DataSection>
+            <div className="explanation-panel">
+              <Fuel size={25} />
+              <h3>Op papier en op de weg</h3>
+              <p>
+                Geregistreerd verbruik is gemeten onder testomstandigheden. Je
+                rijstijl, snelheid en het weer hebben invloed op het werkelijke
+                verbruik.
+              </p>
+              <p>
+                Ontbreekt een waarde? Je kunt zelf een verbruik invullen bij de
+                kostenberekening.
+              </p>
+              <button className="text-button" onClick={() => setTab("Kosten")}>
+                Naar de kostenberekening <ArrowRight size={15} />
+              </button>
+            </div>
+          </div>
+        )}
+        {tab === "Afmetingen & gewicht" && (
+          <div className="data-grid">
+            <DataSection title="Afmetingen">
+              <Row label="Lengte" value={numeric(v.lengthCm, "cm")} />
+              <Row label="Breedte" value={numeric(v.widthCm, "cm")} />
+              <Row label="Hoogte" value={numeric(v.heightCm, "cm")} />
+              <Row
+                label="Wielbasis"
+                value={numeric(v.wheelbaseCm, "cm")}
+                explanation="De afstand tussen de vooras en achteras."
+              />
+            </DataSection>
+            <DataSection title="Gewicht">
+              <Row label="Massa leeg" value={numeric(v.massKg, "kg")} />
+              <Row
+                label="Massa rijklaar"
+                value={numeric(v.readyMassKg, "kg")}
+                explanation="Het gewicht van de auto in rijklare toestand, inclusief vloeistoffen en de wettelijk meegerekende bestuurder."
+              />
+              <Row
+                label="Toegestane maximummassa"
+                value={numeric(v.maxMassKg, "kg")}
+              />
+              <Row
+                label="Laadvermogen vanaf rijklaar"
+                value={numeric(v.payloadKg, "kg")}
+                derived
+                explanation="Toegestane maximummassa min massa rijklaar."
+              />
+            </DataSection>
+          </div>
+        )}
+        {tab === "Kosten" && <CostEstimator vehicle={v} />}
+        {tab === "Praktisch" && (
+          <div className="data-grid">
+            <DataSection title="Dagelijks gebruik">
+              <Row label="Carrosserie" value={titleCase(v.bodyType)} />
+              <Row label="Zitplaatsen" value={numeric(v.numberOfSeats)} />
+              <Row label="Deuren" value={numeric(v.numberOfDoors)} />
+              <Row label="Kleur" value={titleCase(v.colorPrimary)} />
+            </DataSection>
+            <DataSection title="Een aanhanger meenemen">
+              <Row
+                label="Trekgewicht geremd"
+                value={numeric(v.towingBrakedKg, "kg")}
+              />
+              <Row
+                label="Trekgewicht ongeremd"
+                value={numeric(v.towingUnbrakedKg, "kg")}
+              />
+              <Row
+                label="Laadvermogen vanaf rijklaar"
+                value={numeric(v.payloadKg, "kg")}
+                derived
+              />
+            </DataSection>
+          </div>
+        )}
+      </div>
+      <section className="source-info">
+        <div className="section-title">
+          <ShieldCheck size={20} />
+          <h2>Bronnen & actualiteit</h2>
+          <span className="data-quality">
+            {v.source.missingFields.length
+              ? "Enkele gegevens ontbreken"
+              : "Gegevens compleet"}
+          </span>
+        </div>
+        <p>
+          Voertuiggegevens:{" "}
+          <a href="https://opendata.rdw.nl/" target="_blank" rel="noreferrer">
+            RDW Open Data <ArrowUpRight size={13} />
+          </a>{" "}
+          · Opgehaald op{" "}
+          {new Intl.DateTimeFormat("nl-NL", {
+            dateStyle: "long",
+            timeStyle: "short",
+            timeZone: "Europe/Amsterdam",
+          }).format(new Date(v.source.fetchedAt))}
+        </p>
+        <p>
+          Berekende waarden en kosteninschattingen zijn van RitVizier. Je ziet
+          geen informatie over eigenaren, schade of onderhoud.
+        </p>
+        {v.source.warnings.map((warning) => (
+          <p key={warning} className="form-error">
+            {warning}
+          </p>
+        ))}
+      </section>
     </div>
-    <section className="source-info"><div className="section-title"><ShieldCheck size={20}/><h2>Bronnen & actualiteit</h2><span className="data-quality">{v.source.missingFields.length ? "Enkele gegevens ontbreken" : "Gegevens compleet"}</span></div><p>Voertuiggegevens: <a href="https://opendata.rdw.nl/" target="_blank" rel="noreferrer">RDW Open Data <ArrowUpRight size={13}/></a> · Opgehaald op {new Intl.DateTimeFormat("nl-NL", { dateStyle: "long", timeStyle: "short", timeZone: "Europe/Amsterdam" }).format(new Date(v.source.fetchedAt))}</p><p>Berekende waarden en kosteninschattingen zijn van RitVizier. Je ziet geen informatie over eigenaren, schade of onderhoud.</p>{v.source.warnings.map(warning => <p key={warning} className="form-error">{warning}</p>)}</section>
-  </div>;
+  );
 }
