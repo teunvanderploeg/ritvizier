@@ -7,11 +7,11 @@ export const metadata: Metadata = {
     process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
   ),
   title: {
-    default: "RitVizier | Gratis kentekencheck met RDW-gegevens",
+    default: "RitVizier | Gratis kentekencheck met openbare voertuigdata",
     template: "%s | RitVizier",
   },
   description:
-    "Alles over je auto. Helder in beeld. Bekijk officiële RDW-gegevens, APK, specificaties en bereken je autokosten. Gratis, zonder account.",
+    "Alles over je auto. Helder in beeld. Bekijk openbare voertuiggegevens, APK, specificaties en bereken je autokosten. Gratis, zonder account.",
   applicationName: "RitVizier",
   manifest: "/manifest.webmanifest",
   icons: { icon: "/favicon.svg", apple: "/icon-192.png" },

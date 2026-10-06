@@ -117,7 +117,11 @@ async def test_provider_partial_failure():
     async with httpx.AsyncClient(transport=httpx.MockTransport(handler)) as client:
         vehicle = await RdwProvider(client).get_vehicle("AB123C")
         assert vehicle.make == "TEST"
-        assert vehicle.source.datasets == ["m9d7-ebf2", "3huj-srit", "vezc-m2t6", "t49b-isb7"]
+        assert {"m9d7-ebf2", "3huj-srit", "vezc-m2t6", "t49b-isb7"}.issubset(
+            vehicle.source.datasets
+        )
+        assert "8ys7-d773" not in vehicle.source.datasets
+        assert vehicle.source.partial and "fuel" in vehicle.source.unavailable_sections
         assert vehicle.source.warnings
 
 

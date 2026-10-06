@@ -133,6 +133,109 @@
     "fuelTypes": [
       "Benzine"
     ],
+    "fuels": [
+      {
+        "sequence": 1,
+        "name": "Benzine",
+        "powerKw": 100.0,
+        "powerHp": 136,
+        "continuousPowerKw": null,
+        "electricPowerKw": null,
+        "consumptionNedc": 5.4,
+        "consumptionWltp": 6.9,
+        "consumptionWeightedWltp": null,
+        "consumptionCity": null,
+        "consumptionHighway": null,
+        "co2Nedc": 122.0,
+        "co2WeightedNedc": null,
+        "co2Wltp": 157.0,
+        "co2WeightedWltp": null,
+        "emissionClass": "EURO 6 DG",
+        "particulateGKm": null,
+        "particulateWltp": 0.34,
+        "electricConsumptionWhKm": null,
+        "electricRangeKm": null,
+        "hybridClass": null
+      }
+    ],
+    "bodies": [
+      {
+        "sequence": 1,
+        "code": "AC",
+        "description": "Stationwagen"
+      }
+    ],
+    "bodySpecifications": [],
+    "vehicleClasses": [],
+    "apkHistory": {
+      "inspections": [
+        {
+          "key": "2025-10-15|10:35|AL",
+          "date": "2025-10-15",
+          "time": "10:35",
+          "recognitionCode": "AL",
+          "recognition": "APK Lichte voertuigen",
+          "report": "periodieke controle",
+          "expiryDate": "2027-10-18",
+          "hasNotification": true,
+          "defects": []
+        },
+        {
+          "key": "2023-10-13|09:33|AL",
+          "date": "2023-10-13",
+          "time": "09:33",
+          "recognitionCode": "AL",
+          "recognition": "APK Lichte voertuigen",
+          "report": "periodieke controle",
+          "expiryDate": "2025-10-18",
+          "hasNotification": true,
+          "defects": [
+            {
+              "code": "190",
+              "description": "Slijtage/beschadiging wiellager hoorbaar of voelbaar",
+              "count": 1,
+              "category": "banden en wielen"
+            },
+            {
+              "code": "310",
+              "description": "Remslang schuurt langs enig deel",
+              "count": 2,
+              "category": "remmen"
+            }
+          ]
+        }
+      ],
+      "notificationsAvailable": true,
+      "defectsAvailable": true,
+      "descriptionsAvailable": true,
+      "truncated": false
+    },
+    "analysis": {
+      "calculatedAt": "2026-10-07",
+      "ageMonths": 83,
+      "importAgeDays": 0,
+      "registrationDurationDays": 2064,
+      "apkStatus": "valid",
+      "apkDaysRemaining": 376,
+      "apkExempt": false,
+      "apkNoticeDays": 60,
+      "apkUrgentDays": 30,
+      "powerHpPerTon": 91.3,
+      "powerWeightBasis": "massa rijklaar",
+      "inspectionCount": 2,
+      "inspectionsWithDefects": 1,
+      "defectCount": 3,
+      "defectCountComplete": true,
+      "warnings": []
+    },
+    "waitingForInspection": null,
+    "payloadDerived": true,
+    "originalDimensions": {
+      "lengte": "430",
+      "breedte": "182",
+      "hoogte_voertuig": "156",
+      "wielbasis": "267"
+    },
     "powerKw": 100.0,
     "powerHp": 136,
     "electricPowerKw": null,
@@ -162,19 +265,112 @@
     "odometerExplanation": "De geregistreerde tellerstand is steeds hoger dan de daarvoor geregistreerde tellerstand. Wij oordelen dan dat de tellerstand logisch verklaarbaar is.",
     "odometerLastYear": 2026,
     "recalls": [],
+    "possibleRecalls": [
+      {
+        "reference": "MGP260373",
+        "statusCode": null,
+        "status": null,
+        "publicationDate": "2026-09-22",
+        "producer": "BMW Nederland B.V.",
+        "producerReference": "0011950700",
+        "defect": "Het uitlaatgasreinigingssysteem voldoet mogelijk niet aan de aangescherpte wettelijke eisen.",
+        "consequences": "De uitstoot van schadelijke stoffen ligt mogelijk hoger dan wettelijk toegestaan en daardoor is er meer belasting voor het milieu en de gezondheid.",
+        "remedy": "De voertuigeigenaar kan contact opnemen met een BMW/MINI dealer. Zij zullen maatrelen treffen om de uitstoot van schadelijke stoffen te beperken.",
+        "risks": [
+          "Het belasten van het milieu"
+        ],
+        "url": null,
+        "phone": "0800-0992234"
+      },
+      {
+        "reference": "MGP260257",
+        "statusCode": null,
+        "status": null,
+        "publicationDate": "2026-07-13",
+        "producer": "BMW Nederland B.V.",
+        "producerReference": "0034350300",
+        "defect": "In het remsysteem ontbreekt software om fouten te detecteren, waardoor er geen waarschuwing op het informatiedisplay verschijnt bij een storing. De vereiste software is bij een eerdere terugroepactie niet juist ge�nstalleerd.",
+        "consequences": "Als de bestuurder niet op tijd wordt gewaarschuwd kan het remsysteem in storing raken. Dan voelt het rempedaal hard aan en werken de ABS en DSC niet meer.",
+        "remedy": "De voertuigeigenaar wordt verzocht contact op te nemen met de merkdealer, deze zal de juiste software informeren.",
+        "risks": [
+          "Een (verkeers)ongeval met letselschade"
+        ],
+        "url": null,
+        "phone": "0800-0992234"
+      },
+      {
+        "reference": "MGP250395",
+        "statusCode": null,
+        "status": null,
+        "publicationDate": "2025-10-31",
+        "producer": "BMW Nederland B.V.",
+        "producerReference": "0072910200, 0072900200,",
+        "defect": "De veiligheidsgordels linksachter en/of rechtsachter zijn mogelijk niet correct vervaardigd.",
+        "consequences": "Hierdoor kan de veiligheidsgordel bij hard remmen, slippen of een ongeval waarbij de auto over de kop gaat, mogelijk niet goed blokkeren. De gordel houdt de passagiers achterin dan niet op hun plek, waardoor de kans op letsel groter wordt.",
+        "remedy": "De voertuigeigenaar wordt verzocht contact op te nemen met de merkdealer. Deze zal de betreffende gordel(s) vervangen.",
+        "risks": [
+          "Verhoogde kans op letsel bij een ongeval"
+        ],
+        "url": "(Nog) niet bekend",
+        "phone": "0800-0992234"
+      },
+      {
+        "reference": "MGP250346",
+        "statusCode": null,
+        "status": null,
+        "publicationDate": "2025-09-26",
+        "producer": "BMW Nederland B.V.",
+        "producerReference": "0072830200, 0072820200",
+        "defect": "De veiligheidsgordel(s) aan de voorzijde zijn mogelijk niet correct geproduceerd.",
+        "consequences": "Hierdoor kan de veiligheidsgordel bij een aanrijding of ongeval falen en onvoldoende bescherming bieden, wat het risico op letsel verhoogt.",
+        "remedy": "De voertuigeigenaar wordt verzocht contact op te nemen met de merkdealer. Deze zal de betreffende gordel(s) vervangen.",
+        "risks": [
+          "Verhoogde kans op letsel bij een ongeval"
+        ],
+        "url": null,
+        "phone": "0800-0992234"
+      },
+      {
+        "reference": "MGP250249",
+        "statusCode": null,
+        "status": null,
+        "publicationDate": "2025-07-24",
+        "producer": "BMW Nederland B.V.",
+        "producerReference": "0061250900 / 0061260900",
+        "defect": "De massakabel van de PowerControlUnit PCU48 is mogelijk niet of met te weinig koppel op de behuizing aangedraaid.",
+        "consequences": "Een verhoogde overgangsweerstand waardoor brand niet kan worden uitgesloten.",
+        "remedy": "De voertuigeigenaar wordt verzocht contact op te nemen met de merkdealer, deze zal de massaverbinding controleren en zonodig vervangen.",
+        "risks": [
+          "Brand met letselschade"
+        ],
+        "url": "(Nog) niet bekend",
+        "phone": "0800-0992234"
+      }
+    ],
+    "possibleRecallsAvailable": true,
     "recallDetailsAvailable": true,
     "axes": [
       {
         "number": 1,
         "position": "V",
         "trackCm": 159,
-        "maxMassKg": 1045
+        "maxMassKg": 1045,
+        "technicalMaxMassKg": 1045,
+        "driven": null,
+        "liftable": null,
+        "braked": null,
+        "suspensionCode": null
       },
       {
         "number": 2,
         "position": "A",
         "trackCm": 159,
-        "maxMassKg": 980
+        "maxMassKg": 980,
+        "technicalMaxMassKg": 980,
+        "driven": null,
+        "liftable": null,
+        "braked": null,
+        "suspensionCode": null
       }
     ],
     "typeApproval": {
@@ -199,6 +395,9 @@
     "noiseRpm": 3375,
     "environmentalApproval": "715/2007*2018/1832DG",
     "electricRangeKm": null,
+    "hybridClass": null,
+    "consumptionWeightedWltp": null,
+    "emissionsCo2WeightedWltp": null,
     "numberOfSeats": 5,
     "numberOfDoors": 4,
     "engineCapacityCc": 1499,
@@ -226,20 +425,180 @@
         "8ys7-d773",
         "3huj-srit",
         "vezc-m2t6",
+        "jhie-znh9",
+        "kmfi-hrps",
+        "sgfe-77wx",
+        "a34c-vvps",
         "t49b-isb7",
+        "mu2x-mu5e",
+        "j9yg-7rg9",
+        "9ihi-jgpf",
+        "jqs4-4kvw",
         "byxc-wwua",
         "7rjk-eycs",
-        "jqs4-4kvw"
+        "hx2c-gt7k"
       ],
-      "fetchedAt": "2026-10-06T22:36:37.538762Z",
+      "fetchedAt": "2026-10-06T23:25:38.370659Z",
       "missingFields": [],
       "derivedFields": [
         "powerHp",
         "payloadKg",
         "isImport"
       ],
-      "warnings": [],
-      "schemaVersion": 2
+      "warnings": [
+        "Er worden maximaal vijf mogelijke merk/type-acties getoond."
+      ],
+      "schemaVersion": 3,
+      "partial": true,
+      "unavailableSections": [
+        "possibleRecalls"
+      ],
+      "sections": {
+        "registration": {
+          "datasets": [
+            "m9d7-ebf2"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.027374Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 1
+        },
+        "fuel": {
+          "datasets": [
+            "8ys7-d773"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.153037Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 1
+        },
+        "axles": {
+          "datasets": [
+            "3huj-srit"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.265657Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 2
+        },
+        "body": {
+          "datasets": [
+            "vezc-m2t6"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.241659Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 1
+        },
+        "bodySpecifications": {
+          "datasets": [
+            "jhie-znh9"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.278659Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 0
+        },
+        "vehicleClasses": {
+          "datasets": [
+            "kmfi-hrps"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.274658Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 0
+        },
+        "inspectionNotifications": {
+          "datasets": [
+            "sgfe-77wx"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.264657Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 2
+        },
+        "inspectionDefects": {
+          "datasets": [
+            "a34c-vvps"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.284659Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 2
+        },
+        "recallStatuses": {
+          "datasets": [
+            "t49b-isb7"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.285657Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 0
+        },
+        "possibleRecalls": {
+          "datasets": [
+            "mu2x-mu5e"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.370659Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 63
+        },
+        "recallCampaigns": {
+          "datasets": [
+            "j9yg-7rg9"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.467421Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 5
+        },
+        "recallRisks": {
+          "datasets": [
+            "9ihi-jgpf"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.501423Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 5
+        },
+        "odometerExplanation": {
+          "datasets": [
+            "jqs4-4kvw"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.598420Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 1
+        },
+        "typeApproval": {
+          "datasets": [
+            "byxc-wwua"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.626423Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 1
+        },
+        "transmission": {
+          "datasets": [
+            "7rjk-eycs"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.549421Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 1
+        },
+        "defectDescriptions": {
+          "datasets": [
+            "hx2c-gt7k"
+          ],
+          "fetchedAt": "2026-10-06T23:25:38.655421Z",
+          "available": true,
+          "truncated": false,
+          "recordCount": 1002
+        }
+      }
     }
   }
 }

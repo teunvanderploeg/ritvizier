@@ -13,7 +13,7 @@ export function Footer() {
           <Link href="/over">Over RitVizier</Link>
           <Link href="/privacy">Privacy</Link>
           <a href="https://opendata.rdw.nl/" target="_blank" rel="noreferrer">
-            RDW Open Data <ArrowUpRight size={14} />
+            Open voertuigdata <ArrowUpRight size={14} />
           </a>
         </div>
       </div>

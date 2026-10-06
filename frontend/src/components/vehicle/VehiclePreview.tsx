@@ -20,7 +20,7 @@ export function VehiclePreview() {
           <ShieldCheck size={17} />
         </span>
         <div>
-          <strong>Rechtstreeks van de RDW</strong>
+          <strong>Gegevens uit het register</strong>
           <span>Openbare voertuiggegevens</span>
         </div>
         <Check size={16} />

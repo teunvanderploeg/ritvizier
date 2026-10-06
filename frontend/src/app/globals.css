@@ -2770,6 +2770,8 @@ input[type="range"] {
 }
 .vehicle-status-card small {
   color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.5;
 }
 .vehicle-status-card:hover {
   border-color: var(--brand);
@@ -2894,6 +2896,254 @@ input[type="range"] {
   font-size: 0.8125rem;
   color: var(--muted);
 }
+
+.section-description {
+  max-width: 50rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+  margin-bottom: 1.5rem;
+}
+.history-stats {
+  display: grid;
+  gap: 0.75rem;
+  margin: 1.5rem 0 2rem;
+}
+.history-stats > div {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.history-stats dt {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.history-stats dd {
+  margin: 0.3rem 0 0;
+  font-size: 1.5rem;
+  font-weight: 650;
+}
+.inspection-timeline {
+  list-style: none;
+  padding: 0;
+  display: grid;
+  gap: 1rem;
+}
+.inspection-event,
+.technical-disclosure {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+  min-width: 0;
+}
+.inspection-event summary,
+.technical-disclosure summary {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  min-height: 3rem;
+  padding: 1rem;
+  cursor: pointer;
+  list-style: none;
+  overflow-wrap: anywhere;
+}
+.inspection-event summary::-webkit-details-marker,
+.technical-disclosure summary::-webkit-details-marker {
+  display: none;
+}
+.inspection-event summary > span:nth-child(2) {
+  flex: 1;
+  min-width: 0;
+}
+.inspection-event summary strong,
+.possible-recall-card summary strong {
+  display: block;
+  font-size: 0.9375rem;
+}
+.inspection-event summary small,
+.possible-recall-card summary small {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+  margin-top: 0.2rem;
+}
+.inspection-marker {
+  display: grid;
+  place-items: center;
+  width: 2rem;
+  height: 2rem;
+  flex-shrink: 0;
+  border-radius: 50%;
+  background: var(--mint);
+  color: var(--teal);
+}
+.inspection-event-count {
+  display: none;
+  color: var(--muted);
+  font-size: 0.75rem;
+}
+.inspection-event summary > svg,
+.technical-disclosure summary > svg {
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform 180ms ease;
+}
+.inspection-event[open] summary > svg,
+.technical-disclosure[open] summary > svg {
+  transform: rotate(180deg);
+}
+.inspection-event-body,
+.possible-recall-body,
+.technical-disclosure > dl {
+  padding: 0 1rem 1rem;
+}
+.inspection-event[open] .inspection-event-body,
+.technical-disclosure[open] > dl,
+.technical-disclosure[open] .possible-recall-body {
+  animation: content-reveal 180ms ease-out;
+}
+.inspection-expiry,
+.inspection-no-defects {
+  color: var(--muted);
+  font-size: 0.8125rem;
+}
+.inspection-defects {
+  list-style: none;
+  padding: 0;
+  margin-bottom: 0;
+}
+.inspection-defects li {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding-block: 0.9rem;
+  border-top: 1px solid var(--border);
+  font-size: 0.8125rem;
+}
+.inspection-defects li > div {
+  min-width: 0;
+  overflow-wrap: anywhere;
+}
+.inspection-defects li > span {
+  flex-shrink: 0;
+  color: var(--muted);
+}
+.inspection-defects small {
+  display: block;
+  color: var(--muted);
+  margin-top: 0.3rem;
+}
+.history-empty {
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--surface-subtle);
+}
+.history-empty > svg {
+  color: var(--teal);
+}
+.history-empty p {
+  max-width: 40rem;
+  font-size: 0.875rem;
+}
+.technical-axes {
+  grid-column: 1 / -1;
+}
+.technical-axes .technical-disclosure {
+  margin-top: 0.75rem;
+}
+.fuel-records,
+.possible-recalls,
+.mileage-estimate {
+  margin-top: 2.5rem;
+}
+.fuel-record {
+  padding: 1rem 1.25rem;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  background: var(--surface);
+}
+.fuel-record h3 {
+  font-size: 1rem;
+}
+.fuel-record h3 span {
+  display: block;
+  color: var(--muted);
+  font-size: 0.75rem;
+  font-weight: 400;
+  margin-top: 0.3rem;
+}
+.possible-recall-body p {
+  font-size: 0.875rem;
+  overflow-wrap: anywhere;
+}
+.mileage-estimate {
+  max-width: 44rem;
+  padding: 1.5rem;
+  border-radius: var(--radius);
+  background: var(--blue-soft);
+}
+.mileage-estimate p {
+  color: var(--ink);
+  font-size: 0.875rem;
+}
+.mileage-estimate label {
+  display: block;
+  font-size: 0.8125rem;
+  font-weight: 600;
+  margin-bottom: 0.5rem;
+}
+.mileage-input {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  max-width: 23rem;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  background: var(--surface);
+}
+.mileage-input input {
+  width: 100%;
+  min-width: 0;
+  min-height: 2.75rem;
+  border: 0;
+  border-radius: inherit;
+  background: transparent;
+  padding: 0.75rem;
+  color: var(--ink);
+  font-size: 1rem;
+}
+.mileage-input span {
+  padding-right: 0.75rem;
+  color: var(--muted);
+  font-size: 0.875rem;
+}
+.mileage-result {
+  margin-bottom: 0;
+}
+.source-status {
+  margin-block: 1rem;
+}
+.explanation-panel blockquote {
+  margin: 0 0 1rem;
+  color: var(--ink);
+  font-size: 0.875rem;
+  line-height: 1.8;
+}
+@media (min-width: 640px) {
+  .history-stats {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .inspection-event-count {
+    display: block;
+  }
+  .inspection-event summary {
+    padding: 1.25rem;
+  }
+  .inspection-event-body {
+    padding-inline: 4rem 1.25rem;
+  }
+}
 .tax-mode-button {
   min-height: 2.75rem;
   text-align: left;
@@ -2943,6 +3193,9 @@ input[type="range"] {
   .vehicle-status-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
+  .vehicle-status-card:last-child {
+    grid-column: 1 / -1;
+  }
   .road-tax-panel {
     padding: 1.25rem;
   }
@@ -2954,5 +3207,13 @@ input[type="range"] {
   .recall-card .data-row {
     grid-template-columns: minmax(0, 1fr) minmax(0, 2fr);
     gap: 1rem;
+  }
+}
+@media (min-width: 1024px) {
+  .vehicle-status-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+  .vehicle-status-card:last-child {
+    grid-column: auto;
   }
 }

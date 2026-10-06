@@ -141,10 +141,10 @@
       "tellerstandoordeel": "Logisch",
       "code_toelichting_tellerstandoordeel": "00",
       "tenaamstellen_mogelijk": "Ja",
-      "vervaldatum_apk_dt": "2027-10-18T00:00:00",
-      "datum_tenaamstelling_dt": "2021-02-11T00:00:00",
-      "datum_eerste_toelating_dt": "2019-10-18T00:00:00",
-      "datum_eerste_tenaamstelling_in_nederland_dt": "2019-10-18T00:00:00",
+      "vervaldatum_apk_dt": "2027-10-18T00:00:00.000",
+      "datum_tenaamstelling_dt": "2021-02-11T00:00:00.000",
+      "datum_eerste_toelating_dt": "2019-10-18T00:00:00.000",
+      "datum_eerste_tenaamstelling_in_nederland_dt": "2019-10-18T00:00:00.000",
       "hoogte_voertuig": "156",
       "api_gekentekende_voertuigen_assen": "https://opendata.rdw.nl/resource/3huj-srit.json",
       "api_gekentekende_voertuigen_brandstof": "https://opendata.rdw.nl/resource/8ys7-d773.json",
@@ -158,6 +158,556 @@
     {
       "code_toelichting_tellerstandoordeel": "00",
       "toelichting_tellerstandoordeel": "De geregistreerde tellerstand is steeds hoger dan de daarvoor geregistreerde tellerstand. Wij oordelen dan dat de tellerstand logisch verklaarbaar is."
+    }
+  ],
+  "jhie-znh9": [],
+  "kmfi-hrps": [],
+  "sgfe-77wx": [
+    {
+      "kenteken": "G921GS",
+      "soort_erkenning_keuringsinstantie": "AL",
+      "meld_datum_door_keuringsinstantie": "20251015",
+      "meld_tijd_door_keuringsinstantie": "1035",
+      "soort_erkenning_omschrijving": "APK Lichte voertuigen",
+      "soort_melding_ki_omschrijving": "periodieke controle",
+      "vervaldatum_keuring": "20271018",
+      "meld_datum_door_keuringsinstantie_dt": "2025-10-15T10:35:00.000",
+      "vervaldatum_keuring_dt": "2027-10-18T00:00:00.000",
+      "api_gebrek_constateringen": "https://opendata.rdw.nl/Voertuigen/Open-Data-RDW-Geconstateerde-Gebreken/a34c-vvps",
+      "api_gebrek_beschrijving": "https://opendata.rdw.nl/dataset/Open-Data-RDW-Gebreken/hx2c-gt7k/"
+    },
+    {
+      "kenteken": "G921GS",
+      "soort_erkenning_keuringsinstantie": "AL",
+      "meld_datum_door_keuringsinstantie": "20231013",
+      "meld_tijd_door_keuringsinstantie": "933",
+      "soort_erkenning_omschrijving": "APK Lichte voertuigen",
+      "soort_melding_ki_omschrijving": "periodieke controle",
+      "vervaldatum_keuring": "20251018",
+      "meld_datum_door_keuringsinstantie_dt": "2023-10-13T09:33:00.000",
+      "vervaldatum_keuring_dt": "2025-10-18T00:00:00.000",
+      "api_gebrek_constateringen": "https://opendata.rdw.nl/Voertuigen/Open-Data-RDW-Geconstateerde-Gebreken/a34c-vvps",
+      "api_gebrek_beschrijving": "https://opendata.rdw.nl/dataset/Open-Data-RDW-Gebreken/hx2c-gt7k/"
+    }
+  ],
+  "a34c-vvps": [
+    {
+      "kenteken": "G921GS",
+      "soort_erkenning_keuringsinstantie": "AL",
+      "meld_datum_door_keuringsinstantie": "20231013",
+      "meld_tijd_door_keuringsinstantie": "933",
+      "gebrek_identificatie": "190",
+      "soort_erkenning_omschrijving": "APK Lichte voertuigen",
+      "aantal_gebreken_geconstateerd": "1",
+      "meld_datum_door_keuringsinstantie_dt": "2023-10-13T09:33:00.000"
+    },
+    {
+      "kenteken": "G921GS",
+      "soort_erkenning_keuringsinstantie": "AL",
+      "meld_datum_door_keuringsinstantie": "20231013",
+      "meld_tijd_door_keuringsinstantie": "933",
+      "gebrek_identificatie": "310",
+      "soort_erkenning_omschrijving": "APK Lichte voertuigen",
+      "aantal_gebreken_geconstateerd": "2",
+      "meld_datum_door_keuringsinstantie_dt": "2023-10-13T09:33:00.000"
+    }
+  ],
+  "mu2x-mu5e": [
+    {
+      "referentiecode_rdw": "MGP140298",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP140298",
+      "merk": "MINI",
+      "type": "ONE"
+    },
+    {
+      "referentiecode_rdw": "MGP160524",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP160524",
+      "merk": "MINI",
+      "type": "ONE"
+    },
+    {
+      "referentiecode_rdw": "MGP180258",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP180416",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP190370",
+      "merk": "MINI",
+      "type": "CLUBMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP190370",
+      "merk": "MINI",
+      "type": "COOPER CABRIO"
+    },
+    {
+      "referentiecode_rdw": "MGP190370",
+      "merk": "MINI",
+      "type": "JCW COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP200355",
+      "merk": "MINI",
+      "type": "CLUBMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP200467",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP220258",
+      "merk": "MINI",
+      "type": "CLUBMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP220258",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP220258",
+      "merk": "MINI",
+      "type": "COOPER CABRIO"
+    },
+    {
+      "referentiecode_rdw": "MGP220258",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP230191",
+      "merk": "MINI",
+      "type": "CLUBMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP230191",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP230191",
+      "merk": "MINI",
+      "type": "COOPER S"
+    },
+    {
+      "referentiecode_rdw": "MGP230191",
+      "merk": "MINI",
+      "type": "ONE"
+    },
+    {
+      "referentiecode_rdw": "MGP240167",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP240203",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240276",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP240276",
+      "merk": "MINI",
+      "type": "COOPER CABRIO"
+    },
+    {
+      "referentiecode_rdw": "MGP240293",
+      "merk": "MINI",
+      "type": "ACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240293",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP240328",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240336",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP240336",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240337",
+      "merk": "MINI",
+      "type": "ACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240337",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP240337",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240340",
+      "merk": "MINI",
+      "type": "ACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240340",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240406",
+      "merk": "MINI",
+      "type": "ACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240406",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP240422",
+      "merk": "MINI",
+      "type": "ACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP240422",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP250126",
+      "merk": "MINI",
+      "type": "ACEMAN E"
+    },
+    {
+      "referentiecode_rdw": "MGP250126",
+      "merk": "MINI",
+      "type": "ACEMAN S"
+    },
+    {
+      "referentiecode_rdw": "MGP250126",
+      "merk": "MINI",
+      "type": "COOPER E"
+    },
+    {
+      "referentiecode_rdw": "MGP250126",
+      "merk": "MINI",
+      "type": "COOPER S"
+    },
+    {
+      "referentiecode_rdw": "MGP250148",
+      "merk": "MINI",
+      "type": "ACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP250148",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP250212",
+      "merk": "MINI",
+      "type": "CABRIOLET"
+    },
+    {
+      "referentiecode_rdw": "MGP250212",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP250212",
+      "merk": "MINI",
+      "type": "JCW"
+    },
+    {
+      "referentiecode_rdw": "MGP250249",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP250288",
+      "merk": "MINI",
+      "type": "ACEMAN E"
+    },
+    {
+      "referentiecode_rdw": "MGP250288",
+      "merk": "MINI",
+      "type": "COOPER E"
+    },
+    {
+      "referentiecode_rdw": "MGP250346",
+      "merk": "MINI",
+      "type": "CABRIOLET"
+    },
+    {
+      "referentiecode_rdw": "MGP250346",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP250346",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP250346",
+      "merk": "MINI",
+      "type": "JCW"
+    },
+    {
+      "referentiecode_rdw": "MGP250395",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP260226",
+      "merk": "MINI",
+      "type": "ACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP260226",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP260257",
+      "merk": "MINI",
+      "type": "ACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP260257",
+      "merk": "MINI",
+      "type": "COOPER"
+    },
+    {
+      "referentiecode_rdw": "MGP260257",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP260373",
+      "merk": "MINI",
+      "type": "COUNTRYMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP260373",
+      "merk": "MINI",
+      "type": "PACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP260371",
+      "merk": "MINI",
+      "type": "ACEMAN"
+    },
+    {
+      "referentiecode_rdw": "MGP260371",
+      "merk": "MINI",
+      "type": "COOPER"
+    }
+  ],
+  "hx2c-gt7k": [
+    {
+      "gebrek_identificatie": "190",
+      "ingangsdatum_gebrek": "20170401",
+      "gebrek_artikel_nummer": "5.*.20",
+      "gebrek_omschrijving": "Slijtage/beschadiging wiellager hoorbaar of voelbaar",
+      "ingangsdatum_gebrek_dt": "2017-04-01T00:00:00.000"
+    },
+    {
+      "gebrek_identificatie": "310",
+      "ingangsdatum_gebrek": "20170401",
+      "gebrek_artikel_nummer": "5.*.31",
+      "gebrek_omschrijving": "Remslang schuurt langs enig deel",
+      "ingangsdatum_gebrek_dt": "2017-04-01T00:00:00.000"
+    }
+  ],
+  "j9yg-7rg9": [
+    {
+      "referentiecode_rdw": "MGP260373",
+      "publicatiedatum_rdw": "20260922",
+      "meldende_producent_distributeur": "BMW Nederland B.V.",
+      "referentiecode_producent": "0011950700",
+      "omschrijving_defect": "Het uitlaatgasreinigingssysteem voldoet mogelijk niet aan de aangescherpte wettelijke eisen.",
+      "categorie_defect": "Motorrijtuigen - motor inclusief brandstof-, smeer- en koelsysteem",
+      "materi_le_gevolgen": "De uitstoot van schadelijke stoffen ligt mogelijk hoger dan wettelijk toegestaan en daardoor is er meer belasting voor het milieu en de gezondheid.",
+      "beschrijving_van_het_herstel": "De voertuigeigenaar kan contact opnemen met een BMW/MINI dealer. Zij zullen maatrelen treffen om de uitstoot van schadelijke stoffen te beperken.",
+      "meer_informatie_via_telefoonnummer": "0800-0992234",
+      "datum_aankondiging_producent": "20260410",
+      "datum_melding_bij_rdw": "20260921",
+      "risicobeoordeling_rdw": "GEM",
+      "datum_informeren_eigenaar": "20260508",
+      "datum_eigenaren_ge_nformeerd": "20260708",
+      "totaal_aantal_voertuigen_terugroepactie": "82625",
+      "nationaal_opgegeven_aantal_voertuigen_terugroepactie": "423",
+      "publicatiedatum_rdw_dt": "2026-09-22T00:00:00.000",
+      "datum_aankondiging_producent_dt": "2026-04-10T00:00:00.000",
+      "datum_melding_bij_rdw_dt": "2026-09-21T00:00:00.000",
+      "datum_informeren_eigenaar_dt": "2026-05-08T00:00:00.000",
+      "datum_eigenaren_ge_nformeerd_dt": "2026-07-08T00:00:00.000",
+      "api_terugroep_actie_status": "https://opendata.rdw.nl/resource/t49b-isb7.json",
+      "api_terugroep_actie_risico": "https://opendata.rdw.nl/resource/9ihi-jgpf.json",
+      "api_terugroep_voertuig_merk_type": "https://opendata.rdw.nl/resource/mu2x-mu5e.json",
+      "api_terugroep_infomeren_eigenaar": "https://opendata.rdw.nl/resource/mh8w-8cup.json"
+    },
+    {
+      "referentiecode_rdw": "MGP260257",
+      "publicatiedatum_rdw": "20260713",
+      "meldende_producent_distributeur": "BMW Nederland B.V.",
+      "referentiecode_producent": "0034350300",
+      "omschrijving_defect": "In het remsysteem ontbreekt software om fouten te detecteren, waardoor er geen waarschuwing op het informatiedisplay verschijnt bij een storing. De vereiste software is bij een eerdere terugroepactie niet juist ge�nstalleerd.",
+      "categorie_defect": "Motorrijtuigen en aanhangwagens - reminrichting",
+      "materi_le_gevolgen": "Als de bestuurder niet op tijd wordt gewaarschuwd kan het remsysteem in storing raken. Dan voelt het rempedaal hard aan en werken de ABS en DSC niet meer.",
+      "beschrijving_van_het_herstel": "De voertuigeigenaar wordt verzocht contact op te nemen met de merkdealer, deze zal de juiste software informeren.",
+      "meer_informatie_via_telefoonnummer": "0800-0992234",
+      "datum_aankondiging_producent": "20260430",
+      "datum_melding_bij_rdw": "20260708",
+      "risicobeoordeling_rdw": "ERN",
+      "datum_informeren_eigenaar": "20260609",
+      "datum_eigenaren_ge_nformeerd": "20260909",
+      "totaal_aantal_voertuigen_terugroepactie": "2075",
+      "nationaal_opgegeven_aantal_voertuigen_terugroepactie": "1",
+      "publicatiedatum_rdw_dt": "2026-07-13T00:00:00.000",
+      "datum_aankondiging_producent_dt": "2026-04-30T00:00:00.000",
+      "datum_melding_bij_rdw_dt": "2026-07-08T00:00:00.000",
+      "datum_informeren_eigenaar_dt": "2026-06-09T00:00:00.000",
+      "datum_eigenaren_ge_nformeerd_dt": "2026-09-09T00:00:00.000",
+      "api_terugroep_actie_status": "https://opendata.rdw.nl/resource/t49b-isb7.json",
+      "api_terugroep_actie_risico": "https://opendata.rdw.nl/resource/9ihi-jgpf.json",
+      "api_terugroep_voertuig_merk_type": "https://opendata.rdw.nl/resource/mu2x-mu5e.json",
+      "api_terugroep_infomeren_eigenaar": "https://opendata.rdw.nl/resource/mh8w-8cup.json"
+    },
+    {
+      "referentiecode_rdw": "MGP250395",
+      "publicatiedatum_rdw": "20251031",
+      "meldende_producent_distributeur": "BMW Nederland B.V.",
+      "referentiecode_producent": "0072910200, 0072900200,",
+      "omschrijving_defect": "De veiligheidsgordels linksachter en/of rechtsachter zijn mogelijk niet correct vervaardigd.",
+      "categorie_defect": "Motorrijtuigen - carrosserie (beschermingsmiddelen inzittenden)",
+      "materi_le_gevolgen": "Hierdoor kan de veiligheidsgordel bij hard remmen, slippen of een ongeval waarbij de auto over de kop gaat, mogelijk niet goed blokkeren. De gordel houdt de passagiers achterin dan niet op hun plek, waardoor de kans op letsel groter wordt.",
+      "beschrijving_van_het_herstel": "De voertuigeigenaar wordt verzocht contact op te nemen met de merkdealer. Deze zal de betreffende gordel(s) vervangen.",
+      "meer_informatie_op_internet": "(Nog) niet bekend",
+      "meer_informatie_via_telefoonnummer": "0800-0992234",
+      "opmerkingen_rdw": "Betreft ook de volgende referentiecodes van de fabrikant: 0072890200, 0072880200, 0072870200, 0072860200, 0072850200, 0072840200",
+      "datum_aankondiging_producent": "20251021",
+      "datum_melding_bij_rdw": "20251030",
+      "risicobeoordeling_rdw": "GEM",
+      "datum_informeren_eigenaar": "20251021",
+      "datum_eigenaren_ge_nformeerd": "20260221",
+      "totaal_aantal_voertuigen_terugroepactie": "27012",
+      "nationaal_opgegeven_aantal_voertuigen_terugroepactie": "857",
+      "publicatiedatum_rdw_dt": "2025-10-31T00:00:00.000",
+      "datum_aankondiging_producent_dt": "2025-10-21T00:00:00.000",
+      "datum_melding_bij_rdw_dt": "2025-10-30T00:00:00.000",
+      "datum_informeren_eigenaar_dt": "2025-10-21T00:00:00.000",
+      "datum_eigenaren_ge_nformeerd_dt": "2026-02-21T00:00:00.000",
+      "api_terugroep_actie_status": "https://opendata.rdw.nl/resource/t49b-isb7.json",
+      "api_terugroep_actie_risico": "https://opendata.rdw.nl/resource/9ihi-jgpf.json",
+      "api_terugroep_voertuig_merk_type": "https://opendata.rdw.nl/resource/mu2x-mu5e.json",
+      "api_terugroep_infomeren_eigenaar": "https://opendata.rdw.nl/resource/mh8w-8cup.json"
+    },
+    {
+      "referentiecode_rdw": "MGP250346",
+      "publicatiedatum_rdw": "20250926",
+      "meldende_producent_distributeur": "BMW Nederland B.V.",
+      "referentiecode_producent": "0072830200, 0072820200",
+      "omschrijving_defect": "De veiligheidsgordel(s) aan de voorzijde zijn mogelijk niet correct geproduceerd.",
+      "categorie_defect": "Motorrijtuigen - carrosserie (beschermingsmiddelen inzittenden)",
+      "materi_le_gevolgen": "Hierdoor kan de veiligheidsgordel bij een aanrijding of ongeval falen en onvoldoende bescherming bieden, wat het risico op letsel verhoogt.",
+      "beschrijving_van_het_herstel": "De voertuigeigenaar wordt verzocht contact op te nemen met de merkdealer. Deze zal de betreffende gordel(s) vervangen.",
+      "meer_informatie_via_telefoonnummer": "0800-0992234",
+      "opmerkingen_rdw": "Betreft ook de volgende referentiecodes van de fabrikant: 0072810200, 0072800200, 0072790200, 0072780200",
+      "datum_aankondiging_producent": "20250916",
+      "datum_melding_bij_rdw": "20250922",
+      "risicobeoordeling_rdw": "GEM",
+      "datum_informeren_eigenaar": "20250925",
+      "datum_eigenaren_ge_nformeerd": "20251225",
+      "totaal_aantal_voertuigen_terugroepactie": "15131",
+      "nationaal_opgegeven_aantal_voertuigen_terugroepactie": "240",
+      "publicatiedatum_rdw_dt": "2025-09-26T00:00:00.000",
+      "datum_aankondiging_producent_dt": "2025-09-16T00:00:00.000",
+      "datum_melding_bij_rdw_dt": "2025-09-22T00:00:00.000",
+      "datum_informeren_eigenaar_dt": "2025-09-25T00:00:00.000",
+      "datum_eigenaren_ge_nformeerd_dt": "2025-12-25T00:00:00.000",
+      "api_terugroep_actie_status": "https://opendata.rdw.nl/resource/t49b-isb7.json",
+      "api_terugroep_actie_risico": "https://opendata.rdw.nl/resource/9ihi-jgpf.json",
+      "api_terugroep_voertuig_merk_type": "https://opendata.rdw.nl/resource/mu2x-mu5e.json",
+      "api_terugroep_infomeren_eigenaar": "https://opendata.rdw.nl/resource/mh8w-8cup.json"
+    },
+    {
+      "referentiecode_rdw": "MGP250249",
+      "publicatiedatum_rdw": "20250724",
+      "meldende_producent_distributeur": "BMW Nederland B.V.",
+      "referentiecode_producent": "0061250900 / 0061260900",
+      "omschrijving_defect": "De massakabel van de PowerControlUnit PCU48 is mogelijk niet of met te weinig koppel op de behuizing aangedraaid.",
+      "categorie_defect": "Motorrijtuigen en aanhangwagens - elektrische installatie",
+      "materi_le_gevolgen": "Een verhoogde overgangsweerstand waardoor brand niet kan worden uitgesloten.",
+      "beschrijving_van_het_herstel": "De voertuigeigenaar wordt verzocht contact op te nemen met de merkdealer, deze zal de massaverbinding controleren en zonodig vervangen.",
+      "meer_informatie_op_internet": "(Nog) niet bekend",
+      "meer_informatie_via_telefoonnummer": "0800-0992234",
+      "opmerkingen_rdw": "Geen",
+      "datum_aankondiging_producent": "20250709",
+      "datum_melding_bij_rdw": "20250723",
+      "risicobeoordeling_rdw": "GEM",
+      "totaal_aantal_voertuigen_terugroepactie": "1664",
+      "nationaal_opgegeven_aantal_voertuigen_terugroepactie": "40",
+      "publicatiedatum_rdw_dt": "2025-07-24T00:00:00.000",
+      "datum_aankondiging_producent_dt": "2025-07-09T00:00:00.000",
+      "datum_melding_bij_rdw_dt": "2025-07-23T00:00:00.000",
+      "api_terugroep_actie_status": "https://opendata.rdw.nl/resource/t49b-isb7.json",
+      "api_terugroep_actie_risico": "https://opendata.rdw.nl/resource/9ihi-jgpf.json",
+      "api_terugroep_voertuig_merk_type": "https://opendata.rdw.nl/resource/mu2x-mu5e.json",
+      "api_terugroep_infomeren_eigenaar": "https://opendata.rdw.nl/resource/mh8w-8cup.json"
+    }
+  ],
+  "9ihi-jgpf": [
+    {
+      "referentiecode_rdw": "MGP260373",
+      "code_mogelijk_gevaar": "MIL",
+      "mogelijk_gevaar": "Het belasten van het milieu"
+    },
+    {
+      "referentiecode_rdw": "MGP260257",
+      "code_mogelijk_gevaar": "ONG",
+      "mogelijk_gevaar": "Een (verkeers)ongeval met letselschade"
+    },
+    {
+      "referentiecode_rdw": "MGP250395",
+      "code_mogelijk_gevaar": "TEL",
+      "mogelijk_gevaar": "Verhoogde kans op letsel bij een ongeval"
+    },
+    {
+      "referentiecode_rdw": "MGP250346",
+      "code_mogelijk_gevaar": "TEL",
+      "mogelijk_gevaar": "Verhoogde kans op letsel bij een ongeval"
+    },
+    {
+      "referentiecode_rdw": "MGP250249",
+      "code_mogelijk_gevaar": "BRA",
+      "mogelijk_gevaar": "Brand met letselschade"
     }
   ]
 }

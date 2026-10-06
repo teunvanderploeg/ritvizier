@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import Literal
 
 from pydantic import BaseModel, ConfigDict, Field
 from pydantic.alias_generators import to_camel
@@ -8,6 +9,14 @@ class ApiModel(BaseModel):
     model_config = ConfigDict(alias_generator=to_camel, populate_by_name=True, allow_inf_nan=False)
 
 
+class SectionSource(ApiModel):
+    datasets: list[str]
+    fetched_at: datetime
+    available: bool = True
+    truncated: bool = False
+    record_count: int = 0
+
+
 class SourceInfo(ApiModel):
     name: str = "RDW Open Data"
     datasets: list[str]
@@ -15,7 +24,104 @@ class SourceInfo(ApiModel):
     missing_fields: list[str] = Field(default_factory=list)
     derived_fields: list[str] = Field(default_factory=list)
     warnings: list[str] = Field(default_factory=list)
-    schema_version: int = 2
+    schema_version: int = 3
+    partial: bool = False
+    unavailable_sections: list[str] = Field(default_factory=list)
+    sections: dict[str, SectionSource] = Field(default_factory=dict)
+
+
+class FuelRecord(ApiModel):
+    sequence: int | None = None
+    name: str | None = None
+    power_kw: float | None = None
+    power_hp: int | None = None
+    continuous_power_kw: float | None = None
+    electric_power_kw: float | None = None
+    consumption_nedc: float | None = None
+    consumption_wltp: float | None = None
+    consumption_weighted_wltp: float | None = None
+    consumption_city: float | None = None
+    consumption_highway: float | None = None
+    co2_nedc: float | None = None
+    co2_weighted_nedc: float | None = None
+    co2_wltp: float | None = None
+    co2_weighted_wltp: float | None = None
+    emission_class: str | None = None
+    particulate_g_km: float | None = None
+    particulate_wltp: float | None = None
+    electric_consumption_wh_km: float | None = None
+    electric_range_km: float | None = None
+    hybrid_class: str | None = None
+
+
+class BodyRecord(ApiModel):
+    sequence: int | None = None
+    code: str | None = None
+    description: str | None = None
+
+
+class BodySpecification(BodyRecord):
+    specification_sequence: int | None = None
+
+
+class VehicleClass(ApiModel):
+    body_sequence: int | None = None
+    sequence: int | None = None
+    code: str | None = None
+    description: str | None = None
+
+
+class InspectionDefect(ApiModel):
+    code: str
+    description: str | None = None
+    count: int | None = None
+    category: str | None = None
+
+
+class Inspection(ApiModel):
+    key: str
+    date: str
+    time: str | None = None
+    recognition_code: str | None = None
+    recognition: str | None = None
+    report: str | None = None
+    expiry_date: str | None = None
+    has_notification: bool = False
+    defects: list[InspectionDefect] = Field(default_factory=list)
+
+
+class ApkHistory(ApiModel):
+    inspections: list[Inspection] = Field(default_factory=list)
+    notifications_available: bool = False
+    defects_available: bool = False
+    descriptions_available: bool = False
+    truncated: bool = False
+
+
+class AnalysisWarning(ApiModel):
+    code: str
+    severity: Literal["info", "warning", "critical"]
+    title: str
+    description: str
+
+
+class VehicleAnalysis(ApiModel):
+    calculated_at: str | None = None
+    age_months: int | None = None
+    import_age_days: int | None = None
+    registration_duration_days: int | None = None
+    apk_status: str = "unknown"
+    apk_days_remaining: int | None = None
+    apk_exempt: bool = False
+    apk_notice_days: int = 60
+    apk_urgent_days: int = 30
+    power_hp_per_ton: float | None = None
+    power_weight_basis: str = "massa rijklaar"
+    inspection_count: int = 0
+    inspections_with_defects: int = 0
+    defect_count: int = 0
+    defect_count_complete: bool = True
+    warnings: list[AnalysisWarning] = Field(default_factory=list)
 
 
 class Recall(ApiModel):
@@ -38,6 +144,11 @@ class Axle(ApiModel):
     position: str | None = None
     track_cm: int | None = None
     max_mass_kg: int | None = None
+    technical_max_mass_kg: int | None = None
+    driven: bool | None = None
+    liftable: bool | None = None
+    braked: bool | None = None
+    suspension_code: str | None = None
 
 
 class TypeApproval(ApiModel):
@@ -61,6 +172,15 @@ class Vehicle(ApiModel):
     first_registration_netherlands_date: str | None = None
     apk_expiry_date: str | None = None
     fuel_types: list[str] = Field(default_factory=list)
+    fuels: list[FuelRecord] = Field(default_factory=list)
+    bodies: list[BodyRecord] = Field(default_factory=list)
+    body_specifications: list[BodySpecification] = Field(default_factory=list)
+    vehicle_classes: list[VehicleClass] = Field(default_factory=list)
+    apk_history: ApkHistory = Field(default_factory=ApkHistory)
+    analysis: VehicleAnalysis = Field(default_factory=VehicleAnalysis)
+    waiting_for_inspection: bool | None = None
+    payload_derived: bool = False
+    original_dimensions: dict[str, str] = Field(default_factory=dict)
     power_kw: float | None = None
     power_hp: int | None = None
     electric_power_kw: float | None = None
@@ -90,6 +210,8 @@ class Vehicle(ApiModel):
     odometer_explanation: str | None = None
     odometer_last_year: int | None = None
     recalls: list[Recall] = Field(default_factory=list)
+    possible_recalls: list[Recall] = Field(default_factory=list)
+    possible_recalls_available: bool = False
     recall_details_available: bool = False
     axes: list[Axle] = Field(default_factory=list)
     type_approval: TypeApproval = Field(default_factory=TypeApproval)

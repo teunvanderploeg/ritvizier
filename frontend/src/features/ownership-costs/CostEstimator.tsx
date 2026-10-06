@@ -155,9 +155,9 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
             <p className="cost-footnote">
               Verbruik vooraf ingevuld met{" "}
               {vehicle.consumptionWltp != null
-                ? "RDW WLTP"
+                ? "geregistreerde WLTP-waarden"
                 : vehicle.consumptionCombined != null
-                  ? "RDW NEDC"
+                  ? "geregistreerde NEDC-waarden"
                   : "een voorbeeldwaarde"}
               . Pas dit aan je praktijkverbruik aan.
             </p>

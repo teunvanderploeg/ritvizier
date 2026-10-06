@@ -33,14 +33,16 @@ export function apkStatus(v: Vehicle, today = amsterdamToday()) {
       ? "Niet beschikbaar"
       : days < 0
         ? "Verlopen"
-        : days <= 30
+        : days <= v.analysis.apkUrgentDays
           ? "Verloopt binnenkort"
-          : "Geldig";
+          : days <= v.analysis.apkNoticeDays
+            ? "Binnenkort"
+            : "Geldig";
   return {
     days: exempt ? null : days,
     status,
     exempt,
-    warning: !exempt && days != null && days <= 30,
+    warning: !exempt && days != null && days <= v.analysis.apkNoticeDays,
   };
 }
 export function vehicleColors(v: Vehicle) {

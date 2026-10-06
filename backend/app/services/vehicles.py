@@ -8,7 +8,9 @@ from sqlalchemy.ext.asyncio import AsyncSession, async_sessionmaker
 
 from app.db.cache import VehicleCache
 from app.providers.rdw import VehicleProvider
+from app.providers.rdw_client import DATASETS
 from app.schemas.vehicle import Vehicle
+from app.services.analysis import analyze_vehicle
 
 logger = logging.getLogger(__name__)
 
@@ -31,11 +33,12 @@ class VehicleService:
         cached = self.cache.get(plate)
         if cached and cached[0] > now:
             self.cache.move_to_end(plate)
-            return cached[1]
+            return cached[1].model_copy(update={"analysis": analyze_vehicle(cached[1])})
         if plate not in self.pending:
             self.pending[plate] = asyncio.create_task(self._fetch(plate))
             self.pending[plate].add_done_callback(lambda _: self.pending.pop(plate, None))
-        return await asyncio.shield(self.pending[plate])
+        vehicle = await asyncio.shield(self.pending[plate])
+        return vehicle.model_copy(update={"analysis": analyze_vehicle(vehicle)})
 
     async def _fetch(self, plate: str) -> Vehicle:
         now = datetime.now(UTC)
@@ -46,7 +49,7 @@ class VehicleService:
                     if (
                         stored
                         and stored.expires_at > now
-                        and stored.payload.get("source", {}).get("schemaVersion") == 2
+                        and stored.payload.get("source", {}).get("schemaVersion") == 3
                     ):
                         vehicle = Vehicle.model_validate(stored.payload)
                         self._remember(plate, stored.expires_at, vehicle)
@@ -57,6 +60,13 @@ class VehicleService:
         expires = now + timedelta(
             seconds=min(self.ttl, 60) if vehicle.source.warnings else self.ttl
         )
+        # An aggregate response must not extend a source's freshness deadline.
+        for section in vehicle.source.sections.values():
+            for dataset in section.datasets:
+                if dataset in DATASETS:
+                    expires = min(
+                        expires, section.fetched_at + timedelta(seconds=DATASETS[dataset].ttl)
+                    )
         self._remember(plate, expires, vehicle)
         if self.sessions:
             try:

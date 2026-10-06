@@ -6,6 +6,7 @@ from time import monotonic
 import httpx
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.responses import JSONResponse
 from starlette.responses import Response
 
 from app.core.config import settings
@@ -38,6 +39,27 @@ app.add_middleware(
     allow_headers=["Content-Type"],
 )
 requests: OrderedDict[str, deque[float]] = OrderedDict()
+
+
+@app.exception_handler(HTTPException)
+async def api_error(request: Request, exc: HTTPException) -> JSONResponse:
+    defaults = {
+        422: "invalid_input",
+        404: "vehicle_not_found",
+        429: "rate_limited",
+        502: "rdw_unavailable",
+        503: "api_unavailable",
+        504: "rdw_timeout",
+    }
+    headers = exc.headers or {}
+    return JSONResponse(
+        {
+            "detail": exc.detail,
+            "code": headers.get("X-Error-Code", defaults.get(exc.status_code, "api_error")),
+        },
+        status_code=exc.status_code,
+        headers=headers,
+    )
 
 
 @app.middleware("http")
@@ -84,16 +106,23 @@ async def get_vehicle(plate: str, request: Request) -> Vehicle:
         normalized = normalize_plate(plate)
     except ValueError:
         raise HTTPException(
-            422, "Dit kenteken lijkt niet geldig. Controleer het kenteken en probeer opnieuw."
+            422,
+            "Dit kenteken lijkt niet geldig. Controleer het kenteken en probeer opnieuw.",
+            headers={"X-Error-Code": "invalid_plate"},
         ) from None
     service: VehicleService = request.app.state.vehicle_service
     try:
         return await service.get_vehicle(normalized)
     except VehicleNotFound:
         raise HTTPException(404, "We konden geen voertuig vinden voor dit kenteken.") from None
-    except ProviderUnavailable:
+    except ProviderUnavailable as exc:
         raise HTTPException(
-            503, "De voertuiggegevens zijn tijdelijk niet beschikbaar. Probeer het zo opnieuw."
+            {"upstream_rate_limited": 429, "rdw_timeout": 504}.get(exc.code, 502),
+            "De voertuiggegevens zijn tijdelijk niet beschikbaar. Probeer het zo opnieuw.",
+            headers={
+                "X-Error-Code": exc.code,
+                **({"Retry-After": "60"} if exc.code == "upstream_rate_limited" else {}),
+            },
         ) from None
 
 

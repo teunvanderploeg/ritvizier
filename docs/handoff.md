@@ -1,6 +1,6 @@
 # Developer handoff
 
-Updated 7 October 2026. The first tagged baseline is `v1.0.0`. Use `git log --graph --oneline --decorate --all` for exact history. At this handoff no remote is configured; all commits, branches and tags are local.
+Updated 7 October 2026. The first tagged baseline is `v1.0.0`; the extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. No remote is configured; all commits, branches and tags are local.
 
 ## First session
 
@@ -15,6 +15,9 @@ Read [Agent instructions](../AGENTS.md), [Contributing](../CONTRIBUTING.md), [Ar
 - Automatic provincial road tax, editable monthly/yearly running costs and manual tax override.
 - Local recent/saved/comparison collections, persistent theme and mobile navigation.
 - Short content transitions with reduced-motion support. Registration year is `2026`, without a thousands separator.
+- Actual APK notification/defect timeline with date-valid official descriptions, observed counts and repeated-category warnings.
+- All fuel/body records, body specifications, class records and expanded optional axle details. Optional manual mileage gives a labeled annual average.
+- Structured section provenance, per-source caching and pure analysis. Possible model recalls remain separate from exact plate actions.
 
 ## Regression vehicle
 
@@ -23,6 +26,8 @@ G921GS is a MINI Countryman Cooper used for live checks and fixture snapshots. T
 Consumption is 6.9 l/100 km WLTP and 5.4 NEDC; CO2 is 157 g/km WLTP and 122 NEDC; massa rijklaar is 1,490 kg. Reviewed 2026 tax is EUR 226 per quarter in Noord-Holland and EUR 247 in Zuid-Holland. These are fixture expectations, not a promise that live data cannot change.
 
 Raw sources are in `backend/tests/fixtures/rdw-mini.json`, normalized browser records in `backend/tests/fixtures/vehicles.json`. Synthetic recalls exist only in tests. Production must keep using the real provider.
+
+The 7 October extension adds actual APK notifications for 15 October 2025 and 13 October 2023. The 2023 event has one wheel-bearing observation and two brake-hose observations. Five possible model campaigns are shown as context, without changing the false plate indicator. This is a subset of public history, not a current condition assessment.
 
 ## Next maintenance work
 
@@ -36,6 +41,8 @@ Raw sources are in `backend/tests/fixtures/rdw-mini.json`, normalized browser re
 ## Known limits
 
 The used public sources do not supply exact mileage, full inspection/maintenance or damage history, previous owner identities/counts or every commercial option package. Theft/road-ban status currently points to the official RDW check. General model recalls do not prove this plate has an open action. Exact approval data needs an unambiguous match.
+
+Source schema 3 is current. Use the allowlisted `rdw_client.py` rather than introducing another HTTP client. Defect-reference data is cached for seven days and descriptions join by code plus date validity. Keep note-only defect events distinct from confirmed notifications. Check `source.partial` and section fetch dates when debugging. The optional valuation provider contract has no actual market-data provider or public endpoint.
 
 Tax covers supported passenger-car cases, excluding personal exemptions and suspension. Costs omit depreciation, finance and purchase price. The install manifest exists; a service worker and offline data caching do not. Chromium/WebKit tests are not physical-device Safari tests. There is no public deployment.
 
@@ -52,3 +59,5 @@ Tax covers supported passenger-car cases, excluding personal exemptions and susp
 | Old saved record disappears    | Check Zod defaults and the legacy-storage regression test.                                                                                               |
 
 Update this handoff when behavior or operations change. Record dated evidence in `verification.md`.
+
+On the current machine, the frontend's ignored environment points to a dedicated API at `127.0.0.1:8002`, with reload enabled. The older port-8000 process was left intact after automatic review blocked its termination. Fresh setup still uses the README's port 8000. Inspect `BACKEND_URL` instead of assuming a port when validating the running app.

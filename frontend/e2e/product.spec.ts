@@ -267,7 +267,7 @@ test("vehicle lookup, local favourites, recent history and second lookup", async
     page.getByRole("heading", { name: "Golf", exact: true }),
   ).toBeVisible();
   await expect(
-    page.getByText("RDW Open Data", { exact: true }).first(),
+    page.getByText("Open voertuigdata", { exact: true }).first(),
   ).toBeVisible();
   await page.getByRole("button", { name: "Auto opslaan", exact: true }).click();
   await page.goto("/opgeslagen");
