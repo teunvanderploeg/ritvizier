@@ -178,7 +178,7 @@ export function RoadTax({
           </div>
         )}
         {result?.available ? (
-          <>
+          <div className="motion-reveal">
             <div className="road-tax-amount">
               <strong>{currency(result.quarterly)}</strong>
               <span>per kwartaal</span>
@@ -194,9 +194,9 @@ export function RoadTax({
               opcenten.
             </p>
             <small>{result.notes.join(" ")}</small>
-          </>
+          </div>
         ) : (
-          result && <p>{result.reason}</p>
+          result && <p className="motion-reveal">{result.reason}</p>
         )}
       </div>
       <a

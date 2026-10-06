@@ -38,7 +38,7 @@ export function VehicleLibrary() {
       )}
       {vehicles.length ? (
         <>
-          <div className="library-grid">
+          <div className="library-grid" key={tab}>
             {vehicles.map((v) => (
               <article className="library-vehicle" key={v.licensePlate}>
                 <div className="library-vehicle-top">
@@ -96,7 +96,7 @@ export function VehicleLibrary() {
           )}
         </>
       ) : (
-        <div className="empty-state">
+        <div className="empty-state" key={tab}>
           <div className="feature-icon blue">
             {tab === "favourites" ? (
               <Bookmark size={26} />

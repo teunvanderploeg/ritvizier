@@ -3,6 +3,38 @@ import { join } from "node:path";
 import { mkdir, readFile } from "node:fs/promises";
 const artifacts = join(process.cwd(), "..", "artifacts");
 
+test("tab transitions respect the reduced motion preference", async ({
+  page,
+}) => {
+  await page.emulateMedia({ reducedMotion: "no-preference" });
+  await page.goto("/auto/G-921-GS");
+  await page
+    .locator(".section-tabs")
+    .getByRole("button", { name: "Tellerstand & historie", exact: true })
+    .click();
+  const panel = page.locator(".vehicle-tab-content");
+  expect(
+    await panel.evaluate((element) =>
+      parseFloat(getComputedStyle(element).animationDuration),
+    ),
+  ).toBeGreaterThan(0);
+  await mkdir(artifacts, { recursive: true });
+  await panel.screenshot({
+    path: join(artifacts, `registration-year-${test.info().project.name}.png`),
+    animations: "disabled",
+  });
+
+  await page.emulateMedia({ reducedMotion: "reduce" });
+  await page
+    .locator(".section-tabs")
+    .getByRole("button", { name: "Uitvoering", exact: true })
+    .click();
+  await expect(page.getByText("DAW500L0", { exact: true })).toBeVisible();
+  expect(
+    await panel.evaluate((element) => getComputedStyle(element).animationName),
+  ).toBe("none");
+});
+
 test("recall details distinguish open actions from repairs reported by the producer", async ({
   page,
 }) => {
@@ -92,6 +124,12 @@ test("MINI exposes RDW history, exact execution, emissions and automatic provinc
   await expect(
     page.getByText(/De geregistreerde tellerstand is steeds hoger/),
   ).toBeVisible();
+  await expect(
+    page
+      .locator(".data-row")
+      .filter({ hasText: "Jaar laatste registratie" })
+      .locator("dd"),
+  ).toHaveText("2026");
   await expect(
     page.locator(".data-row").filter({ hasText: "Exacte kilometerstand" }),
   ).toContainText("Niet openbaar beschikbaar");
