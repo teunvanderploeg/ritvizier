@@ -17,6 +17,10 @@ Browser tests exercise input normalization, invalid input, clear, direct links, 
 
 The viewport matrix covers 320, 375, 390, 430, 768, 1024 and 1440 pixels. Browser screenshots are in ignored `artifacts/`. These are browser-engine checks, not a physical-device Safari test.
 
+## Local network regression
+
+Reproduced a disabled license-plate field at `http://192.168.50.205:3000` caused by a rejected Next.js development connection. Development origins now include the machine's own IPv4 interface addresses. `scripts/check-lan.mjs` passes in Chromium and WebKit at 390px, checking that the field enables, a license plate can be entered, RDW results load, another lookup works from the vehicle page, and no browser errors occur.
+
 ## Visual review
 
 Reviewed light and dark desktop screenshots, mobile home and vehicle screenshots, and responsive captures from both engines. No page-level horizontal overflow appeared in the tested routes and widths. The visual lint found no major homepage findings after corrections. Accepted minor findings are decorative plate-strip letters and text inside the small illustrative cost graphic; the functional content has separate readable labels.

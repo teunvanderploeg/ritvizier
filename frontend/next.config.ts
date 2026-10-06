@@ -1,9 +1,16 @@
 import type { NextConfig } from "next";
+import { networkInterfaces } from "node:os";
+
+const localAddresses = Object.values(networkInterfaces())
+  .flatMap((interfaces) => interfaces ?? [])
+  .filter((network) => network.family === "IPv4" && !network.internal)
+  .map((network) => network.address);
 
 const config: NextConfig = {
   output: "standalone",
   poweredByHeader: false,
   devIndicators: false,
+  allowedDevOrigins: localAddresses,
   async headers() {
     return [
       {

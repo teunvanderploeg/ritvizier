@@ -17,6 +17,8 @@ Copy-Item .env.example frontend/.env.local
 
 In another terminal, run `npm run dev` and open http://localhost:3000.
 
+For a phone or another device on the same network, use the computer's IPv4 address on port 3000, for example `http://192.168.50.205:3000`. The development server listens on all interfaces and allows its local interface addresses for Next.js development assets and live updates. Restart it after a network-address change. With the development server running, `node scripts/check-lan.mjs http://192.168.50.205:3000` checks network access, input and lookups in Chromium and WebKit.
+
 The frontend proxies `/api/vehicles/:plate` and `/api/costs` to FastAPI. Domain logic belongs to the Python backend. RDW datasets `m9d7-ebf2` and `8ys7-d773` supply registration and fuel data. No owner, damage or maintenance history is inferred.
 
 ## Configuration
