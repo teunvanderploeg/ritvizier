@@ -2,6 +2,20 @@ import { z } from "zod";
 const text = z.string().nullable();
 const number = z.number().nullable();
 const boolean = z.boolean().nullable();
+const recallSchema = z.object({
+  reference: z.string(),
+  statusCode: text,
+  status: text,
+  publicationDate: text,
+  producer: text,
+  producerReference: text,
+  defect: text,
+  consequences: text,
+  remedy: text,
+  risks: z.array(z.string()),
+  url: text,
+  phone: text,
+});
 export const vehicleSchema = z.object({
   licensePlate: z.string(),
   make: z.string(),
@@ -12,6 +26,118 @@ export const vehicleSchema = z.object({
   firstRegistrationNetherlandsDate: text,
   apkExpiryDate: text,
   fuelTypes: z.array(z.string()),
+  fuels: z
+    .array(
+      z.object({
+        sequence: number,
+        name: text,
+        powerKw: number,
+        powerHp: number,
+        continuousPowerKw: number,
+        electricPowerKw: number,
+        consumptionNedc: number,
+        consumptionWltp: number,
+        consumptionWeightedWltp: number,
+        consumptionCity: number,
+        consumptionHighway: number,
+        co2Nedc: number,
+        co2WeightedNedc: number,
+        co2Wltp: number,
+        co2WeightedWltp: number,
+        emissionClass: text,
+        particulateGKm: number,
+        particulateWltp: number,
+        electricConsumptionWhKm: number,
+        electricRangeKm: number,
+        hybridClass: text,
+      }),
+    )
+    .default([]),
+  bodies: z
+    .array(z.object({ sequence: number, code: text, description: text }))
+    .default([]),
+  bodySpecifications: z
+    .array(
+      z.object({
+        sequence: number,
+        code: text,
+        description: text,
+        specificationSequence: number,
+      }),
+    )
+    .default([]),
+  vehicleClasses: z
+    .array(
+      z.object({
+        bodySequence: number,
+        sequence: number,
+        code: text,
+        description: text,
+      }),
+    )
+    .default([]),
+  waitingForInspection: boolean.default(null),
+  payloadDerived: z.boolean().default(true),
+  originalDimensions: z.record(z.string(), z.string()).default({}),
+  apkHistory: z
+    .object({
+      inspections: z
+        .array(
+          z.object({
+            key: z.string(),
+            date: z.string(),
+            time: text,
+            recognitionCode: text,
+            recognition: text,
+            report: text,
+            expiryDate: text,
+            hasNotification: z.boolean(),
+            defects: z.array(
+              z.object({
+                code: z.string(),
+                description: text,
+                count: number,
+                category: text,
+              }),
+            ),
+          }),
+        )
+        .default([]),
+      notificationsAvailable: z.boolean().default(false),
+      defectsAvailable: z.boolean().default(false),
+      descriptionsAvailable: z.boolean().default(false),
+      truncated: z.boolean().default(false),
+    })
+    .prefault({}),
+  analysis: z
+    .object({
+      calculatedAt: text.default(null),
+      ageMonths: number.default(null),
+      importAgeDays: number.default(null),
+      registrationDurationDays: number.default(null),
+      apkStatus: z.string().default("unknown"),
+      apkDaysRemaining: number.default(null),
+      apkExempt: z.boolean().default(false),
+      apkNoticeDays: z.number().default(60),
+      apkUrgentDays: z.number().default(30),
+      powerHpPerTon: number.default(null),
+      powerWeightBasis: z.string().default("massa rijklaar"),
+      inspectionCount: z.number().default(0),
+      inspectionsWithDefects: z.number().default(0),
+      defectCount: z.number().default(0),
+      defectCountComplete: z.boolean().default(true),
+      warnings: z
+        .array(
+          z.object({
+            code: z.string(),
+            severity: z.enum(["info", "warning", "critical"]),
+            title: z.string(),
+            description: z.string(),
+          }),
+        )
+        .default([]),
+    })
+    .prefault({}),
   powerKw: number,
   powerHp: number,
   electricPowerKw: number,
@@ -40,28 +166,23 @@ export const vehicleSchema = z.object({
   odometerJudgmentCode: text.default(null),
   odometerExplanation: text.default(null),
   odometerLastYear: number.default(null),
-  recalls: z
-    .array(
-      z.object({
-        reference: z.string(),
-        statusCode: text,
-        status: text,
-        publicationDate: text,
-        producer: text,
-        producerReference: text,
-        defect: text,
-        consequences: text,
-        remedy: text,
-        risks: z.array(z.string()),
-        url: text,
-        phone: text,
-      }),
-    )
-    .default([]),
+  recalls: z.array(recallSchema).default([]),
+  possibleRecalls: z.array(recallSchema).default([]),
+  possibleRecallsAvailable: z.boolean().default(false),
   recallDetailsAvailable: z.boolean().default(false),
   axes: z
     .array(
-      z.object({ number, position: text, trackCm: number, maxMassKg: number }),
+      z.object({
+        number,
+        position: text,
+        trackCm: number,
+        maxMassKg: number,
+        technicalMaxMassKg: number.default(null),
+        driven: boolean.default(null),
+        liftable: boolean.default(null),
+        braked: boolean.default(null),
+        suspensionCode: text.default(null),
+      }),
     )
     .default([]),
   typeApproval: z
@@ -119,6 +240,20 @@ export const vehicleSchema = z.object({
     derivedFields: z.array(z.string()),
     warnings: z.array(z.string()),
     schemaVersion: z.number().default(1),
+    partial: z.boolean().default(false),
+    unavailableSections: z.array(z.string()).default([]),
+    sections: z
+      .record(
+        z.string(),
+        z.object({
+          datasets: z.array(z.string()),
+          fetchedAt: z.string(),
+          available: z.boolean(),
+          truncated: z.boolean(),
+          recordCount: z.number(),
+        }),
+      )
+      .default({}),
   }),
 });
 export type Vehicle = z.infer<typeof vehicleSchema>;

@@ -25,6 +25,9 @@ it("keeps saved records from the older schema readable", () => {
   expect(old.colorSecondary).toBe(null);
   expect(old.recalls).toEqual([]);
   expect(old.typeApproval.matched).toBe(false);
+  expect(old.fuels).toEqual([]);
+  expect(old.apkHistory.inspections).toEqual([]);
+  expect(old.analysis.calculatedAt).toBe(null);
 });
 it("shows both registered colors", () =>
   expect(vehicleColors(mini)).toBe("Groen / Zwart"));
@@ -44,6 +47,16 @@ it("applies the 50-year exemption only to light passenger cars", () => {
   expect(apkStatus({ ...old, maxMassKg: 4000 }, "2026-10-07").exempt).toBe(
     false,
   );
+});
+it("shows the configured APK notice and urgent boundaries", () => {
+  expect(apkStatus(mini, "2027-08-19").status).toBe("Binnenkort");
+  expect(apkStatus(mini, "2027-08-18").status).toBe("Geldig");
+  const custom = {
+    ...mini,
+    analysis: { ...mini.analysis, apkNoticeDays: 15, apkUrgentDays: 7 },
+  };
+  expect(apkStatus(custom, "2027-10-03").status).toBe("Binnenkort");
+  expect(apkStatus(custom, "2027-10-11").status).toBe("Verloopt binnenkort");
 });
 it("does not count an incomplete anniversary month", () => {
   expect(elapsedMonths("2019-10-18", "2026-10-07")).toBe(83);

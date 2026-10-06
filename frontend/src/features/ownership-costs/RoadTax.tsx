@@ -95,8 +95,8 @@ export function RoadTax({
     <section className="road-tax-panel" aria-busy={busy}>
       <h3>Wegenbelasting automatisch</h3>
       <p>
-        Gewicht en brandstof komen uit de RDW. Kies je woonprovincie voor het
-        tarief.
+        Gewicht en brandstof komen uit de voertuigregistratie. Kies je
+        woonprovincie voor het tarief.
       </p>
       <label className="select-field" htmlFor="tax-province">
         Woonprovincie

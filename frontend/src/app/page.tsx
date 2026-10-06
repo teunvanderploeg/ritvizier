@@ -44,7 +44,7 @@ export default function Home() {
             </span>
             <span>
               <Check size={15} />
-              Officiële RDW-data
+              Openbare voertuigdata
             </span>
           </div>
           <RecentSearches />
@@ -56,7 +56,7 @@ export default function Home() {
           <ShieldCheck size={24} />
           <span>
             <strong>Een goed begin. Een betrouwbare bron.</strong>
-            <span>Voertuiggegevens rechtstreeks uit RDW Open Data.</span>
+            <span>Openbare registratiegegevens met uitleg en bronlinks.</span>
           </span>
         </div>
         <Link href="/over#bronnen">

@@ -37,6 +37,11 @@ import { SkeletonVehiclePage } from "@/components/vehicle/SkeletonVehiclePage";
 import { ErrorState } from "@/components/common/ErrorState";
 import { useCollection } from "@/components/search/RecentSearches";
 import { CostEstimator } from "@/features/ownership-costs/CostEstimator";
+import { ApkHistory } from "./ApkHistory";
+import { TechnicalDetails } from "./TechnicalDetails";
+import { FuelRecords } from "./FuelRecords";
+import { MileageEstimate } from "./MileageEstimate";
+import { PossibleRecalls } from "./PossibleRecalls";
 import { useEffect } from "react";
 import {
   amsterdamToday,
@@ -50,12 +55,14 @@ import {
 const tabs = [
   "Overzicht",
   "APK & registratie",
+  "APK-historie",
   "Tellerstand & historie",
   "Terugroepacties",
   "Uitvoering",
   "Motor & prestaties",
   "Verbruik & milieu",
   "Afmetingen & gewicht",
+  "Carrosserie & assen",
   "Kosten",
   "Praktisch",
 ];
@@ -70,6 +77,12 @@ const datasetNames: Record<string, string> = {
   "jqs4-4kvw": "Tellerstandtoelichting",
   "byxc-wwua": "Typegoedkeuring uitvoering",
   "7rjk-eycs": "Typegoedkeuring transmissie",
+  "jhie-znh9": "Carrosseriespecificaties",
+  "kmfi-hrps": "Voertuigklassen",
+  "sgfe-77wx": "Keuringsmeldingen",
+  "a34c-vvps": "Geconstateerde gebreken",
+  "hx2c-gt7k": "Gebrekomschrijvingen",
+  "mu2x-mu5e": "Terugroepacties per merk en model",
 };
 function DataSection({
   title,
@@ -137,7 +150,7 @@ export function VehicleDetail({
   const apk = apkStatus(v, today);
   const openRecalls = v.recalls.filter((r) => r.statusCode === "O");
   const hasRecall = v.recallPending === true || openRecalls.length > 0;
-  const attention = [
+  const legacyAttention = [
     v.isImport
       ? "Later in Nederland geregistreerd: controleer ook de buitenlandse historie."
       : null,
@@ -164,6 +177,9 @@ export function VehicleDetail({
       ? "De laatste tenaamstelling is minder dan 30 dagen geleden. Vraag bij aankoop naar de reden van verkoop."
       : null,
   ].filter((item): item is string => item !== null);
+  const attention = v.analysis.calculatedAt
+    ? v.analysis.warnings.map((warning) => warning.description)
+    : legacyAttention;
   const isSaved = saved.some((item) => item.licensePlate === v.licensePlate);
   const expired = v.apkExpiryDate ? v.apkExpiryDate < today : false;
   function toggleFavourite() {
@@ -304,6 +320,26 @@ export function VehicleDetail({
       </div>
       <div className="vehicle-status-grid">
         <button
+          className="vehicle-status-card"
+          onClick={() => setTab("APK-historie")}
+        >
+          <CalendarCheck2 size={21} />
+          <span>
+            APK-historie
+            <strong>
+              {v.apkHistory.inspections.length
+                ? `${v.analysis.inspectionCount} keuringsmeldingen`
+                : "Bekijk beschikbare historie"}
+            </strong>
+            <small>
+              {v.apkHistory.inspections.length && v.analysis.defectCountComplete
+                ? `${v.analysis.defectCount} gebreken geregistreerd · historische informatie`
+                : "Meldingen en technische opmerkingen"}
+            </small>
+          </span>
+          <ArrowRight size={16} />
+        </button>
+        <button
           className={`vehicle-status-card ${v.odometerJudgment === "Onlogisch" ? "status-warning" : ""}`}
           onClick={() => setTab("Tellerstand & historie")}
         >
@@ -372,15 +408,24 @@ export function VehicleDetail({
         </button>
       </div>
       <nav className="section-tabs" aria-label="Voertuigonderdelen">
-        {tabs.map((item) => (
-          <button
-            aria-pressed={item === tab}
-            key={item}
-            onClick={() => setTab(item)}
-          >
-            {item}
-          </button>
-        ))}
+        {tabs
+          .filter(
+            (item) =>
+              item !== "Carrosserie & assen" ||
+              v.bodies.length ||
+              v.bodySpecifications.length ||
+              v.vehicleClasses.length ||
+              v.axes.length,
+          )
+          .map((item) => (
+            <button
+              aria-pressed={item === tab}
+              key={item}
+              onClick={() => setTab(item)}
+            >
+              {item}
+            </button>
+          ))}
       </nav>
       <div className="vehicle-tab-content" key={tab}>
         {tab === "Overzicht" && (
@@ -443,7 +488,13 @@ export function VehicleDetail({
                 />
                 <Row
                   label="Geïmporteerd"
-                  value={flag(v.isImport)}
+                  value={
+                    v.isImport == null
+                      ? "Niet beschikbaar"
+                      : v.isImport
+                        ? "Waarschijnlijk geïmporteerd"
+                        : "Geen latere Nederlandse registratie"
+                  }
                   derived
                   explanation="Afgeleid uit de eerste toelating en eerste Nederlandse registratie. Een latere Nederlandse registratie wijst op import."
                 />
@@ -464,8 +515,8 @@ export function VehicleDetail({
                 <span className="eyebrow">MEER DAN DE AANSCHAFPRIJS</span>
                 <h2>Wat kost deze auto jou per maand?</h2>
                 <p>
-                  Wegenbelasting automatisch uit RDW-gegevens. Kies je provincie
-                  en vul jouw vaste lasten in.
+                  Wegenbelasting automatisch uit voertuiggegevens. Kies je
+                  provincie en vul jouw vaste lasten in.
                 </p>
               </div>
               <button className="button" onClick={() => setTab("Kosten")}>
@@ -498,8 +549,12 @@ export function VehicleDetail({
               />
               <Row
                 label="Datum laatste APK"
-                value="Niet openbaar beschikbaar"
-                explanation="De APK-vervaldatum is niet de keuringsdatum. De openbare dataset verstrekt geen volledige keuringshistorie."
+                value={date(
+                  v.apkHistory.inspections.find(
+                    (event) => event.hasNotification,
+                  )?.date ?? null,
+                )}
+                explanation="Laatste beschikbare APK-meldingsdatum. De openbare meldingen zijn geen garantie voor een complete keuringshistorie."
               />
               <Row
                 label="Eerste toelating"
@@ -509,7 +564,17 @@ export function VehicleDetail({
                 label="Eerste registratie Nederland"
                 value={date(v.firstRegistrationNetherlandsDate)}
               />
-              <Row label="Geïmporteerd" value={flag(v.isImport)} derived />
+              <Row
+                label="Importindicatie"
+                value={
+                  v.isImport == null
+                    ? "Niet beschikbaar"
+                    : v.isImport
+                      ? "Waarschijnlijk geïmporteerd"
+                      : "Geen latere Nederlandse registratie"
+                }
+                derived
+              />
               <Row
                 label="Laatste tenaamstelling"
                 value={date(v.registrationDate)}
@@ -523,6 +588,14 @@ export function VehicleDetail({
               <Row label="Geëxporteerd" value={flag(v.isExported)} />
               <Row label="Taxi-indicatie" value={flag(v.isTaxi)} />
               <Row label="WAM-verzekerd" value={flag(v.wamInsured)} />
+              <Row
+                label="Wacht op keuren"
+                value={
+                  v.waitingForInspection == null
+                    ? "Niet openbaar / onbekend"
+                    : flag(v.waitingForInspection)
+                }
+              />
               <Row
                 label="Gestolen / rijverbod"
                 value="Controleer in RDW Kentekencheck"
@@ -544,7 +617,7 @@ export function VehicleDetail({
         {tab === "Tellerstand & historie" && (
           <>
             <div className="data-grid">
-              <DataSection title="Tellerstand volgens de RDW">
+              <DataSection title="Geregistreerd tellerstandoordeel">
                 <Row
                   label="Oordeel"
                   value={v.odometerJudgment || "Niet beschikbaar"}
@@ -560,16 +633,16 @@ export function VehicleDetail({
                 <Row
                   label="Exacte kilometerstand"
                   value="Niet openbaar beschikbaar"
-                  explanation="De RDW deelt het oordeel via Open Data, niet de kilometerstand of de complete reeks registraties."
+                  explanation="Open Data bevat het oordeel, niet de kilometerstand of de complete reeks registraties."
                 />
               </DataSection>
               <div className="explanation-panel">
                 <Gauge size={25} />
                 <h3>Wat betekent dit oordeel?</h3>
-                <p>
+                <blockquote>
                   {v.odometerExplanation ||
-                    "De RDW-toelichting is niet beschikbaar. Controleer het oordeel in de officiële kentekencheck."}
-                </p>
+                    "De geregistreerde toelichting is niet beschikbaar. Controleer het oordeel in de officiële kentekencheck."}
+                </blockquote>
                 <p>
                   Een logisch oordeel beschrijft de geregistreerde reeks. Vraag
                   bij aankoop ook om het actuele RDW-Voertuigrapport en
@@ -619,7 +692,7 @@ export function VehicleDetail({
                 <Row label="Exportindicator" value={flag(v.isExported)} />
                 <Row
                   label="Aantal eerdere eigenaren"
-                  value="Niet in RDW Open Data"
+                  value="Niet openbaar beschikbaar"
                 />
               </DataSection>
             </div>
@@ -630,8 +703,11 @@ export function VehicleDetail({
                 gegevens geven geen volledig beeld van de buitenlandse historie.
               </p>
             )}
+            <MileageEstimate vehicle={v} />
           </>
         )}
+        {tab === "APK-historie" && <ApkHistory vehicle={v} />}
+        {tab === "Carrosserie & assen" && <TechnicalDetails vehicle={v} />}
         {tab === "Terugroepacties" && (
           <>
             <div
@@ -649,7 +725,7 @@ export function VehicleDetail({
                 <p>
                   {hasRecall
                     ? "Neem contact op met de merkdealer om de actie en herstelplanning te controleren."
-                    : "Dit is de actuele indicator in het opgehaalde RDW-register."}
+                    : "Dit is de indicator in het opgehaalde kentekenregister."}
                 </p>
               </div>
             </div>
@@ -739,6 +815,7 @@ export function VehicleDetail({
             >
               Controleer bij de RDW <ArrowUpRight size={14} />
             </a>
+            <PossibleRecalls vehicle={v} />
           </>
         )}
         {tab === "Uitvoering" && (
@@ -786,7 +863,7 @@ export function VehicleDetail({
                 />
                 <Row
                   label="Commerciële uitvoering / pakket"
-                  value="Niet in RDW Open Data"
+                  value="Niet openbaar beschikbaar"
                 />
               </DataSection>
             </div>
@@ -801,68 +878,72 @@ export function VehicleDetail({
           </>
         )}
         {tab === "Motor & prestaties" && (
-          <div className="data-grid">
-            <DataSection title="Motor">
-              <Row label="Brandstof" value={fuelLabel(v.fuelTypes)} />
-              <Row
-                label="Aandrijving"
-                value={
-                  v.hybridClass === "OVC-HEV"
-                    ? "Plug-inhybride (PHEV)"
-                    : v.hybridClass === "NOVC-HEV"
-                      ? "Hybride (HEV)"
-                      : v.fuelTypes.length === 1 &&
-                          v.fuelTypes[0] === "Elektriciteit"
-                        ? "Volledig elektrisch (EV)"
-                        : fuelLabel(v.fuelTypes)
-                }
-              />
-              <Row
-                label="Hybrideklasse RDW"
-                value={v.hybridClass || "Niet geregistreerd"}
-              />
-              <Row
-                label="Cilinderinhoud"
-                value={numeric(v.engineCapacityCc, "cc")}
-              />
-              <Row label="Cilinders" value={numeric(v.cylinders)} />
-              <Row label="Vermogen" value={numeric(v.powerKw, "kW")} />
-              <Row
-                label="Vermogen in paardenkracht"
-                value={numeric(v.powerHp, "pk")}
-                derived
-                explanation="Omgerekend uit kW. 1 kW is ongeveer 1,36 pk."
-              />
-            </DataSection>
-            <DataSection title="Prestaties">
-              <Row
-                label="Transmissie"
-                value={v.typeApproval.transmission || "Niet beschikbaar"}
-              />
-              <Row
-                label="Versnellingen"
-                value={numeric(v.typeApproval.gears)}
-              />
-              <Row
-                label="Vermogen per ton rijklaar"
-                value={numeric(
-                  v.powerHp != null && v.readyMassKg
-                    ? (v.powerHp / v.readyMassKg) * 1000
-                    : null,
-                  "pk/ton",
-                )}
-                derived
-              />
-              <Row
-                label="Elektrisch vermogen"
-                value={numeric(v.electricPowerKw, "kW")}
-              />
-              <Row
-                label="Maximumsnelheid"
-                value={numeric(v.maxSpeedKmh, "km/u")}
-              />
-            </DataSection>
-          </div>
+          <>
+            <div className="data-grid">
+              <DataSection title="Motor">
+                <Row label="Brandstof" value={fuelLabel(v.fuelTypes)} />
+                <Row
+                  label="Aandrijving"
+                  value={
+                    v.hybridClass === "OVC-HEV"
+                      ? "Plug-inhybride (PHEV)"
+                      : v.hybridClass === "NOVC-HEV"
+                        ? "Hybride (HEV)"
+                        : v.fuelTypes.length === 1 &&
+                            v.fuelTypes[0] === "Elektriciteit"
+                          ? "Volledig elektrisch (EV)"
+                          : fuelLabel(v.fuelTypes)
+                  }
+                />
+                <Row
+                  label="Geregistreerde hybrideklasse"
+                  value={v.hybridClass || "Niet geregistreerd"}
+                />
+                <Row
+                  label="Cilinderinhoud"
+                  value={numeric(v.engineCapacityCc, "cc")}
+                />
+                <Row label="Cilinders" value={numeric(v.cylinders)} />
+                <Row label="Vermogen" value={numeric(v.powerKw, "kW")} />
+                <Row
+                  label="Vermogen in paardenkracht"
+                  value={numeric(v.powerHp, "pk")}
+                  derived
+                  explanation="Omgerekend uit kW. 1 kW is ongeveer 1,36 pk."
+                />
+              </DataSection>
+              <DataSection title="Prestaties">
+                <Row
+                  label="Transmissie"
+                  value={v.typeApproval.transmission || "Niet beschikbaar"}
+                />
+                <Row
+                  label="Versnellingen"
+                  value={numeric(v.typeApproval.gears)}
+                />
+                <Row
+                  label="Vermogen per ton rijklaar"
+                  value={numeric(
+                    v.analysis.powerHpPerTon ??
+                      (v.powerHp != null && v.readyMassKg
+                        ? (v.powerHp / v.readyMassKg) * 1000
+                        : null),
+                    "pk/ton",
+                  )}
+                  derived
+                />
+                <Row
+                  label="Elektrisch vermogen"
+                  value={numeric(v.electricPowerKw, "kW")}
+                />
+                <Row
+                  label="Maximumsnelheid"
+                  value={numeric(v.maxSpeedKmh, "km/u")}
+                />
+              </DataSection>
+            </div>
+            <FuelRecords vehicle={v} />
+          </>
         )}
         {tab === "Verbruik & milieu" && (
           <div className="data-grid">
@@ -1009,10 +1090,18 @@ export function VehicleDetail({
                 value={numeric(v.maxMassKg, "kg")}
               />
               <Row
-                label="Laadvermogen vanaf rijklaar"
+                label={
+                  v.payloadDerived
+                    ? "Laadvermogen vanaf rijklaar"
+                    : "Geregistreerd laadvermogen"
+                }
                 value={numeric(v.payloadKg, "kg")}
-                derived
-                explanation="Toegestane maximummassa min massa rijklaar."
+                derived={v.payloadDerived}
+                explanation={
+                  v.payloadDerived
+                    ? "Toegestane maximummassa min massa rijklaar."
+                    : "Het laadvermogen uit de voertuigregistratie."
+                }
               />
             </DataSection>
             <DataSection title="Afmetingen typegoedkeuring">
@@ -1086,9 +1175,13 @@ export function VehicleDetail({
                 value={numeric(v.towingUnbrakedKg, "kg")}
               />
               <Row
-                label="Laadvermogen vanaf rijklaar"
+                label={
+                  v.payloadDerived
+                    ? "Laadvermogen vanaf rijklaar"
+                    : "Geregistreerd laadvermogen"
+                }
                 value={numeric(v.payloadKg, "kg")}
-                derived
+                derived={v.payloadDerived}
               />
             </DataSection>
           </div>
@@ -1099,17 +1192,19 @@ export function VehicleDetail({
           <ShieldCheck size={20} />
           <h2>Bronnen & actualiteit</h2>
           <span className="data-quality">
-            {v.source.missingFields.length
-              ? "Enkele gegevens ontbreken"
-              : "Beschikbare velden opgehaald"}
+            {v.source.partial
+              ? "Enkele bronnen onvolledig"
+              : v.source.missingFields.length
+                ? "Enkele gegevens ontbreken"
+                : "Beschikbare velden opgehaald"}
           </span>
         </div>
         <p>
-          Voertuiggegevens:{" "}
+          Openbare bronnen:{" "}
           <a href="https://opendata.rdw.nl/" target="_blank" rel="noreferrer">
-            RDW Open Data <ArrowUpRight size={13} />
+            Open voertuigdata <ArrowUpRight size={13} />
           </a>{" "}
-          · Opgehaald op{" "}
+          · Check samengesteld op{" "}
           {new Intl.DateTimeFormat("nl-NL", {
             dateStyle: "long",
             timeStyle: "short",
@@ -1124,17 +1219,44 @@ export function VehicleDetail({
               target="_blank"
               rel="noreferrer"
             >
-              {datasetNames[id] || "Aanvullende RDW-bron"}{" "}
+              {datasetNames[id] || "Aanvullende bron"}{" "}
               <ArrowUpRight size={12} />
             </a>
           ))}
         </div>
+        {Object.keys(v.source.sections).length > 0 && (
+          <details className="technical-disclosure source-status">
+            <summary>
+              Actualiteit per onderdeel <ArrowRight size={16} />
+            </summary>
+            <dl>
+              {Object.entries(v.source.sections).map(([section, source]) => (
+                <Row
+                  key={section}
+                  label={datasetNames[source.datasets[0]] || "Aanvullende bron"}
+                  value={
+                    source.available ? (
+                      <>
+                        {date(source.fetchedAt.slice(0, 10))}
+                        <br />
+                        {source.recordCount} records
+                        {source.truncated ? " · Onvolledig" : ""}
+                      </>
+                    ) : (
+                      "Tijdelijk niet beschikbaar"
+                    )
+                  }
+                />
+              ))}
+            </dl>
+          </details>
+        )}
         <p>
           Berekende waarden en kosteninschattingen zijn van RitVizier. Je ziet
           geen informatie over eigenaren, schade of onderhoud.
         </p>
         {v.source.warnings.map((warning) => (
-          <p key={warning} className="form-error">
+          <p key={warning} className="data-note">
             {warning}
           </p>
         ))}
