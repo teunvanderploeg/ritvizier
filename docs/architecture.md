@@ -1,6 +1,6 @@
 # Architecture
 
-RitVizier is a Next.js/FastAPI monorepo. The browser stores vehicle collections. Optional PostgreSQL stores shared cached responses rather than user accounts.
+RitVizier is a Next.js/FastAPI monorepo. The browser stores vehicle collections. Optional PostgreSQL stores shared cached responses rather than user accounts. See [Extended check implementation](extended-rdw-check.md) for the source registry, full file map, joins and limits added in the extended check.
 
 ## Request flow
 
@@ -57,7 +57,7 @@ Next.js proxies the three data/calculation endpoints and validates browser input
 
 ## RDW joins
 
-Stage one retrieves registration, fuel, axle, body and per-plate recall status in parallel. Stage two enriches odometer explanations, exact type approvals and referenced campaigns/risks.
+Registration succeeds first. Then independent fuel, body/specification, axle, class, APK, per-plate recall and model-mapping queries run in parallel. Dependent enrichment retrieves odometer explanations, exact approvals, descriptions and campaigns/risks. The centralized allowlisted client owns source TTLs, tokens, concurrency and classified failures. Analysis is pure and refreshed for today even on cached vehicles.
 
 | Source               | Public dataset ID |
 | -------------------- | ----------------- |
@@ -80,9 +80,9 @@ Null means unavailable. Source metadata records retrieval time, datasets, missin
 
 Memory holds at most 1,000 vehicles for a default six hours. Warning responses expire within 60 seconds to retry enrichment. Concurrent requests for one plate share a fetch. PostgreSQL read/write failures fall back to memory/provider behavior.
 
-Persisted payloads require source schema version 2. Older records refresh. For a cached contract change, decide whether to advance the source schema default and service acceptance check together.
+Persisted payloads require source schema version 3. Older records refresh. Advance the source schema default and service acceptance check together for an incompatible cached contract. Aggregate expiry is capped by every underlying source deadline. Per-section provenance retains actual source fetch timestamps.
 
-httpx has a 12-second request timeout and five-second connection timeout. Next.js allows 35 seconds for two-stage retrieval. The IP limiter works per API process. Requests behind the Next.js proxy share its bucket.
+The source client overrides httpx requests with a default eight-second timeout and an 8.5-second budget including semaphore waiting. The connect timeout is five seconds. Next.js allows 35 seconds for the dependent stages. The IP limiter is per API process; requests behind Next.js share its bucket.
 
 ## Browser state and presentation
 

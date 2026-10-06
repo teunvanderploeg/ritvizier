@@ -22,6 +22,8 @@ The frontend uses Next.js App Router, React, TypeScript, Zod, Lucide and custom 
 
 Keep RDW retrieval, normalization and calculations in `backend/app/`. The browser calls Next.js proxy routes rather than a hardcoded backend address. Update both `backend/app/schemas/vehicle.py` and `frontend/src/types/vehicle.ts` when changing the vehicle contract. Preserve compatibility with older saved vehicles and cached records.
 
+For source/analysis changes, read `docs/extended-rdw-check.md`. Use the allowlisted source client, preserve per-section provenance and source expiry bounds, and refresh date-dependent analysis on cache hits. Current persisted source schema is version 3. APK observations without a matching notification remain labeled separately. Model recall context must never change the plate-specific warning.
+
 Read the installed Next.js documentation under `node_modules/next/dist/docs/` before changing Next.js behavior. The current version is 16.4.0; the package is installed at the monorepo root. Do not assume older-version APIs apply.
 
 ## Data rules
