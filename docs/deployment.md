@@ -1,6 +1,6 @@
 # Automatic VPS deployment
 
-The GitHub workflow runs frontend checks, backend checks and both browser engines. After all pass it builds the frontend/backend containers, starts them with PostgreSQL and verifies migrations, a cache write/read/delete and the frontend API proxy. Only a successful push to `main` publishes those exact images to GHCR. Deployment uses their immutable digests, not a moving `latest` tag.
+The GitHub workflow scans full Git history for secrets with redacted output and runs frontend checks, backend checks and both browser engines. After all pass it builds the frontend/backend containers, starts them with PostgreSQL and verifies migrations, a cache write/read/delete and the frontend API proxy. Only a successful push to `main` publishes those exact images to GHCR. Deployment uses their immutable digests, not a moving `latest` tag.
 
 Enable deployment after completing setup below. Linux x86-64 with Docker Engine and Compose v2.24+ is required. Allow roughly 2 GB RAM minimum, preferably 4 GB, and room for retained images. The VPS pulls prebuilt images; it does not build Next.js. PostgreSQL and FastAPI have no published ports. Next.js listens only on host loopback port 3000 for your reverse proxy. This does not install or change an existing proxy.
 

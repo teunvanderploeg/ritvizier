@@ -55,7 +55,7 @@ End-to-end tests require a production build first. Playwright starts an isolated
 
 For automatic production deployment after all GitHub checks pass, follow [VPS deployment](docs/deployment.md). It documents the SSH secrets, repository variables, one-time VPS setup, HTTPS proxy, persistent database and rollback behavior. Production uses `deploy/compose.yml`; the root Compose file below remains the local development stack.
 
-`docker compose up --build` starts PostgreSQL, FastAPI and Next.js. Backend migrations run before the API starts. For manual migration, run `alembic upgrade head` from `backend/` with `DATABASE_URL` configured. Production frontend: `npm run build` then `npm start`.
+For local Docker, copy `.env.example` to an ignored root `.env` and set `POSTGRES_PASSWORD` to a random hex value, for example generated with `openssl rand -hex 32`. Then `docker compose up --build` starts PostgreSQL, FastAPI and Next.js. There is no built-in database password. Backend migrations run before the API starts. For manual migration, run `alembic upgrade head` from `backend/` with `DATABASE_URL` configured. Production frontend: `npm run build` then `npm start`.
 
 ## Data and calculations
 

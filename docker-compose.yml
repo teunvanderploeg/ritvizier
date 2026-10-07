@@ -4,7 +4,7 @@ services:
     environment:
       POSTGRES_DB: ritvizier
       POSTGRES_USER: ritvizier
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-local-development}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your local .env}
     ports: ["127.0.0.1:5432:5432"]
     volumes: ["postgres_data:/var/lib/postgresql/data"]
     healthcheck:
@@ -16,7 +16,7 @@ services:
       context: .
       dockerfile: backend/Dockerfile
     environment:
-      DATABASE_URL: postgresql+asyncpg://ritvizier:${POSTGRES_PASSWORD:-local-development}@db:5432/ritvizier
+      DATABASE_URL: postgresql+asyncpg://ritvizier:${POSTGRES_PASSWORD:?Set POSTGRES_PASSWORD in your local .env}@db:5432/ritvizier
       CORS_ORIGINS: http://localhost:3000
     ports: ["127.0.0.1:8000:8000"]
     depends_on:
