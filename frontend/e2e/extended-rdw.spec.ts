@@ -14,6 +14,13 @@ test("APK history shows real notifications, official defects and cautious empty 
     .getByRole("button", { name: "APK-historie", exact: true })
     .click();
   const history = page.locator(".inspection-history");
+  await page.locator(".source-status summary").click();
+  await expect(
+    page
+      .locator(".source-status .data-row")
+      .filter({ hasText: "Keuringsmeldingen" })
+      .locator("dd"),
+  ).toContainText("7 oktober 2026");
   await expect(
     history.getByRole("heading", { name: "APK- en technische historie" }),
   ).toBeVisible();

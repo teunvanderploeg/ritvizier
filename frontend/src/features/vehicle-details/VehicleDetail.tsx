@@ -1237,7 +1237,7 @@ export function VehicleDetail({
                   value={
                     source.available ? (
                       <>
-                        {date(source.fetchedAt.slice(0, 10))}
+                        {date(source.fetchedAt)}
                         <br />
                         {source.recordCount} records
                         {source.truncated ? " · Onvolledig" : ""}
