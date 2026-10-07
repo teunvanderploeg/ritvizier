@@ -21,7 +21,7 @@ Add these repository **variables**, not secrets:
 
 | Variable | Value |
 | --- | --- |
-| `SITE_URL` | Your public HTTPS origin, e.g. `https://ritvizier.example.nl`, without trailing slash |
+| `SITE_URL` | `https://ritvizier.nl`, without trailing slash |
 | `VPS_PORT` | SSH port; defaults to `22` |
 | `VPS_PATH` | App directory; defaults to `/opt/ritvizier`, without spaces |
 | `DEPLOY_ENABLED` | Set to `true` last, after VPS configuration is ready |
@@ -54,15 +54,32 @@ Docker-group access gives this user administrative control of the host. Use a de
 
 As the deployment user, create `/opt/ritvizier/.env` from [the example](../deploy/.env.example), with mode 600. Set `SITE_URL` to the same value as the GitHub variable. Generate `POSTGRES_PASSWORD` using `openssl rand -hex 32`; use that hex value without quotes. `RDW_APP_TOKEN` is optional and stays on the VPS. Do not put the PostgreSQL password in GitHub secrets or commit it. Changing it later also requires changing the existing PostgreSQL user's password; an environment change alone does not reset a populated database.
 
-Point DNS to the VPS and configure your existing HTTPS reverse proxy to `127.0.0.1:3000`. If this is a fresh VPS without a proxy, a host-installed Caddy can use:
+The owner's VPS runs Ubuntu, Docker and Nginx. Use `ritvizier.nl` as the canonical domain and redirect `ritvizier.twanterstappen.nl` to it. Set both DNS A records to the VPS IPv4 address. Only set AAAA records if this VPS actually serves IPv6.
 
-```caddyfile
-ritvizier.example.nl {
-    reverse_proxy 127.0.0.1:3000
+For Nginx installed on the host, [deploy/nginx.conf](../deploy/nginx.conf) proxies to `127.0.0.1:3000`, redirects the secondary domain while preserving the path and limits API/vehicle-page traffic per visitor IP. Keep existing sites intact; create a separate RitVizier site configuration.
+
+To obtain the first certificate, initially enable a port-80-only server block for both names:
+
+```nginx
+server {
+    listen 80;
+    server_name ritvizier.nl ritvizier.twanterstappen.nl;
+    location / { proxy_pass http://127.0.0.1:3000; }
 }
 ```
 
-Open only the needed SSH and HTTP/HTTPS ports. Docker does not publish the database or backend. An existing proxy/container may require a shared network or a different upstream address; adapt this before enabling deployment. The default production backend limiter is a shared 300-request/minute bucket behind Next.js. Configure per-visitor limiting at your proxy before scaling; it is not a per-user backend limit.
+After DNS resolves and ports 80/443 are reachable, use Certbot's Nginx plugin:
+
+```sh
+sudo apt install certbot python3-certbot-nginx
+sudo nginx -t
+sudo systemctl reload nginx
+sudo certbot --nginx --cert-name ritvizier.nl -d ritvizier.nl -d ritvizier.twanterstappen.nl
+```
+
+Then replace that temporary site configuration with `deploy/nginx.conf`, verify `sudo nginx -t` and reload Nginx. The file assumes Certbot's `ritvizier.nl` certificate directory; adjust paths if your existing certificate uses a different name. Run `sudo certbot renew --dry-run` to verify renewal. The supplied TLS configuration is syntax-checked locally with a temporary certificate; actual DNS, certificate issuance and existing VPS configuration still need host verification.
+
+Open only the needed SSH and HTTP/HTTPS ports. Docker does not publish the database or backend. If Nginx itself runs in a container, its loopback is different: attach that proxy to the application's Docker network and use `frontend:3000` instead of host loopback. Adapt the existing proxy's Compose configuration before enabling deployment. The default production backend limiter is a shared 300-request/minute bucket behind Next.js; the supplied host Nginx config adds a separate 60-request/minute per-IP limit with a burst allowance of 20. Adjust for measured traffic before scaling.
 
 Once secrets, variables, VPS environment and HTTPS proxy are ready, set `DEPLOY_ENABLED=true` and push a new commit to `main`, or rerun the latest successful main workflow from GitHub Actions. A rerun executes the tests/build again; deployment is not an unchecked standalone task. Tags and feature branches never deploy.
 

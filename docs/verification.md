@@ -39,6 +39,8 @@ During the original application build the Docker engine was unavailable. The lat
 
 Deployment verification uses `scripts/test-deployment.py` for healthy release selection, failed-update rollback, failed-first-deploy state and missing configuration. These tests use a fake Docker executable; they do not claim actual SSH/VPS recovery. The workflow also passes actionlint and the shell scripts pass Bash syntax checks. All 133 application tests, lint/type checks and the optimized build were rerun for the deployment change. Actual VPS authentication, host reverse proxy/TLS and public deployment are pending the owner's configuration.
 
+The host Nginx example for `ritvizier.nl` and the redirected `ritvizier.twanterstappen.nl` passes `nginx -t` inside the official stable Alpine image with an ignored one-day test certificate. CI repeats this syntax check. This is not a real certificate or a verification of the existing Ubuntu host's Nginx configuration.
+
 ## Extended check verification
 
 The extended implementation adds source schema 3, APK notifications/defects/reference descriptions, multi-record fuel/body/class data, expanded axles, separate possible model recalls, pure analysis and per-source caching. The complete current suite totals 133 tests: 24 frontend, 77 backend and 32 browser checks. See [implementation details](extended-rdw-check.md) for changed files, contracts and limitations.
