@@ -28,3 +28,4 @@ artifacts/
 *.tsbuildinfo
 *.egg-info/
 frontend/next-env.d.ts
+/release.env

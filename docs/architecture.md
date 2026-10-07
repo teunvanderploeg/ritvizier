@@ -97,3 +97,9 @@ Tax uses RDW massa rijklaar, fuel, selected province and passenger-car tables va
 Unsupported categories, missing weight, oldtimer cases and expired validity return unavailable. Until tax is known or manually supplied, the displayed total is a labeled subtotal without tax. Consumption uses WLTP with NEDC fallback; insurance, maintenance and energy price remain assumptions. Depreciation, finance and personal exemptions are excluded.
 
 The updater parses numeric assignments without executing remote JavaScript, validates 12 province tables and records URL, retrieval timestamp and SHA-256. Fetching a new asset alone does not justify extending validity. Compare representative weights, boundaries and fuel cases with the official calculator first.
+
+## Production deployment
+
+`deploy/compose.yml` runs frontend, backend and PostgreSQL under project `ritvizier`. Only frontend loopback port 3000 is published. A host reverse proxy handles HTTPS. Database cache storage uses a persistent named volume. `deploy/deploy.sh` applies checked image digests and waits for health before recording the current release; failed startup attempts to restore previous containers. Migrations are not automatically reversed.
+
+The existing GitHub checks gate container builds and an isolated PostgreSQL/proxy smoke test. Main pushes publish the tested containers to GHCR. Optional SSH deployment is enabled by repository variables and the `production` environment. Credentials, one-time host setup and operational limits are documented in [deployment](deployment.md). The development Compose stack remains separate.

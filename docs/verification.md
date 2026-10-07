@@ -23,7 +23,7 @@ The `v1.0.0` baseline includes the registration-year and motion changes. Browser
 
 Desktop and mobile captures were reviewed after the changes. Vehicle-page visual lint reports the intentionally scrolling tab strip and small existing secondary/decorative labels. The cost prompt contrast findings were corrected. No page-level overflow or browser console errors appeared in these captures. Year screenshots are in `artifacts/registration-year-chromium.png` and `artifacts/registration-year-webkit-iphone.png`; additional captures are in `artifacts/motion-desktop/` and `artifacts/motion-mobile/`. These artifacts are ignored by Git and must be regenerated on another checkout.
 
-Branch and release procedures are in `CONTRIBUTING.md`. Feature and documentation changes use separate branches and merge commits. The annotated baseline tag identifies the integrated snapshot. No remote or online branch protection is configured.
+Branch and release procedures are in `CONTRIBUTING.md`. Feature and documentation changes use separate branches and merge commits. The annotated baseline tag identifies the integrated snapshot. History and tags have since been pushed to GitHub; branch protection remains a separate owner setting.
 
 ## Local network regression
 
@@ -35,7 +35,9 @@ Reviewed light and dark desktop screenshots, mobile home and vehicle screenshots
 
 ## Operational boundaries
 
-The Docker engine was unavailable during this session. Container builds and a live PostgreSQL round trip have not been run. SQL generation, ORM definitions and memory-cache behavior were checked. The app currently uses the bounded memory cache.
+During the original application build the Docker engine was unavailable. The later deployment work on 7 October exercised Docker Desktop's Linux engine: both production images built, PostgreSQL 17 and API/frontend containers became healthy, Alembic created the cache table, a real cache write/read/delete passed, and a request through the container frontend proxy returned the expected validation response. The isolated smoke stack and its test volume were removed afterward. The normal development app still uses memory caching.
+
+Deployment verification uses `scripts/test-deployment.py` for healthy release selection, failed-update rollback, failed-first-deploy state and missing configuration. These tests use a fake Docker executable; they do not claim actual SSH/VPS recovery. The workflow also passes actionlint and the shell scripts pass Bash syntax checks. All 133 application tests, lint/type checks and the optimized build were rerun for the deployment change. Actual VPS authentication, host reverse proxy/TLS and public deployment are pending the owner's configuration.
 
 ## Extended check verification
 
