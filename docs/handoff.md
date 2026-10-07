@@ -1,6 +1,6 @@
 # Developer handoff
 
-Updated 7 October 2026. The first tagged baseline is `v1.0.0`; the extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. No remote is configured; all commits, branches and tags are local.
+Updated 7 October 2026. Current release is `v1.1.0`; `v1.0.0` remains the original baseline. The extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. No remote is configured; all commits, branches and tags are local.
 
 ## First session
 
