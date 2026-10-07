@@ -12,8 +12,8 @@ At **Settings → Secrets and variables → Actions**, add these repository secr
 
 | Secret | Value |
 | --- | --- |
-| `VPS_HOST` | VPS IPv4 address or SSH hostname, without protocol |
-| `VPS_USER` | Deployment user, for example `ritvizier` |
+| `VPS_HOST` | `158.178.148.105`, without protocol or username |
+| `VPS_USER` | `ubuntu` |
 | `VPS_SSH_KEY` | Complete private deployment key, including BEGIN/END lines |
 | `VPS_KNOWN_HOSTS` | Verified SSH host-key lines for this VPS, including `[host]:port` when using a nonstandard port |
 
@@ -40,21 +40,21 @@ Use no passphrase for this automation key. The `.pub` file belongs in the deploy
 
 Install Docker Engine and the Compose plugin using the [official Ubuntu guide](https://docs.docker.com/engine/install/ubuntu/) or your distribution's corresponding instructions. Do not expose the Docker daemon over the network.
 
-On an Ubuntu/Debian VPS, as an administrator:
+On the owner's Ubuntu VPS, as an administrator, give the existing `ubuntu` account access to Docker and the app directory:
 
 ```sh
-sudo adduser --disabled-password --gecos '' ritvizier
-sudo usermod -aG docker ritvizier
-sudo install -d -o ritvizier -g ritvizier -m 750 /opt/ritvizier
-sudo install -d -o ritvizier -g ritvizier -m 700 /home/ritvizier/.ssh
-# Put the dedicated public key in authorized_keys, owned by ritvizier, mode 600.
+sudo usermod -aG docker ubuntu
+sudo install -d -o ubuntu -g ubuntu -m 750 /opt/ritvizier
+sudo install -d -o ubuntu -g ubuntu -m 700 /home/ubuntu/.ssh
+# Append the dedicated public key to authorized_keys; preserve existing keys.
+# The file should be owned by ubuntu with mode 600.
 ```
 
 Docker-group access gives this user administrative control of the host. Use a dedicated deployment key and repository access appropriate to that trust. Reconnect after changing group membership.
 
 As the deployment user, create `/opt/ritvizier/.env` from [the example](../deploy/.env.example), with mode 600. Set `SITE_URL` to the same value as the GitHub variable. Generate `POSTGRES_PASSWORD` using `openssl rand -hex 32`; use that hex value without quotes. `RDW_APP_TOKEN` is optional and stays on the VPS. Do not put the PostgreSQL password in GitHub secrets or commit it. Changing it later also requires changing the existing PostgreSQL user's password; an environment change alone does not reset a populated database.
 
-The owner's VPS runs Ubuntu, Docker and Nginx. Use `ritvizier.nl` as the canonical domain and redirect `ritvizier.twanterstappen.nl` to it. Set both DNS A records to the VPS IPv4 address. Only set AAAA records if this VPS actually serves IPv6.
+The owner's VPS at `158.178.148.105` runs Ubuntu, Docker and Nginx, with SSH user `ubuntu`. Use `ritvizier.nl` as the canonical domain and redirect `ritvizier.twanterstappen.nl` to it. Set both DNS A records to `158.178.148.105`. Only set AAAA records if this VPS actually serves IPv6.
 
 For Nginx installed on the host, [deploy/nginx.conf](../deploy/nginx.conf) proxies to `127.0.0.1:3000`, redirects the secondary domain while preserving the path and limits API/vehicle-page traffic per visitor IP. Keep existing sites intact; create a separate RitVizier site configuration.
 
