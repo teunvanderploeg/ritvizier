@@ -11,6 +11,8 @@ from app.db.cache import Base
 config = context.config
 if settings.database_url:
     config.set_main_option("sqlalchemy.url", settings.database_url.replace("%", "%%"))
+else:
+    raise RuntimeError("Set DATABASE_URL before running database migrations")
 
 
 def run_migrations(connection: Connection) -> None:

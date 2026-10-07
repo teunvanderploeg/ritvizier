@@ -6,7 +6,7 @@ A Dutch vehicle lookup application. Next.js renders the interface; FastAPI fetch
 
 Read [Contributing](CONTRIBUTING.md) for branches, commits, checks and releases. [Architecture](docs/architecture.md) maps code and data flow; [Developer handoff](docs/handoff.md) records current behavior and maintenance priorities. [Verification](docs/verification.md) records completed checks and limits. Coding agents should read [AGENTS.md](AGENTS.md) before editing.
 
-`main` holds integrated work. New tasks use their own branch and merge commit. Annotated tags identify checked snapshots; `v1.0.0` is the first tagged baseline. See the [Changelog](CHANGELOG.md). Git history is currently local; no remote repository is configured.
+`main` holds integrated work. New tasks use their own branch and merge commit. Annotated tags identify checked snapshots; `v1.0.0` is the first tagged baseline. See the [Changelog](CHANGELOG.md). History, branches and release tags are backed up in [GitHub](https://github.com/twanterstappen/ritvizier).
 
 The [extended RDW implementation](docs/extended-rdw-check.md) documents APK history, technical arrays, analysis, source caching, API additions and the original specification.
 
@@ -53,7 +53,9 @@ End-to-end tests require a production build first. Playwright starts an isolated
 
 ## PostgreSQL and containers
 
-`docker compose up --build` starts PostgreSQL, FastAPI and Next.js. Backend migrations run before the API starts. For manual migration, run `alembic upgrade head` from `backend/` with `DATABASE_URL` configured. Production frontend: `npm run build` then `npm start`.
+For automatic production deployment after all GitHub checks pass, follow [VPS deployment](docs/deployment.md). It documents the SSH secrets, repository variables, one-time VPS setup, HTTPS proxy, persistent database and rollback behavior. Production uses `deploy/compose.yml`; the root Compose file below remains the local development stack.
+
+For local Docker, copy `.env.example` to an ignored root `.env` and set `POSTGRES_PASSWORD` to a random hex value, for example generated with `openssl rand -hex 32`. Then `docker compose up --build` starts PostgreSQL, FastAPI and Next.js. There is no built-in database password. Backend migrations run before the API starts. For manual migration, run `alembic upgrade head` from `backend/` with `DATABASE_URL` configured. Production frontend: `npm run build` then `npm start`.
 
 ## Data and calculations
 

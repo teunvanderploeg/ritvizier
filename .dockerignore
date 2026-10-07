@@ -9,5 +9,7 @@ artifacts
 .env
 **/.env
 **/.env.local
+**/.env.*
+deploy/**/.ssh
 **/test-results
 **/playwright-report

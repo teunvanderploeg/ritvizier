@@ -4,6 +4,13 @@ User-visible changes use semantic versions and annotated Git tags. Dates use the
 
 ## Unreleased
 
+- Removed fixed local-development database passwords from Compose/Alembic examples. Database migrations and Docker now require explicitly supplied credentials.
+- Added a redacted full-history secret scan to the GitHub deployment gates.
+
+- Production Docker Compose stack with persistent PostgreSQL cache and private backend/database networking.
+- GitHub checks now gate container build, PostgreSQL smoke verification, immutable GHCR images and optional automatic SSH deployment of `main`.
+- Deployment setup documents secrets, HTTPS proxy, health checks and rollback to the previous healthy release.
+
 ## 1.1.0 - 2026-10-07
 
 ### Added

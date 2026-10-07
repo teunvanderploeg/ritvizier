@@ -1,6 +1,6 @@
 # Developer handoff
 
-Updated 7 October 2026. Current release is `v1.1.0`; `v1.0.0` remains the original baseline. The extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. No remote is configured; all commits, branches and tags are local.
+Updated 7 October 2026. Current release is `v1.1.0`; `v1.0.0` remains the original baseline. The extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. `origin` points to GitHub, with history, branches and both release tags pushed. Production container/SSH workflow setup is in [deployment](deployment.md); it remains disabled until the owner sets VPS configuration and `DEPLOY_ENABLED=true`.
 
 ## First session
 
@@ -34,9 +34,9 @@ The 7 October extension adds actual APK notifications for 15 October 2025 and 13
 | When                                     | Work                                                                                                                                                                                   |
 | ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Before January 2027                      | Review/update tax tariffs. The snapshot expires after December 2026 and returns unavailable beyond validity. Follow the updater instructions and compare with the official calculator. |
-| When online version control is requested | Connect the chosen remote, push history/tags and configure branch protection with required CI. Local Git is not an off-device backup.                                                  |
+| Before accepting production contributions | Configure GitHub branch protection with required CI. The remote and history/tags are already backed up. |
 | Before public deployment                 | Choose hosting/TLS, set canonical URL and trusted proxy handling, and address the shared proxy-IP rate bucket for multiple users/workers.                                              |
-| Before persistent cache in production    | Exercise real PostgreSQL migrations, reads, expiry and failure fallback. Docker/live database integration remains unverified.                                                          |
+| Before persistent cache in production    | Follow the deployment guide and inspect the first successful VPS workflow. Local/CI container smoke checks exercise PostgreSQL migrations and cache reads/writes. |
 
 ## Known limits
 

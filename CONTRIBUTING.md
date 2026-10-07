@@ -4,7 +4,7 @@ Setup is in [README.md](README.md), the code/data map in [docs/architecture.md](
 
 ## Branch workflow
 
-`main` holds integrated, checked work. Each task gets a branch. The repository currently has local history only; no remote, online backup or GitHub branch protection is configured.
+`main` holds integrated, checked work. Each task gets a branch. `origin` points to the GitHub repository. Branch protection is configured separately in GitHub settings.
 
 Inspect the working tree first. Do not discard another contributor's changes.
 
@@ -72,6 +72,8 @@ Set-Location ..
 ```
 
 Record checks that actually ran. Keep useful screenshots in ignored `artifacts/`. Test behavior and regressions rather than mirroring trivial implementation details.
+
+Deployment changes also require container builds and `scripts/container-smoke.sh`. CI starts real PostgreSQL and verifies migrations/cache writes before publishing the checked image digests. Main deployment is enabled through `DEPLOY_ENABLED`; see [deployment setup](docs/deployment.md). Feature branches and pull requests run checks without deploying.
 
 ## Versions and releases
 
