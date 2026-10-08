@@ -1,6 +1,6 @@
 # Developer handoff
 
-Updated 8 October 2026. The latest tagged release is `v1.1.0`; `v1.0.0` remains the original baseline. Later listing and deployment changes are recorded under Unreleased. The extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. `origin` points to GitHub, with history and release tags pushed. Production deployment is enabled and verified; see [deployment](deployment.md) for the current separate-proxy topology.
+Updated 8 October 2026 for release `v1.2.0`, including listing search, conservative duplicate grouping and the verified Oracle deployment. `v1.0.0` remains the original baseline. The extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. `origin` points to GitHub, with history and release tags pushed. Production deployment is enabled and verified; see [deployment](deployment.md) for the current separate-proxy topology.
 
 ## First session
 
