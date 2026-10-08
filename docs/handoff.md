@@ -1,10 +1,10 @@
 # Developer handoff
 
-Updated 7 October 2026. Current release is `v1.1.0`; `v1.0.0` remains the original baseline. The extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. `origin` points to GitHub, with history, branches and both release tags pushed. Production container/SSH workflow setup is in [deployment](deployment.md); it remains disabled until the owner sets VPS configuration and `DEPLOY_ENABLED=true`.
+Updated 8 October 2026. The latest tagged release is `v1.1.0`; `v1.0.0` remains the original baseline. Later listing and deployment changes are recorded under Unreleased. The extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. `origin` points to GitHub, with history and release tags pushed. Production deployment is enabled and verified; see [deployment](deployment.md) for the current separate-proxy topology.
 
 ## First session
 
-Oracle deployment is being enabled through the gated GitHub workflow. The app is on `oracle-portfolio` at `158.178.148.105`; the separate reverse proxy is `144.21.43.210` and must target the frontend on port 3000. See [current topology](deployment.md#current-oracle-topology). Actual rollout success must be checked in the main workflow and the VPS `current-release` file. No listing feed is connected yet.
+Oracle release `6492d2ab1293dd6ebfc15886fb3f4f823b0736a2` was deployed successfully on 8 October through [workflow 37784839170](https://github.com/twanterstappen/ritvizier/actions/runs/37784839170). The app is on `oracle-portfolio` at `158.178.148.105`; the separate reverse proxy is `144.21.43.210` and targets the frontend on port 3000. See [current topology](deployment.md#current-oracle-topology). All three app containers were healthy, HTTPS home/search pages responded, and a live RDW lookup wrote a PostgreSQL cache record. For later rollouts, check the main workflow and VPS `current-release` file rather than assuming this revision is still current. No listing feed is connected yet.
 
 Read [Agent instructions](../AGENTS.md), [Contributing](../CONTRIBUTING.md), [Architecture](architecture.md) and [Verification](verification.md). Inspect the branch, working tree and history. Start the next task from `main` on a new branch. Follow the README setup with the normal API on port 8000 and frontend on port 3000.
 
@@ -48,7 +48,7 @@ The used public sources do not supply exact mileage, full inspection/maintenance
 
 Source schema 3 is current. Use the allowlisted `rdw_client.py` rather than introducing another HTTP client. Defect-reference data is cached for seven days and descriptions join by code plus date validity. Keep note-only defect events distinct from confirmed notifications. Check `source.partial` and section fetch dates when debugging. The optional valuation provider contract has no actual market-data provider or public endpoint.
 
-Tax covers supported passenger-car cases, excluding personal exemptions and suspension. Costs omit depreciation, finance and purchase price. The install manifest exists; a service worker and offline data caching do not. Chromium/WebKit tests are not physical-device Safari tests. There is no public deployment.
+Tax covers supported passenger-car cases, excluding personal exemptions and suspension. Costs omit depreciation, finance and purchase price. The install manifest exists; a service worker and offline data caching do not. Chromium/WebKit tests are not physical-device Safari tests. The public site is `https://ritvizier.nl`; listing coverage remains unavailable without a feed.
 
 ## Troubleshooting
 

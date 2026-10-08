@@ -1,5 +1,15 @@
 # Verification
 
+## Oracle production rollout, 8 October 2026
+
+[Main workflow 37784839170](https://github.com/twanterstappen/ritvizier/actions/runs/37784839170) passed frontend, backend, both browser engines, the history secret scan, container/real PostgreSQL smoke verification, image publishing and SSH deployment. The VPS `current-release` matched `6492d2ab1293dd6ebfc15886fb3f4f823b0736a2`.
+
+Direct SSH inspection confirmed `ritvizier-frontend-1`, `ritvizier-backend-1` and `ritvizier-db-1` healthy on `ritvizier_default`, with no portfolio containers on that network. Only the frontend publishes `0.0.0.0:3000`; backend/database ports are not published. The existing `nginx_proxy` and `flask_app` remained running, and the portfolio origin returned 200 after restoring its original proxy topology.
+
+Chromium verified HTTPS 200 responses and expected page headings for `https://ritvizier.nl/` and `/aanbod` through the separate proxy at `144.21.43.210`. A real G921GS lookup through the production frontend proxy returned MINI COUNTRYMAN COOPER, and PostgreSQL `vehicle_cache` contained one record afterward. This verifies an actual production cache write, not only CI's isolated database. The owner confirmed the remote-proxy upstream and Oracle TCP 3000 ingress rule.
+
+The server environment is mode 600, and a 2 GB swap file supports the 1 GB VPS. No private key or database password was printed or committed. GitHub secret names were inspected, then the successful SSH deploy exercised their values. No paid listing source or feed was connected. This rollout did not exercise a real failed-release rollback, database restore, certificate renewal or physical-device Safari.
+
 ## Listing search, 8 October 2026
 
 The subsequent Linux GitHub Actions run [37782987330](https://github.com/twanterstappen/ritvizier/actions/runs/37782987330) passed all 38 browser scenarios, including WebKit, plus frontend/backend checks, production container builds and actual PostgreSQL/proxy smoke checks. An initial WebKit run found an ambiguous test selector that also matched Next.js's route announcer; the assertion now selects the search panel's own alert. This CI evidence supplements the local Windows limitations below.
