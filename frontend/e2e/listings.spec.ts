@@ -142,7 +142,7 @@ test("search handles empty results, unsafe data and retry", async ({
     }),
   );
   await page.getByRole("button", { name: "Zoek aanbod" }).click();
-  await expect(page.getByRole("alert")).toBeVisible();
+  await expect(page.locator(".listing-search").getByRole("alert")).toBeVisible();
   await expect(page.locator(".listing-card")).toHaveCount(0);
   await page.route("**/api/listings?**", (route) =>
     route.fulfill({ json: results }),
