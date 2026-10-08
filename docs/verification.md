@@ -2,6 +2,8 @@
 
 ## Listing search, 8 October 2026
 
+The subsequent Linux GitHub Actions run [37782987330](https://github.com/twanterstappen/ritvizier/actions/runs/37782987330) passed all 38 browser scenarios, including WebKit, plus frontend/backend checks, production container builds and actual PostgreSQL/proxy smoke checks. An initial WebKit run found an ambiguous test selector that also matched Next.js's route announcer; the assertion now selects the search panel's own alert. This CI evidence supplements the local Windows limitations below.
+
 - Backend: 92 tests pass, including 15 new listing/import checks covering cross-site grouping, conflicting identifiers, incomplete-record bridging, source price retention, numeric filters, pagination, stale snapshots, unsafe links, duplicate observations and atomic import preservation on failure.
 - Frontend: all 24 existing unit tests pass; ESLint, route/type generation, TypeScript and production build pass. Ruff and strict mypy pass.
 - Chromium: all 19 browser scenarios pass. The three new listing scenarios were rerun after the final card/wording changes and pass. They exercise editable filters, one car with two source links/prices, vehicle-prefilled filters, unavailable/empty results, malformed response rejection and retry.
