@@ -4,6 +4,9 @@ User-visible changes use semantic versions and annotated Git tags. Dates use the
 
 ## Unreleased
 
+- Added Dutch listing search and a `Vergelijkbaar aanbod` vehicle tab with editable filters, grouped duplicates and individual source links/prices. Live listings require a current authorized free export; no paid JP.cars API is used.
+- Added validated CSV/JSON stock imports, 24-hour listing freshness, and conservative cross-site identity matching that keeps uncertain duplicates separate.
+
 - Removed fixed local-development database passwords from Compose/Alembic examples. Database migrations and Docker now require explicitly supplied credentials.
 - Added a redacted full-history secret scan to the GitHub deployment gates.
 

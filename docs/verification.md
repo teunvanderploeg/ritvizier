@@ -1,5 +1,15 @@
 # Verification
 
+## Listing search, 8 October 2026
+
+- Backend: 92 tests pass, including 15 new listing/import checks covering cross-site grouping, conflicting identifiers, incomplete-record bridging, source price retention, numeric filters, pagination, stale snapshots, unsafe links, duplicate observations and atomic import preservation on failure.
+- Frontend: all 24 existing unit tests pass; ESLint, route/type generation, TypeScript and production build pass. Ruff and strict mypy pass.
+- Chromium: all 19 browser scenarios pass. The three new listing scenarios were rerun after the final card/wording changes and pass. They exercise editable filters, one car with two source links/prices, vehicle-prefilled filters, unavailable/empty results, malformed response rejection and retry.
+- Desktop 1440px and small-phone 320px captures were inspected in `artifacts/listings/`. No page-level overflow occurred. The skip link was asserted offscreen, then hidden only during screenshot capture to avoid its known full-page screenshot paint artifact. Product focus styles are unchanged.
+- WebKit was installed and attempted, but all 19 scenarios fail before browser startup because the host cannot load `icuin77.dll`, `libxml2.dll` and `webcore.dll`. No WebKit or physical-device Safari verification is claimed for this change. The Docker engine was unavailable as an alternative browser environment.
+- Listing tests use temporary synthetic feeds and intercepted browser responses only. No actual dealer/marketplace feed was supplied, no paid JP.cars API was used, and no live-market coverage, scheduled import, production snapshot mount or public deployment was verified. Production without `LISTINGS_FILE` reports unavailable rather than displaying test adverts.
+- Local test setup used the bundled Node/Python runtimes, a project virtual environment and ignored npm tooling. Windows blocked the SQLAlchemy wheel extension, so a pure Python SQLAlchemy distribution was installed locally to run checks; project dependency declarations were not changed. The existing Starlette/httpx deprecation warning remains.
+
 Verified locally on 7 October 2026 with Node 22.13.1 and Python 3.12.14.
 
 ## Automated checks

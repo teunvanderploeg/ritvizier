@@ -44,6 +44,8 @@ flowchart LR
 
 ## API contracts
 
+Market adverts have a separate contract in `schemas/listings.py` and `frontend/src/types/listings.ts`. `GET /api/listings` reads a bounded server-configured stock snapshot through `services/listings.py`, groups cross-site duplicate adverts and applies filters/pagination. Next.js proxies the endpoint. See [listing search](listing-search.md) for import, identity rules and freshness. These adverts do not alter official vehicle records, the RDW cache or saved browser vehicles.
+
 Local backend OpenAPI documentation is at `http://127.0.0.1:8000/docs` when running.
 
 | Endpoint                    | Behavior                                                                                                                                                                                               |

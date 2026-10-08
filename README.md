@@ -10,6 +10,8 @@ Read [Contributing](CONTRIBUTING.md) for branches, commits, checks and releases.
 
 The [extended RDW implementation](docs/extended-rdw-check.md) documents APK history, technical arrays, analysis, source caching, API additions and the original specification.
 
+[Dutch listing search](docs/listing-search.md) documents `/aanbod`, the comparable-offer tab, conservative duplicate grouping and free CSV/JSON stock imports. A real current export is required; no paid API or nationwide listing feed is connected by default.
+
 ## Development
 
 Requirements: Node.js 22.12+, Python 3.12+, npm. PostgreSQL 16+ is optional for durable cache storage. Without a database, the backend uses a bounded in-memory cache.

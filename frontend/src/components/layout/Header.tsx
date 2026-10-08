@@ -8,6 +8,7 @@ export function Header() {
   const path = usePathname();
   const links = [
     { href: "/", label: "Kentekencheck", icon: Search },
+    { href: "/aanbod", label: "Autoaanbod", icon: Search },
     { href: "/vergelijken", label: "Vergelijken", icon: Columns2 },
     { href: "/opgeslagen", label: "Opgeslagen", icon: Bookmark },
   ];
