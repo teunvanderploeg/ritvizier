@@ -4,6 +4,8 @@ User-visible changes use semantic versions and annotated Git tags. Dates use the
 
 ## Unreleased
 
+- Production frontend binding is configurable for a reverse proxy on a separate server; the API and database remain unpublished on the app's private Docker network.
+
 - Added Dutch listing search and a `Vergelijkbaar aanbod` vehicle tab with editable filters, grouped duplicates and individual source links/prices. Live listings require a current authorized free export; no paid JP.cars API is used.
 - Added validated CSV/JSON stock imports, 24-hour listing freshness, and conservative cross-site identity matching that keeps uncertain duplicates separate.
 

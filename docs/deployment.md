@@ -2,9 +2,19 @@
 
 The GitHub workflow scans full Git history for secrets with redacted output and runs frontend checks, backend checks and both browser engines. After all pass it builds the frontend/backend containers, starts them with PostgreSQL and verifies migrations, a cache write/read/delete and the frontend API proxy. Only a successful push to `main` publishes those exact images to GHCR. Deployment uses their immutable digests, not a moving `latest` tag.
 
-Enable deployment after completing setup below. Linux x86-64 with Docker Engine and Compose v2.24+ is required. Allow roughly 2 GB RAM minimum, preferably 4 GB, and room for retained images. The VPS pulls prebuilt images; it does not build Next.js. PostgreSQL and FastAPI have no published ports. Next.js listens only on host loopback port 3000 for your reverse proxy. This does not install or change an existing proxy.
+Enable deployment after completing setup below. Linux x86-64 with Docker Engine and Compose v2.24+ is required. Allow roughly 2 GB RAM minimum, preferably 4 GB, and room for retained images. The VPS pulls prebuilt images; it does not build Next.js. PostgreSQL and FastAPI have no published ports. By default, Next.js listens on host loopback port 3000 for a local reverse proxy. The current owner's external-proxy topology is documented below. This workflow does not install or change an existing proxy.
 
 ## GitHub settings
+
+### Current Oracle topology
+
+The app's SSH alias is `oracle-portfolio`, Ubuntu at **158.178.148.105**. The owner's separate Nginx reverse proxy is **144.21.43.210**. The DNS A record for `ritvizier.nl` points to that proxy. Its upstream must be `http://158.178.148.105:3000`, including the final `5` in the app server's address.
+
+For this topology, set `HTTP_BIND_ADDRESS=0.0.0.0` and `HTTP_PORT=3000` in `/opt/ritvizier/.env`. Allow inbound TCP 3000 from `144.21.43.210/32` in the Oracle security list/network security group. The public proxy handles ports 80/443 and TLS. The backend and PostgreSQL have no published ports. All three app services use the dedicated `ritvizier_default` Docker network; the portfolio remains in its separate network.
+
+The default binding remains `127.0.0.1` for installations with a proxy on the same server. A container proxy on another server cannot reach that loopback binding. Do not route this remote proxy through the portfolio's Nginx container or attach it to the app network. `/opt/ritvizier/.env` is mode 600. This 1 GB VPS has a 2 GB swap file to support container startup; production images are still built in GitHub Actions rather than on the VPS.
+
+The GitHub `production` environment restricts deployment to `main`; `DEPLOY_ENABLED=true` enables the existing gated workflow. Checks cover both browser engines, frontend/backend validation, the history secret scan, production container builds and PostgreSQL/proxy smoke verification. Look at the main workflow's deploy job and `/opt/ritvizier/current-release` to establish the actual deployed revision. An enabled variable or successful test job alone does not establish deployment.
 
 Create an environment named `production` at **Settings → Environments**. Restrict its deployment branches to `main`. Required reviewers are optional; enabling them makes deployments wait for your approval.
 

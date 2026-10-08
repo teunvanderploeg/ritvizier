@@ -4,6 +4,8 @@ Updated 7 October 2026. Current release is `v1.1.0`; `v1.0.0` remains the origin
 
 ## First session
 
+Oracle deployment is being enabled through the gated GitHub workflow. The app is on `oracle-portfolio` at `158.178.148.105`; the separate reverse proxy is `144.21.43.210` and must target the frontend on port 3000. See [current topology](deployment.md#current-oracle-topology). Actual rollout success must be checked in the main workflow and the VPS `current-release` file. No listing feed is connected yet.
+
 Read [Agent instructions](../AGENTS.md), [Contributing](../CONTRIBUTING.md), [Architecture](architecture.md) and [Verification](verification.md). Inspect the branch, working tree and history. Start the next task from `main` on a new branch. Follow the README setup with the normal API on port 8000 and frontend on port 3000.
 
 ## Current behavior
