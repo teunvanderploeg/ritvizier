@@ -4,6 +4,12 @@ User-visible changes use semantic versions and annotated Git tags. Dates use the
 
 ## Unreleased
 
+No unreleased changes.
+
+## 1.2.0 - 2026-10-08
+
+### Added and changed
+
 - Production frontend binding is configurable for a reverse proxy on a separate server; the API and database remain unpublished on the app's private Docker network.
 
 - Added Dutch listing search and a `Vergelijkbaar aanbod` vehicle tab with editable filters, grouped duplicates and individual source links/prices. Live listings require a current authorized free export; no paid JP.cars API is used.
@@ -15,6 +21,13 @@ User-visible changes use semantic versions and annotated Git tags. Dates use the
 - Production Docker Compose stack with persistent PostgreSQL cache and private backend/database networking.
 - GitHub checks now gate container build, PostgreSQL smoke verification, immutable GHCR images and optional automatic SSH deployment of `main`.
 - Deployment setup documents secrets, HTTPS proxy, health checks and rollback to the previous healthy release.
+
+### Validation and limits
+
+- 154 application checks: 92 backend, 24 frontend and 38 Chromium/WebKit browser tests. Lint, TypeScript, Ruff, mypy, production builds and the full-history secret scan pass in GitHub Actions.
+- Production containers, migrations and PostgreSQL cache operations were checked in CI. The Oracle rollout was verified with healthy isolated frontend/backend/database containers, public HTTPS pages and a real RDW lookup/cache write.
+- Live listing coverage requires a current authorized free feed or dealer export. No paid JP.cars API, valuation model, watchlist or sale-history tracking is included.
+- Physical-device Safari, a real failed-production rollback, database restore and certificate renewal were not exercised.
 
 ## 1.1.0 - 2026-10-07
 
