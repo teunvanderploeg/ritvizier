@@ -42,6 +42,7 @@ import { TechnicalDetails } from "./TechnicalDetails";
 import { FuelRecords } from "./FuelRecords";
 import { MileageEstimate } from "./MileageEstimate";
 import { PossibleRecalls } from "./PossibleRecalls";
+import { ListingSearch } from "@/features/listings/ListingSearch";
 import { useEffect } from "react";
 import {
   amsterdamToday,
@@ -54,6 +55,7 @@ import {
 
 const tabs = [
   "Overzicht",
+  "Vergelijkbaar aanbod",
   "APK & registratie",
   "APK-historie",
   "Tellerstand & historie",
@@ -428,6 +430,7 @@ export function VehicleDetail({
           ))}
       </nav>
       <div className="vehicle-tab-content" key={tab}>
+        {tab === "Vergelijkbaar aanbod" && <ListingSearch vehicle={v} />}
         {tab === "Overzicht" && (
           <>
             {attention.length > 0 && (

@@ -8,6 +8,8 @@ Read [Agent instructions](../AGENTS.md), [Contributing](../CONTRIBUTING.md), [Ar
 
 ## Current behavior
 
+The new `/aanbod` page and `Vergelijkbaar aanbod` vehicle tab search authorized Dutch listing snapshots and group duplicates with all source links retained. `LISTINGS_FILE` is unset by default, so live listings are unavailable until a current free export is connected. No JP.cars or paid API is used. See [listing search](listing-search.md) for CSV/JSON imports, required fields, conservative identity rules and operational limits.
+
 - Dutch plate lookup and direct `/auto/{formatted-plate}` links.
 - Vehicle sections for overview, APK/registration, odometer/history, recalls, execution, engine, emissions, dimensions, costs and practical information.
 - Both colors, execution identifiers, exact transmission where available, separate WLTP/NEDC data and source links.

@@ -25,6 +25,114 @@
   --font: Inter, Arial, Helvetica, sans-serif;
   color-scheme: light;
 }
+.listing-filters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 210px), 1fr));
+  gap: 1rem;
+  margin: 1.5rem 0;
+  padding: 1.25rem;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+}
+.listing-filters label {
+  display: grid;
+  gap: 0.4rem;
+  font-size: 0.875rem;
+  font-weight: 600;
+  min-width: 0;
+}
+.listing-filters input,
+.listing-filters select {
+  width: 100%;
+  min-width: 0;
+  min-height: 44px;
+  border: 1px solid var(--border);
+  border-radius: 0.5rem;
+  padding: 0.6rem;
+  background: var(--bg);
+  color: var(--ink);
+}
+.listing-filters button {
+  align-self: end;
+  min-height: 44px;
+}
+.listing-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(min(100%, 320px), 1fr));
+  gap: 1rem;
+}
+.listing-card {
+  min-width: 0;
+  overflow-wrap: anywhere;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+}
+.listing-card h3 {
+  margin: 0;
+}
+.listing-card p {
+  margin: 0.5rem 0;
+}
+.listing-card .listing-price {
+  display: block;
+  font-size: 1.5rem;
+  margin: 1rem 0;
+}
+.listing-card dl > div {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  gap: 0.4rem;
+  padding: 0.4rem 0;
+  border-bottom: 1px solid var(--border);
+}
+.listing-card dd {
+  margin: 0;
+}
+.listing-card dt,
+.listing-explanation {
+  color: var(--muted);
+}
+.listing-sources {
+  margin-top: 1rem;
+}
+.listing-sources summary {
+  cursor: pointer;
+  min-height: 44px;
+  color: var(--brand);
+  padding: 0.5rem 0;
+}
+.listing-sources ul {
+  padding: 0;
+  list-style: none;
+}
+.listing-sources li {
+  display: grid;
+  gap: 0.35rem;
+  padding: 0.75rem 0;
+  border-top: 1px solid var(--border);
+}
+.listing-sources a {
+  text-decoration: underline;
+  color: var(--brand);
+}
+.listing-sources small {
+  color: var(--muted);
+}
+.listing-pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  justify-content: center;
+  gap: 1rem;
+  margin-top: 1.5rem;
+}
+.listing-empty p:last-child {
+  margin-bottom: 0;
+}
 [data-theme="dark"] {
   --bg: #101925;
   --surface: #182434;

@@ -2,19 +2,23 @@ from collections import OrderedDict, deque
 from collections.abc import AsyncIterator
 from contextlib import asynccontextmanager
 from time import monotonic
+from typing import Annotated
 
 import httpx
-from fastapi import FastAPI, HTTPException, Request
+from fastapi import FastAPI, HTTPException, Query, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
+from starlette.concurrency import run_in_threadpool
 from starlette.responses import Response
 
 from app.core.config import settings
 from app.core.plates import normalize_plate
 from app.db.cache import create_sessions
 from app.providers.rdw import ProviderUnavailable, RdwProvider, VehicleNotFound
+from app.schemas.listings import ListingQuery, ListingResults
 from app.schemas.vehicle import Vehicle
 from app.services.costs import CostAssumptions, CostEstimate, calculate_costs
+from app.services.listings import search_feed
 from app.services.road_tax import RoadTaxEstimate, RoadTaxRequest, calculate_road_tax
 from app.services.vehicles import VehicleService
 
@@ -97,6 +101,18 @@ def check_rate(request: Request) -> None:
 @app.get("/health")
 async def health() -> dict[str, str]:
     return {"status": "ok"}
+
+
+@app.get("/api/listings", response_model=ListingResults)
+async def get_listings(request: Request, query: Annotated[ListingQuery, Query()]) -> ListingResults:
+    check_rate(request)
+    if (
+        query.year_min is not None
+        and query.year_max is not None
+        and query.year_min > query.year_max
+    ):
+        raise HTTPException(422, "Het minimumjaar moet voor het maximumjaar liggen.")
+    return await run_in_threadpool(search_feed, settings.listings_file, query)
 
 
 @app.get("/api/vehicles/{plate}", response_model=Vehicle)
