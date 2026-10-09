@@ -3,14 +3,19 @@
 }
 
 .hero {
+  --hero-surface: #e9f1fa;
+  position: relative;
+  isolation: isolate;
   display: grid;
   overflow: hidden;
   border-radius: 1.25rem;
-  background: #e9f1fa;
+  background: var(--hero-surface);
   color: #202a36;
 }
 
 .copy {
+  position: relative;
+  z-index: 1;
   padding: 2rem 1.25rem;
   min-width: 0;
 }
@@ -33,7 +38,7 @@
 }
 
 .search {
-  max-width: 33rem;
+  max-width: 28rem;
   text-align: left;
 }
 
@@ -53,8 +58,10 @@
 }
 
 .search :global(.search-button) {
+  justify-self: start;
   font-size: 0.8125rem;
-  padding-inline: 1.1rem;
+  padding-inline: 0.875rem;
+  gap: 0.5rem;
   background: #2457f5;
   color: #fff;
 }
@@ -81,11 +88,19 @@
   position: relative;
   min-width: 0;
   height: 15rem;
+  pointer-events: none;
+}
+
+.visual::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, var(--hero-surface), transparent 35%);
 }
 
 .car {
   object-fit: cover;
-  object-position: center 60%;
+  object-position: 85% center;
 }
 
 .details {
@@ -182,8 +197,12 @@
 }
 
 :global([data-theme="dark"]) .hero {
-  background: #1c2d42;
+  --hero-surface: #1c2d42;
   color: var(--ink);
+}
+
+:global([data-theme="dark"]) .car {
+  filter: brightness(0.75);
 }
 
 :global([data-theme="dark"]) .description,
@@ -230,10 +249,22 @@
     z-index: 1;
   }
   .visual {
-    height: 100%;
+    position: absolute;
+    inset: 0;
+    height: auto;
+    z-index: -1;
+  }
+  .visual::after {
+    background: linear-gradient(
+      to right,
+      var(--hero-surface) 5%,
+      color-mix(in srgb, var(--hero-surface) 97%, transparent) 30%,
+      color-mix(in srgb, var(--hero-surface) 85%, transparent) 43%,
+      transparent 65%
+    );
   }
   .car {
-    object-position: 47% center;
+    object-position: right center;
   }
   .search :global(.search-controls) {
     grid-template-columns: minmax(0, 1fr);
