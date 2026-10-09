@@ -1,6 +1,6 @@
 # Contributing to RitVizier
 
-Setup is in [README.md](README.md), the code/data map in [docs/architecture.md](docs/architecture.md), and maintenance priorities in [docs/handoff.md](docs/handoff.md). Human and AI contributions follow the same workflow.
+Setup is in [Installation](docs/install.md), environment settings in [Configuration](docs/configuration.md), the code/data map in [Architecture](docs/architecture.md), and maintenance priorities in [Developer handoff](docs/handoff.md). Use [Troubleshooting](docs/troubleshooting.md) for local issues. Human and AI contributions follow the same workflow.
 
 ## Branch workflow
 
@@ -105,6 +105,9 @@ The new worktree needs dependencies and its own environment files. Remove it wit
 ## Documentation maintenance
 
 - `README.md` contains setup and document links.
+- `docs/install.md` covers first-run native, database and local Docker setup.
+- `docs/configuration.md` documents environment settings and container differences.
+- `docs/troubleshooting.md` contains diagnostic steps and known failure cases.
 - `AGENTS.md` contains instructions for coding agents.
 - `docs/architecture.md` maps code, requests, sources and storage.
 - `docs/handoff.md` records current behavior, limits and maintenance work.

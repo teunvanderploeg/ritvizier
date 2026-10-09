@@ -1,12 +1,12 @@
 # Developer handoff
 
-Updated 8 October 2026 for release `v1.2.0`, including listing search, conservative duplicate grouping and the verified Oracle deployment. `v1.0.0` remains the original baseline. The extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. `origin` points to GitHub, with history and release tags pushed. Production deployment is enabled and verified; see [deployment](deployment.md) for the current separate-proxy topology.
+Updated 9 October 2026 with installation, configuration and troubleshooting guides for release `v1.2.0`. Current behavior includes listing search, conservative duplicate grouping and the verified Oracle deployment. `v1.0.0` remains the original baseline. The extended check is documented in [its implementation report](extended-rdw-check.md). Use `git log --graph --oneline --decorate --all` for exact versions. `origin` points to GitHub, with history and release tags pushed. Production deployment is enabled and verified; see [deployment](deployment.md) for the current separate-proxy topology.
 
 ## First session
 
 Oracle release `6492d2ab1293dd6ebfc15886fb3f4f823b0736a2` was deployed successfully on 8 October through [workflow 37784839170](https://github.com/twanterstappen/ritvizier/actions/runs/37784839170). The app is on `oracle-portfolio` at `158.178.148.105`; the separate reverse proxy is `144.21.43.210` and targets the frontend on port 3000. See [current topology](deployment.md#current-oracle-topology). All three app containers were healthy, HTTPS home/search pages responded, and a live RDW lookup wrote a PostgreSQL cache record. For later rollouts, check the main workflow and VPS `current-release` file rather than assuming this revision is still current. No listing feed is connected yet.
 
-Read [Agent instructions](../AGENTS.md), [Contributing](../CONTRIBUTING.md), [Architecture](architecture.md) and [Verification](verification.md). Inspect the branch, working tree and history. Start the next task from `main` on a new branch. Follow the README setup with the normal API on port 8000 and frontend on port 3000.
+Read [Agent instructions](../AGENTS.md), [Contributing](../CONTRIBUTING.md), [Architecture](architecture.md) and [Verification](verification.md). Inspect the branch, working tree and history. Start the next task from `main` on a new branch. Follow [Installation](install.md) with the normal API on port 8000 and frontend on port 3000. [Configuration](configuration.md) explains native/container settings; [Troubleshooting](troubleshooting.md) covers common failures.
 
 ## Current behavior
 
@@ -35,12 +35,12 @@ The 7 October extension adds actual APK notifications for 15 October 2025 and 13
 
 ## Next maintenance work
 
-| When                                     | Work                                                                                                                                                                                   |
-| ---------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Before January 2027                      | Review/update tax tariffs. The snapshot expires after December 2026 and returns unavailable beyond validity. Follow the updater instructions and compare with the official calculator. |
-| Before accepting production contributions | Configure GitHub branch protection with required CI. The remote and history/tags are already backed up. |
-| Before public deployment                 | Choose hosting/TLS, set canonical URL and trusted proxy handling, and address the shared proxy-IP rate bucket for multiple users/workers.                                              |
-| Before persistent cache in production    | Follow the deployment guide and inspect the first successful VPS workflow. Local/CI container smoke checks exercise PostgreSQL migrations and cache reads/writes. |
+| When                                      | Work                                                                                                                                                                                                      |
+| ----------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Before January 2027                       | Review/update tax tariffs. The snapshot expires after December 2026 and returns unavailable beyond validity. Follow the updater instructions and compare with the official calculator.                    |
+| Before accepting production contributions | Configure GitHub branch protection with required CI. The remote and history/tags are already backed up.                                                                                                   |
+| Before scaling public traffic             | Review the shared proxy-IP rate bucket, trusted proxy handling and capacity. HTTPS and production deployment were verified on 8 October.                                                                  |
+| For each production rollout               | Check the deploy job, host release file and container health. Persistent cache writes were verified on 8 October; database restore, certificate renewal and real failed-release recovery remain untested. |
 
 ## Known limits
 
@@ -51,6 +51,8 @@ Source schema 3 is current. Use the allowlisted `rdw_client.py` rather than intr
 Tax covers supported passenger-car cases, excluding personal exemptions and suspension. Costs omit depreciation, finance and purchase price. The install manifest exists; a service worker and offline data caching do not. Chromium/WebKit tests are not physical-device Safari tests. The public site is `https://ritvizier.nl`; listing coverage remains unavailable without a feed.
 
 ## Troubleshooting
+
+Use [the troubleshooting guide](troubleshooting.md) for diagnostic commands and recovery steps. The quick reference below points to the most common checks.
 
 | Symptom                        | First check                                                                                                                                              |
 | ------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------- |

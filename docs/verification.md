@@ -1,5 +1,7 @@
 # Verification
 
+Entries record the state at the time of each check. Newer dated evidence can supersede older deployment or platform limitations; historical entries remain intact. For current setup instructions, use [Installation](install.md), [Configuration](configuration.md) and [Troubleshooting](troubleshooting.md).
+
 ## Oracle production rollout, 8 October 2026
 
 [Main workflow 37784839170](https://github.com/twanterstappen/ritvizier/actions/runs/37784839170) passed frontend, backend, both browser engines, the history secret scan, container/real PostgreSQL smoke verification, image publishing and SSH deployment. The VPS `current-release` matched `6492d2ab1293dd6ebfc15886fb3f4f823b0736a2`.

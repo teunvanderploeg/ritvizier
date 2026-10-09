@@ -51,11 +51,12 @@ Local backend OpenAPI documentation is at `http://127.0.0.1:8000/docs` when runn
 | Endpoint                    | Behavior                                                                                                                                                                                               |
 | --------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
 | `GET /health`               | Process health only; does not test RDW or PostgreSQL availability.                                                                                                                                     |
-| `GET /api/vehicles/{plate}` | Normalize plate and return vehicle/source metadata. Invalid plate: 422; absent vehicle: 404; unavailable provider: 503; rate limit: 429.                                                               |
+| `GET /api/vehicles/{plate}` | Normalize plate and return vehicle/source metadata. Invalid plate: 422; absent vehicle: 404; provider failure: 502; provider timeout: 504; local/upstream rate limit: 429.                             |
+| `GET /api/listings`         | Search the configured snapshot with filters, grouping and pagination. Missing or stale feeds return an unavailable result; invalid queries return 422.                                                 |
 | `POST /api/costs`           | Validate assumptions and compute monthly/yearly running costs. Full limits are in `CostAssumptions` in `services/costs.py`.                                                                            |
 | `POST /api/road-tax`        | Accept plate, province and optional diesel/LPG choices. Fetch technical values from `VehicleService`; caller-supplied weight/fuel are not used. Return availability, amounts, basis, notes and source. |
 
-Next.js proxies the three data/calculation endpoints and validates browser input. Python owns calculation rules. JSON uses camelCase; Python fields use snake_case with aliases. Update both schemas, services, fixtures and consumers for contract changes. Zod defaults preserve older local records.
+Next.js proxies the four data/calculation endpoints and validates browser input. Its proxy returns 503 when it cannot reach the backend. Backend vehicle errors include `detail` and `code`; optional RDW-source failures can instead return vehicle data with warnings. Python owns calculation rules. JSON uses camelCase; Python fields use snake_case with aliases. Update both schemas, services, fixtures and consumers for contract changes. Zod defaults preserve older local records.
 
 ## RDW joins
 
@@ -102,6 +103,6 @@ The updater parses numeric assignments without executing remote JavaScript, vali
 
 ## Production deployment
 
-`deploy/compose.yml` runs frontend, backend and PostgreSQL under project `ritvizier`. Only frontend loopback port 3000 is published. A host reverse proxy handles HTTPS. Database cache storage uses a persistent named volume. `deploy/deploy.sh` applies checked image digests and waits for health before recording the current release; failed startup attempts to restore previous containers. Migrations are not automatically reversed.
+`deploy/compose.yml` runs frontend, backend and PostgreSQL under project `ritvizier`. Only the frontend port is published, on host loopback port 3000 by default. The current Oracle installation uses `0.0.0.0:3000` with ingress restricted to a separate reverse proxy; see [the deployed topology](deployment.md#current-oracle-topology). The reverse proxy handles HTTPS. Database cache storage uses a persistent named volume. `deploy/deploy.sh` applies checked image digests and waits for health before recording the current release; failed startup attempts to restore previous containers. Migrations are not automatically reversed.
 
 The existing GitHub checks gate container builds and an isolated PostgreSQL/proxy smoke test. Main pushes publish the tested containers to GHCR. Optional SSH deployment is enabled by repository variables and the `production` environment. Credentials, one-time host setup and operational limits are documented in [deployment](deployment.md). The development Compose stack remains separate.
