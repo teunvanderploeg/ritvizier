@@ -2,6 +2,18 @@
 
 Entries record the state at the time of each check. Newer dated evidence can supersede older deployment or platform limitations; historical entries remain intact. For current setup instructions, use [Installation](install.md), [Configuration](configuration.md) and [Troubleshooting](troubleshooting.md).
 
+## Dutch-road homepage hero, 9 October 2026
+
+The homepage uses a decorative Dutch-road car photograph with a horizontal fade behind the desktop search form. On phones, the image follows the form with a vertical fade. Dark mode dims the photograph and uses a matching dark fade. The image does not represent any searched vehicle.
+
+Generated with the built-in image generation tool and saved as `frontend/public/images/hero-dutch-road.webp` (1774 × 887, about 184 KiB). The original studio image remains available. Final prompt:
+
+```text
+Use case: photorealistic-natural. Asset type: wide website homepage hero background for RitVizier, a Dutch license plate lookup app. Create an editorial automotive photograph of a contemporary understated pale steel-blue compact hatchback with a plain yellow Dutch-style license plate, no lettering or brand logos, parked on the RIGHT THIRD of a quiet asphalt road beside a Dutch dike, grass verges, distant rows of willow trees, flat countryside and an open pale blue sky. Front three-quarter view, car facing towards left, complete car and wheels visible, realistic proportions. Wide landscape composition around 2:1. The car occupies the rightmost 40 percent; LEFT HALF has calm low-detail landscape and pale sky with ample negative space for a website search form which will be overlaid separately. Soft morning daylight, slight distant haze, natural muted greens, pale cool blues, welcoming trustworthy atmosphere. Real photographic texture, no dramatic sunset, no people, no text, no watermark, no UI, no luxury styling, no oversized car, no motion blur.
+```
+
+ESLint, TypeScript, all 24 frontend unit tests and the optimized production build pass. Six existing browser checks pass across Chromium and WebKit: plate validation/clearing, theme persistence and the 320–1440px viewport matrix. Reviewed desktop light/dark and 320px phone screenshots in ignored `artifacts/home-*-*.png` and `artifacts/dark-*.png`; the viewport checks found no page-level horizontal overflow. WebKit used the existing local library setup and `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1`. The collaborative preview could not reach the local development server. No public deployment or physical-device Safari testing was performed.
+
 ## Brand refinement, 9 October 2026
 
 The homepage now pairs the license-plate search with a studio-car image in a split layout. The search precedes the image on phones. Copy remains short and eyebrow headings remain absent. Light and dark themes use separate hero colors.

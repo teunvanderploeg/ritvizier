@@ -35,10 +35,10 @@ export default function Home() {
         </div>
         <div className={styles.visual} aria-hidden="true">
           <Image
-            src="/images/hero-car.webp"
+            src="/images/hero-dutch-road.webp"
             alt=""
             fill
-            sizes="(min-width: 900px) 50vw, 100vw"
+            sizes="(min-width: 1200px) 1152px, 100vw"
             loading="eager"
             className={styles.car}
           />
