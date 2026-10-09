@@ -2,6 +2,8 @@
 
 The GitHub workflow scans full Git history for secrets with redacted output and runs frontend checks, backend checks and both browser engines. After all pass it builds the frontend/backend containers, starts them with PostgreSQL and verifies migrations, a cache write/read/delete and the frontend API proxy. Only a successful push to `main` publishes those exact images to GHCR. Deployment uses their immutable digests, not a moving `latest` tag.
 
+Every push to `main`, including documentation-only changes and merged pull requests, starts this pipeline. There are no path filters. Deployment runs after successful checks and container verification when `DEPLOY_ENABLED=true`; production environment approval rules can make it wait. Feature-branch pushes and pull requests run checks without deploying. Local commits do not trigger GitHub Actions until pushed.
+
 Enable deployment after completing setup below. Linux x86-64 with Docker Engine and Compose v2.24+ is required. Allow roughly 2 GB RAM minimum, preferably 4 GB, and room for retained images. The VPS pulls prebuilt images; it does not build Next.js. PostgreSQL and FastAPI have no published ports. By default, Next.js listens on host loopback port 3000 for a local reverse proxy. The current owner's external-proxy topology is documented below. This workflow does not install or change an existing proxy.
 
 ## GitHub settings
@@ -20,21 +22,21 @@ Create an environment named `production` at **Settings → Environments**. Restr
 
 At **Settings → Secrets and variables → Actions**, add these repository secrets:
 
-| Secret | Value |
-| --- | --- |
-| `VPS_HOST` | `158.178.148.105`, without protocol or username |
-| `VPS_USER` | `ubuntu` |
-| `VPS_SSH_KEY` | Complete private deployment key, including BEGIN/END lines |
+| Secret            | Value                                                                                           |
+| ----------------- | ----------------------------------------------------------------------------------------------- |
+| `VPS_HOST`        | `158.178.148.105`, without protocol or username                                                 |
+| `VPS_USER`        | `ubuntu`                                                                                        |
+| `VPS_SSH_KEY`     | Complete private deployment key, including BEGIN/END lines                                      |
 | `VPS_KNOWN_HOSTS` | Verified SSH host-key lines for this VPS, including `[host]:port` when using a nonstandard port |
 
 Add these repository **variables**, not secrets:
 
-| Variable | Value |
-| --- | --- |
-| `SITE_URL` | `https://ritvizier.nl`, without trailing slash |
-| `VPS_PORT` | SSH port; defaults to `22` |
-| `VPS_PATH` | App directory; defaults to `/opt/ritvizier`, without spaces |
-| `DEPLOY_ENABLED` | Set to `true` last, after VPS configuration is ready |
+| Variable         | Value                                                       |
+| ---------------- | ----------------------------------------------------------- |
+| `SITE_URL`       | `https://ritvizier.nl`, without trailing slash              |
+| `VPS_PORT`       | SSH port; defaults to `22`                                  |
+| `VPS_PATH`       | App directory; defaults to `/opt/ritvizier`, without spaces |
+| `DEPLOY_ENABLED` | Set to `true` last, after VPS configuration is ready        |
 
 Do not create a `GITHUB_TOKEN` secret. GitHub provides the short-lived token automatically. The image job gets package-write permission; deployment gets package-read permission. The VPS uses the token temporarily to pull private GHCR images, then removes the temporary Docker login. No long-lived registry token is needed.
 
