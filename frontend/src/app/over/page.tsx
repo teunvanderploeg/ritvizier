@@ -6,16 +6,10 @@ export const metadata = {
 export default function AboutPage() {
   return (
     <article className="container prose-page">
-      <span className="eyebrow">OVER RITVIZIER</span>
-      <h1>
-        Alles over je auto.
-        <br />
-        Helder in beeld.
-      </h1>
+      <h1>Over RitVizier</h1>
       <p>
-        Een kenteken is het begin. RitVizier brengt openbare voertuiggegevens
-        bij elkaar, met uitleg en hulpmiddelen om auto’s te vergelijken en je
-        kosten in te schatten.
+        Bekijk openbare RDW-gegevens, vergelijk auto’s en bereken je autokosten.
+        Gratis en zonder account.
       </p>
       <h2 id="bronnen">Waar komen de gegevens vandaan?</h2>
       <p>

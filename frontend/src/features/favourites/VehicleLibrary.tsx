@@ -63,8 +63,8 @@ export function VehicleLibrary() {
                     <Trash2 size={17} />
                   </button>
                 </div>
-                <span className="eyebrow">{v.make}</span>
                 <h2>{titleCase(v.model)}</h2>
+                <p className="vehicle-brand">{titleCase(v.make)}</p>
                 <p>
                   {v.firstRegistrationDate?.slice(0, 4) || "Bouwjaar onbekend"}{" "}
                   · {fuelLabel(v.fuelTypes)} · {numeric(v.powerKw, "kW")}
@@ -106,13 +106,13 @@ export function VehicleLibrary() {
           </div>
           <h2>
             {tab === "favourites"
-              ? "Je favoriete auto’s, bij elkaar."
-              : "Hier vind je je vorige checks."}
+              ? "Nog geen opgeslagen auto’s"
+              : "Nog geen recente zoekopdrachten"}
           </h2>
           <p>
             {tab === "favourites"
-              ? "Sla een auto op vanuit de kentekencheck. Je vindt hem hier terug, zonder een account aan te maken."
-              : "Na een kentekencheck kun je het voertuig hier eenvoudig opnieuw openen."}
+              ? "Sla een auto op via de voertuigpagina."
+              : "Zoek een kenteken om de gegevens hier terug te vinden."}
           </p>
           <Link className="button" href="/#kenteken">
             <Search size={17} />

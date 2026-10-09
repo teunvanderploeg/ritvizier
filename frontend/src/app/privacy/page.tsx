@@ -6,12 +6,7 @@ export const metadata = {
 export default function PrivacyPage() {
   return (
     <article className="container prose-page">
-      <span className="eyebrow">JOUW GEGEVENS</span>
-      <h1>
-        Je zoekt een auto.
-        <br />
-        Wij volgen je niet.
-      </h1>
+      <h1>Privacy</h1>
       <p>
         RitVizier werkt zonder account. We gebruiken geen advertentietrackers of
         analytische cookies.

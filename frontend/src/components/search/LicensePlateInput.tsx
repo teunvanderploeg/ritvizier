@@ -29,7 +29,9 @@ export function LicensePlateInput({ compact = false }: { compact?: boolean }) {
       noValidate
     >
       {!compact && (
-        <label htmlFor="plate-input">Van welke auto wil je meer weten?</label>
+        <label htmlFor="plate-input" className="sr-only">
+          Kenteken
+        </label>
       )}
       <div className="search-controls">
         <div className="plate-input-wrap">

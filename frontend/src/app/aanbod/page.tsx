@@ -8,8 +8,7 @@ export const metadata = {
 export default function ListingsPage() {
   return (
     <div className="container inner-page">
-      <span className="eyebrow">NEDERLANDS AUTOAANBOD</span>
-      <h1>Vind en vergelijk autoaanbod.</h1>
+      <h1>Autoaanbod</h1>
       <ListingSearch />
     </div>
   );

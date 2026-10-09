@@ -245,7 +245,7 @@ export function CostEstimator({ vehicle }: { vehicle?: Vehicle }) {
         )}
       </div>
       <div className="cost-result" aria-busy={busy}>
-        <span className="eyebrow">RITVIZIER-INSCHATTING</span>
+        <h2>Kosteninschatting</h2>
         <div className="cost-total" aria-live="polite">
           {error
             ? "Niet beschikbaar"

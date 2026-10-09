@@ -7,10 +7,9 @@ export const metadata = {
 export default function SavedPage() {
   return (
     <section className="container inner-page">
-      <span className="eyebrow">JOUW AUTO’S</span>
-      <h1>Bewaar je blikvangers.</h1>
+      <h1>Opgeslagen auto’s</h1>
       <p className="page-description">
-        Favorieten en recente zoekopdrachten. Gewoon op dit apparaat.
+        Favorieten en recente zoekopdrachten op dit apparaat.
       </p>
       <VehicleLibrary />
     </section>
