@@ -4,8 +4,6 @@ User-visible changes use semantic versions and annotated Git tags. Dates use the
 
 ## Unreleased
 
-- Added a Dutch-road homepage hero photograph with a soft search-area fade and responsive light/dark presentation.
-
 - Made the homepage search button narrower with a shorter label and less horizontal padding.
 
 - Added a studio-car homepage hero, a custom road-and-lens logo, matching favicon/app icons and share artwork, and responsive light/dark styling while keeping the shorter copy.

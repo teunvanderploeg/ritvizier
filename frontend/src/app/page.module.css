@@ -3,19 +3,14 @@
 }
 
 .hero {
-  --hero-surface: #e9f1fa;
-  position: relative;
-  isolation: isolate;
   display: grid;
   overflow: hidden;
   border-radius: 1.25rem;
-  background: var(--hero-surface);
+  background: #e9f1fa;
   color: #202a36;
 }
 
 .copy {
-  position: relative;
-  z-index: 1;
   padding: 2rem 1.25rem;
   min-width: 0;
 }
@@ -88,19 +83,11 @@
   position: relative;
   min-width: 0;
   height: 15rem;
-  pointer-events: none;
-}
-
-.visual::after {
-  content: "";
-  position: absolute;
-  inset: 0;
-  background: linear-gradient(to bottom, var(--hero-surface), transparent 35%);
 }
 
 .car {
   object-fit: cover;
-  object-position: 85% center;
+  object-position: center 60%;
 }
 
 .details {
@@ -197,12 +184,8 @@
 }
 
 :global([data-theme="dark"]) .hero {
-  --hero-surface: #1c2d42;
+  background: #1c2d42;
   color: var(--ink);
-}
-
-:global([data-theme="dark"]) .car {
-  filter: brightness(0.75);
 }
 
 :global([data-theme="dark"]) .description,
@@ -249,22 +232,10 @@
     z-index: 1;
   }
   .visual {
-    position: absolute;
-    inset: 0;
-    height: auto;
-    z-index: -1;
-  }
-  .visual::after {
-    background: linear-gradient(
-      to right,
-      var(--hero-surface) 5%,
-      color-mix(in srgb, var(--hero-surface) 97%, transparent) 30%,
-      color-mix(in srgb, var(--hero-surface) 85%, transparent) 43%,
-      transparent 65%
-    );
+    height: 100%;
   }
   .car {
-    object-position: right center;
+    object-position: 47% center;
   }
   .search :global(.search-controls) {
     grid-template-columns: minmax(0, 1fr);
