@@ -24,6 +24,8 @@ Restart the affected process after editing environment files. Rebuild the fronte
 
 The browser calls `/api/vehicles/{plate}`, `/api/costs`, `/api/road-tax` and `/api/listings` on the frontend. A phone does not need the backend's loopback address. Never prefix database credentials or the RDW token with `NEXT_PUBLIC_`.
 
+`NEXT_PUBLIC_SITE_URL` also supplies the absolute URLs in `/sitemap.xml` and the sitemap reference in `/robots.txt`. Set it to the public site origin at build time (`https://ritvizier.nl` in production). The sitemap lists the six public static pages; saved vehicles and on-demand plate results are excluded. Vehicle results retain their normalized canonical URLs, and unsuccessful lookups remain `noindex`. Crawlers can read that directive because only `/api/` is disallowed. The sitemap omits modification dates because no reliable per-page update dates are tracked. After deployment, submit `/sitemap.xml` in Google Search Console to monitor discovery and indexing.
+
 If your own backend must use another port, change its startup command and `BACKEND_URL` together. The current maintainer's ignored local configuration uses port 8002; the fresh-install examples use 8000.
 
 ## Database and cache

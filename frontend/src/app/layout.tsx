@@ -1,17 +1,16 @@
 import type { Metadata, Viewport } from "next";
 import { Header } from "@/components/layout/Header";
 import { Footer } from "@/components/layout/Footer";
+import { siteUrl } from "@/lib/site-url";
 import "./globals.css";
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    process.env.NEXT_PUBLIC_SITE_URL || "http://localhost:3000",
-  ),
+  metadataBase: siteUrl,
   title: {
-    default: "RitVizier | Gratis kentekencheck met openbare voertuigdata",
+    default: "Gratis kentekencheck: RDW-gegevens & APK | RitVizier",
     template: "%s | RitVizier",
   },
   description:
-    "Alles over je auto. Helder in beeld. Bekijk openbare voertuiggegevens, APK, specificaties en bereken je autokosten. Gratis, zonder account.",
+    "Doe een gratis kentekencheck met openbare RDW-gegevens. Bekijk specificaties, APK en terugroepacties en bereken je autokosten. Zonder account.",
   applicationName: "RitVizier",
   manifest: "/manifest.webmanifest",
   icons: { icon: "/favicon.svg", apple: "/icon-192.png" },

@@ -1,6 +1,8 @@
 import Link from "next/link";
 export const metadata = {
   title: "Privacy",
+  description:
+    "Lees hoe RitVizier omgaat met kentekenzoekopdrachten en lokale browseropslag. Zonder account, advertentietrackers of analytische cookies.",
   alternates: { canonical: "/privacy" },
 };
 export default function PrivacyPage() {

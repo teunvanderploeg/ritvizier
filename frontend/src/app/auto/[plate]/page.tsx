@@ -42,6 +42,9 @@ export async function generateMetadata({
     title: vehicle
       ? `${titleCase(vehicle.make)} ${titleCase(vehicle.model)} ${formatPlate(plate)} | Specificaties & APK`
       : "Kentekencheck",
+    description: vehicle
+      ? `Bekijk openbare RDW-gegevens voor ${titleCase(vehicle.make)} ${titleCase(vehicle.model)} (${formatPlate(plate)}): specificaties, APK, terugroepacties en geschatte autokosten.`
+      : "De voertuiggegevens voor dit kenteken zijn niet beschikbaar. Controleer het kenteken of probeer de kentekencheck later opnieuw.",
     robots: { index: !!vehicle, follow: !!vehicle },
     alternates: { canonical: `/auto/${formatPlate(plate)}` },
   };

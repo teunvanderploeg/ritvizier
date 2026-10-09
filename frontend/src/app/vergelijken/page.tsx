@@ -1,6 +1,8 @@
 import { VehicleComparison } from "@/features/comparison/VehicleComparison";
 export const metadata = {
   title: "Auto’s vergelijken",
+  description:
+    "Vergelijk maximaal drie auto's op kenteken. Bekijk openbare RDW-gegevens, specificaties en APK naast elkaar. Gratis en zonder account.",
   alternates: { canonical: "/vergelijken" },
 };
 export default function ComparePage() {

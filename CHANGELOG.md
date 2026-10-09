@@ -4,6 +4,8 @@ User-visible changes use semantic versions and annotated Git tags. Dates use the
 
 ## Unreleased
 
+- Added a sitemap and crawler rules, a clearer kentekencheck search title, and page-specific search descriptions for tools, sources and vehicle results.
+
 - Added a Dutch-road homepage hero photograph with a soft search-area fade and responsive light/dark presentation.
 
 - Made the homepage search button narrower with a shorter label and less horizontal padding.

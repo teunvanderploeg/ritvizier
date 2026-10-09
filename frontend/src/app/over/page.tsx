@@ -1,6 +1,8 @@
 import { ArrowUpRight } from "lucide-react";
 export const metadata = {
   title: "Over RitVizier & onze bronnen",
+  description:
+    "Lees hoe RitVizier openbare RDW-gegevens gebruikt voor kentekenchecks, APK en autokosten. Bekijk onze bronnen, actualiteit en beperkingen.",
   alternates: { canonical: "/over" },
 };
 export default function AboutPage() {
