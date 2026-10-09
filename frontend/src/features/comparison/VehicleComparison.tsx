@@ -193,8 +193,8 @@ export function VehicleComparison() {
               <article className="comparison-vehicle" key={v.licensePlate}>
                 <div className="comparison-vehicle-title">
                   <div>
-                    <span className="eyebrow">{v.make}</span>
                     <h2>{titleCase(v.model)}</h2>
+                    <p className="vehicle-brand">{titleCase(v.make)}</p>
                     <LicensePlateBadge plate={v.licensePlate} small />
                   </div>
                   <button
@@ -239,16 +239,10 @@ export function VehicleComparison() {
           <div className="feature-icon blue">
             <Columns2 size={28} />
           </div>
-          <h2>Welke auto past bij jou?</h2>
+          <h2>Voeg een auto toe om te vergelijken</h2>
           <p>
-            Voeg twee of drie kentekens toe. Vergelijk vermogen, gewicht, APK en
-            andere specificaties overzichtelijk naast elkaar.
+            Vul hierboven een kenteken in. Je kunt tot drie auto’s vergelijken.
           </p>
-          <div className="comparison-empty-art" aria-hidden="true">
-            <div>A</div>
-            <span>of</span>
-            <div>B</div>
-          </div>
         </div>
       )}
     </>

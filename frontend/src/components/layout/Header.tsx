@@ -1,7 +1,7 @@
 "use client";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { ArrowRight, Search, Bookmark, Columns2 } from "lucide-react";
+import { Search, Bookmark, Columns2 } from "lucide-react";
 import { BrandLogo } from "@/components/brand/BrandLogo";
 import { ThemeToggle } from "@/components/common/ThemeToggle";
 export function Header() {
@@ -35,9 +35,6 @@ export function Header() {
           </nav>
           <div className="header-actions">
             <ThemeToggle />
-            <Link className="button header-cta" href="/#kenteken">
-              Check je kenteken <ArrowRight size={16} />
-            </Link>
           </div>
         </div>
       </header>

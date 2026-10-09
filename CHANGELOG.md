@@ -4,6 +4,14 @@ User-visible changes use semantic versions and annotated Git tags. Dates use the
 
 ## Unreleased
 
+- Added a Dutch-road homepage hero photograph with a soft search-area fade and responsive light/dark presentation.
+
+- Made the homepage search button narrower with a shorter label and less horizontal padding.
+
+- Added a studio-car homepage hero, a custom road-and-lens logo, matching favicon/app icons and share artwork, and responsive light/dark styling while keeping the shorter copy.
+
+- Simplified the homepage around license-plate search, with shorter copy and compact comparison/cost links. Removed decorative previews, eyebrow headings, repeated calls to action and slogans; tightened navigation, vehicle views and page titles.
+
 - Reorganized the README with portfolio-style status/technology badges, a feature overview, clearer local setup and configuration, and a documentation index.
 - Added installation, configuration and troubleshooting guides, and corrected architecture/handoff notes for listing endpoints, provider errors and the verified production topology.
 

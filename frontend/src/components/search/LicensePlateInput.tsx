@@ -29,7 +29,9 @@ export function LicensePlateInput({ compact = false }: { compact?: boolean }) {
       noValidate
     >
       {!compact && (
-        <label htmlFor="plate-input">Van welke auto wil je meer weten?</label>
+        <label htmlFor="plate-input" className="sr-only">
+          Kenteken
+        </label>
       )}
       <div className="search-controls">
         <div className="plate-input-wrap">
@@ -76,12 +78,18 @@ export function LicensePlateInput({ compact = false }: { compact?: boolean }) {
             </button>
           )}
         </div>
-        <button className="button search-button" disabled={busy || !hydrated}>
-          {busy
-            ? "Gegevens ophalen…"
-            : compact
-              ? "Zoeken"
-              : "Kenteken controleren"}
+        <button
+          className="button search-button"
+          aria-label={
+            busy
+              ? "Gegevens ophalen…"
+              : compact
+                ? "Zoeken"
+                : "Kenteken controleren"
+          }
+          disabled={busy || !hydrated}
+        >
+          {busy ? "Ophalen…" : compact ? "Zoeken" : "Controleren"}
           <ArrowRight size={19} />
         </button>
       </div>

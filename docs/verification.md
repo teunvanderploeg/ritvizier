@@ -2,6 +2,44 @@
 
 Entries record the state at the time of each check. Newer dated evidence can supersede older deployment or platform limitations; historical entries remain intact. For current setup instructions, use [Installation](install.md), [Configuration](configuration.md) and [Troubleshooting](troubleshooting.md).
 
+## Dutch-road homepage hero, 9 October 2026
+
+The homepage uses a decorative Dutch-road car photograph with a horizontal fade behind the desktop search form. On phones, the image follows the form with a vertical fade. Dark mode dims the photograph and uses a matching dark fade. The image does not represent any searched vehicle.
+
+Generated with the built-in image generation tool and saved as `frontend/public/images/hero-dutch-road.webp` (1774 × 887, about 184 KiB). The original studio image remains available. Final prompt:
+
+```text
+Use case: photorealistic-natural. Asset type: wide website homepage hero background for RitVizier, a Dutch license plate lookup app. Create an editorial automotive photograph of a contemporary understated pale steel-blue compact hatchback with a plain yellow Dutch-style license plate, no lettering or brand logos, parked on the RIGHT THIRD of a quiet asphalt road beside a Dutch dike, grass verges, distant rows of willow trees, flat countryside and an open pale blue sky. Front three-quarter view, car facing towards left, complete car and wheels visible, realistic proportions. Wide landscape composition around 2:1. The car occupies the rightmost 40 percent; LEFT HALF has calm low-detail landscape and pale sky with ample negative space for a website search form which will be overlaid separately. Soft morning daylight, slight distant haze, natural muted greens, pale cool blues, welcoming trustworthy atmosphere. Real photographic texture, no dramatic sunset, no people, no text, no watermark, no UI, no luxury styling, no oversized car, no motion blur.
+```
+
+ESLint, TypeScript, all 24 frontend unit tests and the optimized production build pass. Six existing browser checks pass across Chromium and WebKit: plate validation/clearing, theme persistence and the 320–1440px viewport matrix. Reviewed desktop light/dark and 320px phone screenshots in ignored `artifacts/home-*-*.png` and `artifacts/dark-*.png`; the viewport checks found no page-level horizontal overflow. WebKit used the existing local library setup and `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1`. The collaborative preview could not reach the local development server. No public deployment or physical-device Safari testing was performed.
+
+## Brand refinement, 9 October 2026
+
+The homepage now pairs the license-plate search with a studio-car image in a split layout. The search precedes the image on phones. Copy remains short and eyebrow headings remain absent. Light and dark themes use separate hero colors.
+
+The new SVG mark combines an R, lane markings and a circular lens opening. Its geometry lives in `frontend/src/components/brand/mark.json`. Logo exports use outlines from the bundled Inter typeface. Light, dark and monochrome logos, favicon, app icons and social preview artwork were refreshed together.
+
+The decorative hero image was generated with the built-in image generation tool, then compressed to the project asset `frontend/public/images/hero-car.webp` (about 64 KiB). It does not represent any searched vehicle. The final generation prompt was:
+
+```text
+Use case: product-mockup. Asset type: editorial automotive photograph for a Dutch vehicle lookup website, placed on the right half of a clean split hero. Make a premium but understated real studio photograph of a metallic ice-blue, contemporary compact five-door European hatchback, viewed front-left three-quarter at wheel height, facing left. Show the entire car with breathing room on all sides. The car sits on a pale cool blue seamless studio floor and backdrop, approximately #e9f1fa. A strong diagonal patch of natural window sunlight falls across the backdrop and floor, giving a beautiful architectural shadow; softly lit realistic bodywork and crisp glass, tyres and wheel details. Long lens, realistic proportions, carefully composed contemporary automotive editorial photography, not a cartoon, not an obvious glossy CGI render. Landscape 3:2 composition with car occupying middle/lower two thirds, empty space above. No people, buildings, scenery, typography, readable letters, brand badges, watermarks, logos or invented specs. Any license plate is a plain unlettered yellow rectangle. This is generic decorative imagery, not a photograph of a particular searched vehicle.
+```
+
+Validation after the refinement: ESLint, TypeScript, all 24 frontend unit tests, the production build and all 38 Chromium/WebKit browser scenarios pass. Reviewed light/dark desktop, mobile and WebKit 320px screenshots in `artifacts/redesign/round-two-*`, plus the logo and share-image exports. No page-level overflow or JavaScript errors appeared in the reviewed pages. The WebKit run used the same local library setup described below. Curated PR previews are stored in `docs/images/frontend-redesign/`; generated browser-test artifacts remain ignored.
+
+## Interface simplification, 9 October 2026
+
+Set up a fresh Linux checkout with Node 24.21.0, Python 3.14.4, npm workspace dependencies and a repository Python virtual environment. The local frontend runs on port 3000 and the real RDW backend on port 8000, using memory caching. A lookup through the frontend proxy returned MINI COUNTRYMAN COOPER for G921GS from RDW Open Data.
+
+The homepage now centers on license-plate search with short feature summaries and compact tool links. Decorative vehicle previews, eyebrow headings, repeated header actions and footer slogans were removed. Page titles and empty states use direct labels; vehicle details retain their data, sources and workflows.
+
+- ESLint, TypeScript, all 24 frontend unit tests and the production build pass.
+- All 38 existing browser scenarios pass: 19 Chromium and 19 WebKit iPhone checks, including lookup, saved/recent vehicles, comparison, costs, themes, reduced motion and the 320–1440px viewport matrix.
+- Reviewed desktop, mobile and dark-mode homepage screenshots, live vehicle screenshots, and WebKit desktop/320px captures in ignored `artifacts/redesign/`. The reviewed pages had no page-level overflow or JavaScript errors.
+- WebKit initially could not launch because shared libraries were missing. Ubuntu packages were extracted locally into ignored `artifacts/browser-deps/` and linked into the downloaded browser bundle. The successful run used `PLAYWRIGHT_SKIP_VALIDATE_HOST_REQUIREMENTS=1` because the system library cache cannot see these local libraries. No system packages were installed. Browser tests ran against the normal production-build fixture setup; the separate live lookup used the real provider.
+- The collaborative preview reported that its browser host was unavailable, so screenshots and browser verification used local headless engines. No public deployment, physical-device Safari, Docker or PostgreSQL verification was performed for this change.
+
 ## Oracle production rollout, 8 October 2026
 
 [Main workflow 37784839170](https://github.com/twanterstappen/ritvizier/actions/runs/37784839170) passed frontend, backend, both browser engines, the history secret scan, container/real PostgreSQL smoke verification, image publishing and SSH deployment. The VPS `current-release` matched `6492d2ab1293dd6ebfc15886fb3f4f823b0736a2`.

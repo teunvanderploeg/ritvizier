@@ -30,13 +30,7 @@ export function useCollection(collection: Collection) {
 }
 export function RecentSearches() {
   const recent = useCollection("recent");
-  if (!recent.length)
-    return (
-      <div className="recent-empty">
-        <Clock3 size={15} />
-        <span>Je recente zoekopdrachten verschijnen hier.</span>
-      </div>
-    );
+  if (!recent.length) return null;
   return (
     <section className="recent-searches" aria-label="Recent bekeken">
       <div className="recent-heading">

@@ -77,10 +77,9 @@ export function ListingSearch({ vehicle }: { vehicle?: Vehicle }) {
       {vehicle && <h2>Vergelijkbaar aanbod</h2>}
       <p className="page-description">
         {vehicle
-          ? "Zoek advertenties met hetzelfde merk en model. Pas de filters aan om de vergelijking te verfijnen."
-          : "Zoek Nederlands autoaanbod en bekijk de bronadvertenties bij elkaar."}{" "}
-        Gevonden dubbele advertenties verschijnen als één auto met alle
-        bronlinks.
+          ? "Zoek advertenties met hetzelfde merk en model."
+          : "Zoek in het beschikbare autoaanbod."}{" "}
+        Dubbele advertenties staan bij elkaar met alle bronlinks.
       </p>
       <form ref={form} className="listing-filters" onSubmit={submit}>
         <label>

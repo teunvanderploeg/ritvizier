@@ -31,7 +31,6 @@ import {
 } from "@/lib/formatting";
 import { LicensePlateInput } from "@/components/search/LicensePlateInput";
 import { LicensePlateBadge } from "@/components/search/LicensePlateBadge";
-import { VehicleIllustration } from "@/components/brand/VehicleIllustration";
 import { VehicleDataRow as Row } from "@/components/vehicle/VehicleDataRow";
 import { SkeletonVehiclePage } from "@/components/vehicle/SkeletonVehiclePage";
 import { ErrorState } from "@/components/common/ErrorState";
@@ -245,9 +244,9 @@ export function VehicleDetail({
       </div>
       <section className="vehicle-hero">
         <div className="vehicle-heading">
-          <span className="eyebrow">{v.make}</span>
           <h1>{titleCase(v.model || v.vehicleType)}</h1>
           <div className="vehicle-subtitle">
+            <span>{titleCase(v.make)}</span>
             <LicensePlateBadge plate={v.licensePlate} />
             <span>
               {v.firstRegistrationDate?.slice(0, 4) || "Bouwjaar onbekend"} ·{" "}
@@ -274,10 +273,6 @@ export function VehicleDetail({
               <Share2 size={18} />
             </button>
           </div>
-        </div>
-        <div className="vehicle-hero-art">
-          <VehicleIllustration />
-          <span>Illustratie, geen foto van dit voertuig</span>
         </div>
       </section>
       {notice && (
@@ -515,11 +510,9 @@ export function VehicleDetail({
             </div>
             <div className="vehicle-cost-promo">
               <div>
-                <span className="eyebrow">MEER DAN DE AANSCHAFPRIJS</span>
-                <h2>Wat kost deze auto jou per maand?</h2>
+                <h2>Autokosten berekenen</h2>
                 <p>
-                  Wegenbelasting automatisch uit voertuiggegevens. Kies je
-                  provincie en vul jouw vaste lasten in.
+                  Kies je provincie en vul je kilometers en vaste lasten in.
                 </p>
               </div>
               <button className="button" onClick={() => setTab("Kosten")}>
